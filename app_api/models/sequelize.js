@@ -4,6 +4,7 @@ const BalanceModel = require('./balance')
 const TransactionModel = require('./transaction')
 const TxReasonModel = require('./txReason')
 const ContactModel = require('./contact')
+const PaymentRequestModel = require('./paymentRequest')
 const AdminModel = require('./admin')
 
 
@@ -27,6 +28,7 @@ const Balance = BalanceModel(sequelize, Sequelize)
 const Transaction = TransactionModel(sequelize, Sequelize)
 const TxReason = TxReasonModel(sequelize, Sequelize)
 const Contact = ContactModel(sequelize, Sequelize)
+const PaymentRequest = PaymentRequestModel(sequelize, Sequelize)
 const Admin = AdminModel(sequelize, Sequelize)
 
 User.hasMany(Balance)
@@ -45,6 +47,7 @@ module.exports = {
     Transaction,
     TxReason,
     Contact,
+    PaymentRequest,
     Admin,
     sequelize
 }

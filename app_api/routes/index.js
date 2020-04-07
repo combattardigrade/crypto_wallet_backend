@@ -10,6 +10,7 @@ const userController = require('../controllers/user')
 const txController = require('../controllers/transaction')
 const txReasonController = require('../controllers/txReason')
 const contactController = require('../controllers/contact')
+const paymentRequestController = require('../controllers/paymentRequest')
 
 // auth
 router.post('/signup', authController.signup)
@@ -21,6 +22,13 @@ router.get('/user', auth, userController.getUserData)
 // transactions
 router.get('/txs', auth, txController.getAllTxs)
 router.post('/sendInternalTx', auth, txController.sendInternalTx)
+
+//  Payment Request
+router.post('/paymentRequest', auth, paymentRequestController.createPaymentRequest)
+router.get('/paymentRequests/:status', auth, paymentRequestController.getPaymentRequests)
+router.put('/paymentRequest', auth, paymentRequestController.updatePaymentRequest)
+router.delete('/paymentRequest/:requestId', auth, paymentRequestController.deletePaymentRequest)
+router.get('/paymentRequest/:requestId', auth, paymentRequestController.getPaymentRequest)
 
 // TxReason
 router.post('/txReason', auth, txReasonController.createTxReason)

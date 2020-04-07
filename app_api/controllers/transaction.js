@@ -36,7 +36,8 @@ module.exports.getAllTxs = (req, res) => {
                     {
                         toUserId: { $eq: userId }
                     }
-                ]
+                ],
+                status: 'COMPLETED'
             },
             include: [
                 { model: User, attributes: ['id', 'firstName', 'lastName', 'username', 'email'] }
@@ -52,7 +53,7 @@ module.exports.getAllTxs = (req, res) => {
     })
         .catch((err) => {
             console.log(err)
-            sendJSONresponse(res, 404, { status: 'ERROR', message: 'Ocurrió un error al intentar realizar la operación' })
+            sendJSONresponse(res, 404, { status: 'ERROR', message: 'An error occurred, please try again' })
             return
         })
 }
@@ -142,7 +143,7 @@ module.exports.getRankingsByPeriod = (req, res) => {
     })
         .catch((err) => {
             console.log(err)
-            sendJSONresponse(res, 404, { status: 'ERROR', message: 'Ocurrió un error al intentar realizar la operación' })
+            sendJSONresponse(res, 404, { status: 'ERROR', message: 'An error occurred, please try again' })
             return
         })
 
@@ -163,13 +164,13 @@ module.exports.sendInternalTx = (req, res) => {
         return
     }
 
-    if(!toUserId || !amount || !currency || !operationType || !reason || !description) {
-        sendJSONresponse(res, 422, { status: 'ERROR', message: 'Enter all the required fields'})
+    if (!toUserId || !amount || !currency || !operationType || !reason || !description) {
+        sendJSONresponse(res, 422, { status: 'ERROR', message: 'Enter all the required fields' })
         return
     }
 
-    if(isNaN(amount) || amount < 0) {
-        sendJSONresponse(res, 422, {status: 'ERROR', message: 'Enter a valid amount'})
+    if (isNaN(amount) || amount < 0) {
+        sendJSONresponse(res, 422, { status: 'ERROR', message: 'Enter a valid amount' })
         return
     }
 
@@ -224,8 +225,7 @@ module.exports.sendInternalTx = (req, res) => {
     })
         .catch((err) => {
             console.log(err)
-            sendJSONresponse(res, 404, { status: 'ERROR', message: 'Ocurrió un error al intentar realizar la operación' })
+            sendJSONresponse(res, 404, { status: 'ERROR', message: 'An error occurred, please try again' })
             return
         })
 }
-
