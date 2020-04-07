@@ -20,6 +20,7 @@ router.get('/user', auth, userController.getUserData)
 
 // transactions
 router.get('/txs', auth, txController.getAllTxs)
+router.post('/sendInternalTx', auth, txController.sendInternalTx)
 
 // TxReason
 router.post('/txReason', auth, txReasonController.createTxReason)

@@ -21,7 +21,7 @@ module.exports = (sequelize,DataTypes) => {
         operationType: {
             type: DataTypes.STRING,
             allowNull: false,
-            defaultValue: 'transfer'
+            defaultValue: 'INTERNAL_TRANSFER'
         },
         reason: {
             type: DataTypes.STRING,

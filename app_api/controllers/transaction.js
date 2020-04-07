@@ -41,6 +41,9 @@ module.exports.getAllTxs = (req, res) => {
             include: [
                 { model: User, attributes: ['id', 'firstName', 'lastName', 'username', 'email'] }
             ],
+            order: [
+                ['createdAt', 'DESC']
+            ],
             transaction: t
         })
 
@@ -143,5 +146,86 @@ module.exports.getRankingsByPeriod = (req, res) => {
             return
         })
 
+}
+
+module.exports.sendInternalTx = (req, res) => {
+    const userId = req.user.id
+    const toUserId = req.body.toUserId
+    const amount = parseFloat(req.body.amount)
+    const currency = req.body.currency
+    const operationType = 'INTERNAL_TRANSFER'
+    const reason = req.body.reason
+    const description = req.body.description
+
+
+    if (!userId) {
+        sendJSONresponse(res, 404, { status: 'ERROR', message: 'Invalid session token' })
+        return
+    }
+
+    if(!toUserId || !amount || !currency || !operationType || !reason || !description) {
+        sendJSONresponse(res, 422, { status: 'ERROR', message: 'Enter all the required fields'})
+        return
+    }
+
+    if(isNaN(amount) || amount < 0) {
+        sendJSONresponse(res, 422, {status: 'ERROR', message: 'Enter a valid amount'})
+        return
+    }
+
+    sequelize.transaction(async (t) => {
+        const user = await User.findOne({
+            where: {
+                id: userId,
+            },
+            transaction: t
+        })
+
+        if (!user) {
+            sendJSONresponse(res, 404, { status: 'ERROR', message: 'User not found' })
+            return
+        }
+
+        const fromBalance = await Balance.findOne({
+            where: {
+                userId,
+                currency: 'JWS'
+            },
+            transaction: t
+        })
+
+        const toBalance = await Balance.findOne({
+            where: {
+                userId: toUserId,
+                currency: 'JWS'
+            },
+            transaction: t
+        })
+
+        fromBalance.amount = fromBalance.amount - amount
+        toBalance.amount = toBalance.amount + amount
+
+        await fromBalance.save({ transaction: t })
+        await toBalance.save({ transaction: t })
+
+        const tx = await Transaction.create({
+            userId,
+            toUserId,
+            amount,
+            currency,
+            operationType,
+            reason,
+            description,
+            status: 'COMPLETED'
+        })
+
+        sendJSONresponse(res, 200, { status: 'OK', payload: tx, message: 'Transaction completed correctly' })
+        return
+    })
+        .catch((err) => {
+            console.log(err)
+            sendJSONresponse(res, 404, { status: 'ERROR', message: 'Ocurrió un error al intentar realizar la operación' })
+            return
+        })
 }
 
