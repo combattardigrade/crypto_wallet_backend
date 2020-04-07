@@ -29,6 +29,7 @@ router.get('/paymentRequests/:status', auth, paymentRequestController.getPayment
 router.put('/paymentRequest', auth, paymentRequestController.updatePaymentRequest)
 router.delete('/paymentRequest/:requestId', auth, paymentRequestController.deletePaymentRequest)
 router.get('/paymentRequest/:requestId', auth, paymentRequestController.getPaymentRequest)
+router.get('/approvePaymentRequest/:requestId', auth, paymentRequestController.approvePaymentRequest)
 
 // TxReason
 router.post('/txReason', auth, txReasonController.createTxReason)

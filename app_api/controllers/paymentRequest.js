@@ -1,10 +1,111 @@
 const User = require('../models/sequelize').User
 const Balance = require('../models/sequelize').Balance
 const PaymentRequest = require('../models/sequelize').PaymentRequest
+const Transaction = require('../models/sequelize').Transaction
 const sendJSONresponse = require('../utils/index.js').sendJSONresponse
 const sequelize = require('../models/sequelize').sequelize
 const { Op } = require('sequelize')
 const moment = require('moment')
+
+module.exports.approvePaymentRequest = (req, res) => {
+    const userId = req.user.id
+    const requestId = req.params.requestId
+
+    if (!userId) {
+        sendJSONresponse(res, 404, { status: 'ERROR', message: 'Invalid session token' })
+        return
+    }
+
+    if (!requestId) {
+        sendJSONresponse(res, 422, { status: 'ERROR', message: 'Enter all the required fields' })
+        return
+    }
+
+    sequelize.transaction(async (t) => {
+        const user = await User.findOne({
+            where: {
+                id: userId,
+            },
+            transaction: t
+        })
+
+        if (!user) {
+            sendJSONresponse(res, 404, { status: 'ERROR', message: 'User not found' })
+            return
+        }
+
+        const paymentRequest = await PaymentRequest.findOne({
+            where: {
+                id: requestId,
+                requestToUserId: userId,
+                status: 'PENDING_APPROVAL',
+            }
+        })
+
+        if (!paymentRequest) {
+            sendJSONresponse(res, 404, { status: 'ERROR', message: 'The payment request was not found or has already been approved' })
+            return
+        }
+
+        const fromBalance = await Balance.findOne({
+            where: {
+                userId: paymentRequest.requestToUserId,
+                currency: paymentRequest.currency
+            },            
+            transaction: t
+        })
+
+        const toBalance = await Balance.findOne({
+            where: {
+                userId: paymentRequest.userId,
+                currency: paymentRequest.currency
+            },            
+            transaction: t
+        })
+
+        if (!fromBalance || !toBalance) {
+            sendJSONresponse(res, 404, { status: 'ERROR', message: 'An error occurred while trying to approve the payment request' })
+            return
+        }
+
+        if (paymentRequest.amount > fromBalance.amount) {
+            sendJSONresponse(res, 404, { status: 'ERROR', message: 'Not enough balance to approve the transaction' })
+            return
+        }
+
+        // Update balances
+        fromBalance.amount = parseFloat(fromBalance.amount) - parseFloat(paymentRequest.amount)
+        toBalance.amount = parseFloat(toBalance.amount) + parseFloat(paymentRequest.amount)
+       
+        // Save balances
+        await fromBalance.save({ transaction: t })
+        await toBalance.save({ transaction: t })
+
+        // Create Tx
+        const tx = await Transaction.create({
+            userId: paymentRequest.requestToUserId,
+            toUserId: paymentRequest.userId,
+            amount: paymentRequest.amount,
+            currency: paymentRequest.currency,
+            operationType: paymentRequest.operationType,
+            reason: paymentRequest.reason,
+            description: paymentRequest.description,
+            status: 'COMPLETED'
+        })
+
+        // Update Payment Request
+        paymentRequest.status = 'COMPLETED'
+        paymentRequest.save({ transction: t })
+
+        sendJSONresponse(res, 200, {status: 'OK', payload: tx, message: 'Payment request approved'})
+        return
+    })
+        .catch((err) => {
+            console.log(err)
+            sendJSONresponse(res, 404, { status: 'ERROR', message: 'An error occurred, please try again' })
+            return
+        })
+}
 
 module.exports.createPaymentRequest = (req, res) => {
     const userId = req.user.id
@@ -20,7 +121,7 @@ module.exports.createPaymentRequest = (req, res) => {
         sendJSONresponse(res, 404, { status: 'ERROR', message: 'Invalid session token' })
         return
     }
-    
+
     if (!requestToUserId || !amount || !currency || !operationType || !reason || !description) {
         sendJSONresponse(res, 422, { status: 'ERROR', message: 'Enter all the required fields' })
         return
@@ -294,7 +395,7 @@ module.exports.getPaymentRequest = (req, res) => {
         if (!paymentRequest) {
             sendJSONresponse(res, 404, { status: 'ERROR', message: 'Payment request not found' })
             return
-        }        
+        }
 
         sendJSONresponse(res, 200, { status: 'OK', payload: paymentRequest })
         return
