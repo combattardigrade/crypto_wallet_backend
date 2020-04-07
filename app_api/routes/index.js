@@ -30,6 +30,7 @@ router.put('/paymentRequest', auth, paymentRequestController.updatePaymentReques
 router.delete('/paymentRequest/:requestId', auth, paymentRequestController.deletePaymentRequest)
 router.get('/paymentRequest/:requestId', auth, paymentRequestController.getPaymentRequest)
 router.get('/approvePaymentRequest/:requestId', auth, paymentRequestController.approvePaymentRequest)
+router.get('/rejectPaymentRequest/:requestId', auth, paymentRequestController.rejectPaymentRequest)
 
 // TxReason
 router.post('/txReason', auth, txReasonController.createTxReason)

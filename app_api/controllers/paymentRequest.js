@@ -51,7 +51,7 @@ module.exports.approvePaymentRequest = (req, res) => {
             where: {
                 userId: paymentRequest.requestToUserId,
                 currency: paymentRequest.currency
-            },            
+            },
             transaction: t
         })
 
@@ -59,7 +59,7 @@ module.exports.approvePaymentRequest = (req, res) => {
             where: {
                 userId: paymentRequest.userId,
                 currency: paymentRequest.currency
-            },            
+            },
             transaction: t
         })
 
@@ -76,7 +76,7 @@ module.exports.approvePaymentRequest = (req, res) => {
         // Update balances
         fromBalance.amount = parseFloat(fromBalance.amount) - parseFloat(paymentRequest.amount)
         toBalance.amount = parseFloat(toBalance.amount) + parseFloat(paymentRequest.amount)
-       
+
         // Save balances
         await fromBalance.save({ transaction: t })
         await toBalance.save({ transaction: t })
@@ -97,7 +97,61 @@ module.exports.approvePaymentRequest = (req, res) => {
         paymentRequest.status = 'COMPLETED'
         paymentRequest.save({ transction: t })
 
-        sendJSONresponse(res, 200, {status: 'OK', payload: tx, message: 'Payment request approved'})
+        sendJSONresponse(res, 200, { status: 'OK', payload: tx, message: 'Payment request approved' })
+        return
+    })
+        .catch((err) => {
+            console.log(err)
+            sendJSONresponse(res, 404, { status: 'ERROR', message: 'An error occurred, please try again' })
+            return
+        })
+}
+
+module.exports.rejectPaymentRequest = (req, res) => {
+    const userId = req.user.id
+    const requestId = req.params.requestId
+
+    if (!userId) {
+        sendJSONresponse(res, 404, { status: 'ERROR', message: 'Invalid session token' })
+        return
+    }
+
+    if (!requestId) {
+        sendJSONresponse(res, 422, { status: 'ERROR', message: 'Enter all the required fields' })
+        return
+    }
+
+    sequelize.transaction(async (t) => {
+        const user = await User.findOne({
+            where: {
+                id: userId,
+            },
+            transaction: t
+        })
+
+        if (!user) {
+            sendJSONresponse(res, 404, { status: 'ERROR', message: 'User not found' })
+            return
+        }
+
+        const paymentRequest = await PaymentRequest.findOne({
+            where: {
+                id: requestId,
+                requestToUserId: userId,
+                status: 'PENDING_APPROVAL',
+            }
+        })
+
+        if (!paymentRequest) {
+            sendJSONresponse(res, 404, { status: 'ERROR', message: 'The payment request was not found or has already been approved' })
+            return
+        }
+
+        // Update Payment Request
+        paymentRequest.status = 'REJECTED'
+        paymentRequest.save({ transction: t })
+
+        sendJSONresponse(res, 200, { status: 'OK', payload: paymentRequest, message: 'Payment request has been rejected' })
         return
     })
         .catch((err) => {
@@ -199,6 +253,9 @@ module.exports.getPaymentRequests = (req, res) => {
                 where: {
                     requestToUserId: userId,
                 },
+                include: [
+                    { model: User }
+                ],
                 transaction: t
             })
         } else {
@@ -207,6 +264,9 @@ module.exports.getPaymentRequests = (req, res) => {
                     requestToUserId: userId,
                     status
                 },
+                include: [
+                    { model: User, attributes: ['id','username','firstName','lastName','email'] }
+                ],
                 transaction: t
             })
         }

@@ -34,6 +34,7 @@ const Admin = AdminModel(sequelize, Sequelize)
 User.hasMany(Balance)
 Transaction.belongsTo(User)
 Contact.belongsTo(User)
+PaymentRequest.belongsTo(User)
 
 
 sequelize.sync({force: false})
