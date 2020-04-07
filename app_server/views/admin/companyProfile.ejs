@@ -1,0 +1,123 @@
+<%- include('header'); -%>
+
+<div class="page-wrapper">
+    <div class="page-content">
+        <nav class="page-breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="#">Empresa</a></li>
+                <li class="breadcrumb-item active" aria-current="page">ID <%= company.id %></li>
+            </ol>
+        </nav>
+        <div class="row">
+            <div class="col-md-4 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <h6 class="card-title">Datos de la Empresa </h6>
+
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Campo</th>
+                                        <th>Valor</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td style="font-weight: bold;">ID: </td>
+                                        <td><%= company.id %></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight: bold;">Nombre: </td>
+                                        <td><%= company.name %></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight: bold;">Teléfono: </td>
+                                        <td><%= company.phone %></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight: bold;">Página Web: </td>
+                                        <td><%= company.website %></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight: bold;">Código </td>
+                                        <td><%= company.code  %></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight: bold;">Estado: </td>
+                                        <td><%= company.status == 1 ? 'ACTIVA' : 'INACTIVA' %></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight: bold;">Fecha de Registro </td>
+                                        <td><%=  company.createdAt %></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight: bold;">Total de Guardias: </td>
+                                        <td><%= stats.totalGuards  %></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight: bold;">Total de Administradores: </td>
+                                        <td><%= stats.totalAdmins %></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight: bold;">Total Reportes: </td>
+                                        <td><%= stats.totalReports %></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight: bold;">Total Bitácoras: </td>
+                                        <td><%= stats.totalBitacoras %></td>
+                                    </tr>
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <h6 class="card-title">Actualizar Datos de la Empresa</h6>
+                        <form class="forms-sample" action="" method="post">
+                            <%  if (serverMsg && valid == true) { %>
+                            <div class="alert alert-success" role="alert">
+                                <%= serverMsg ? serverMsg : '' %>
+                            </div>
+                            <% } else if (serverMsg && valid == false) { %>
+                            <div class="alert alert-danger" role="alert">
+                                <%= serverMsg ? serverMsg : '' %>
+                            </div>
+                            <% } %>
+                            <div class="form-group">
+                                <label for="exampleInputUsername1">Selecciona el campo a cambiar</label>
+                                <select name="fieldToChange" id="" class="form-control">
+                                    <option value="name">Nombre</option>
+                                    <option value="phone">Teléfono</option>
+                                    <option value="website">Página Web</option>
+                                    <option value="code">Código de la Empresa</option>
+                                    <option value="status">Estado</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Nuevo valor</label>
+                                <input name="newValue" type="text" class="form-control"
+                                    placeholder="Ingresa el nuevo valor del campo seleccionado">
+                            </div>
+                            <input type="hidden" name="_csrf" value="<%= csrf %>">
+
+                            <button type="submit" class="btn btn-primary mr-2">Guardar</button>
+                            <button class="btn btn-light">Cancelar</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<%- include('footer'); -%>

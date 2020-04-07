@@ -1,0 +1,86 @@
+<%- include('header'); -%>
+
+<div class="page-wrapper">
+    <div class="page-content">
+        <nav class="page-breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="#">Usuarios</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Añadir Administrador</li>
+            </ol>
+        </nav>
+        <div class="row">
+            <div class="col-md-6 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <h6 class="card-title">Añadir Administrador</h6>
+                        <form class="forms-sample" action="" method="post">
+                            <%  if (serverMsg && valid == true) { %>
+                            <div class="alert alert-success" role="alert">
+                                <%= serverMsg ? serverMsg : '' %>
+                            </div>
+                            <% } else if (serverMsg && valid == false) { %>
+                            <div class="alert alert-danger" role="alert">
+                                <%= serverMsg ? serverMsg : '' %>
+                            </div>
+                            <% } %>
+                            <div class="form-group">
+                                <label>Usuario</label>
+                                <input type="text" class="form-control" autocomplete="off" placeholder="Usuario"
+                                    name="username" value="<%= typeof username != 'undefined' ? username : '' %>">
+                            </div>
+                            <div class="form-group">
+                                <label>Contraseña</label>
+                                <input type="password" class="form-control" placeholder="Contraseña" name="password"
+                                    value="<%= typeof password != 'undefined' ? password : '' %>">
+                            </div>
+                            <div class="form-group">
+                                <label>Repetir Contraseña</label>
+                                <input type="password" class="form-control" placeholder="Repetir Contraseña"
+                                    name="rpassword">
+                            </div>
+                            <div class="form-group">
+                                <label>Identificación</label>
+                                <input type="text" class="form-control" autocomplete="off" placeholder="Identificación"
+                                    name="identification"
+                                    value="<%= typeof identification != 'undefined' ? identification : '' %>">
+                            </div>
+                            <div class="form-group">
+                                <label>Nombre</label>
+                                <input type="text" class="form-control" autocomplete="off" placeholder="Nombre Completo"
+                                    name="name" value="<%= typeof name != 'undefined' ? name : '' %>">
+                            </div>
+                            <div class="form-group">
+                                <label>Email</label>
+                                <input type="email" class="form-control" autocomplete="off" placeholder="Email"
+                                    name="email" value="<%= typeof email != 'undefined' ? email : '' %>">
+                            </div>
+                            <div class="form-group">
+                                <label>Teléfono</label>
+                                <input type="text" class="form-control" autocomplete="off" placeholder="Teléfono"
+                                    name="phone" value="<%= typeof phone != 'undefined' ? phone : '' %>">
+                             </div>
+                            <div class="form-group">
+                                <label>Dirección</label>
+                                <input type="text" class="form-control" autocomplete="off" placeholder="Dirección"
+                                    name="address" value="<%= typeof address != 'undefined' ? address : '' %>">
+                            </div>
+                            <div class="form-group">
+                                <label>Código Empresa</label>
+                                <input type="text" class="form-control" autocomplete="off" placeholder="Código Empresa"
+                                    name="companyCode"
+                                    value="<%= typeof companyCode != 'undefined' ? companyCode : '' %>">
+                            </div>
+                            <input type="hidden" name="imei" value="admin" />
+                            <input type="hidden" name="_csrf" value="<%= csrf %>" />
+
+                            <button type="submit" class="btn btn-primary mr-2">Añadir Guardia</button>
+                            <button class="btn btn-light">Cancelar</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<%- include('footer'); -%>

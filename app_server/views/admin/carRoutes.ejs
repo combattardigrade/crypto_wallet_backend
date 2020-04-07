@@ -1,0 +1,60 @@
+<%- include('header'); -%>
+
+<div class="page-wrapper">
+    <div class="page-content">
+        <nav class="page-breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="#">Recorridos Vehículos</a></li>
+                <li class="breadcrumb-item active" aria-current="page"><%= status == 'ALL' ? 'TODOS' : status %></li>
+            </ol>
+        </nav>
+        
+        <div class="row">
+            <div class="col-md-12 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <h6 class="card-title">Recorridos (<%= status == 'ALL' ? 'TODOS' : status %>) </h6>
+
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Placas Vehículo</th>
+                                        <th>Guardia</th>
+                                        <th>Empresa</th>                                                                                                                       
+                                        <th>Estado</th>                                                                               
+                                        <th>Fecha de Inicio</th>
+                                        <th>Fecha de Finalización</th>
+                                        <th>Ver</th>                                        
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <%
+                                        if(typeof carRoutes != 'undefined') {
+                                            for(let route of carRoutes) { 
+                                    %>
+                                        <tr>
+                                            <td><%= route.id %></td>
+                                            <td><%= route.vehiclePlates %></td>
+                                            <td><%= route.user.username %></td>
+                                            <td><%= route.company.name %></td>                                            
+                                            <td><%= route.status %></td>
+                                            <td><%= route.startTime %></td>
+                                            <td><%= route.endTime %></td>
+                                            <td><a href="<%= host %>admin/carRoute/<%= route.id %>" class="btn btn-primary mr-2">Ver</a></td>                                            
+                                        </tr>
+                                    <% }} %>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+<%- include('footer'); -%>

@@ -1,0 +1,48 @@
+{
+  "name": "control-guardias-seguridad",
+  "version": "1.0.0",
+  "description": "Control de Guardias de Seguridad",
+  "main": "app.js",
+  "scripts": {
+    "test": "nodemon app.js",
+    "test2": "npm test && webpack"
+  },
+  "author": "SoftBot",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "1.18.3",
+    "cookie-parser": "^1.4.5",
+    "cors": "2.8.5",
+    "csurf": "1.9.0",
+    "debug": "4.1.1",
+    "dotenv": "6.2.0",
+    "dotenv-webpack": "^1.7.0",
+    "email-validator": "2.0.4",
+    "express": "4.16.4",
+    "express-fileupload": "1.1.1-alpha.3",
+    "express-jwt": "5.3.1",
+    "express-recaptcha": "^5.0.1",
+    "http": "0.0.0",
+    "https": "1.0.0",
+    "jade": "1.11.0",
+    "jsonwebtoken": "8.4.0",
+    "moment": "2.24.0",
+    "mysql2": "1.6.5",
+    "node-fetch": "^2.6.0",
+    "passport": "0.4.0",
+    "passport-local": "1.0.0",
+    "password-validator": "^5.0.3",
+    "request": "^2.88.2",
+    "request-promise": "^4.2.4",
+    "sequelize": "4.42.0",
+    "serve-favicon": "2.5.0",
+    "socket.io": "2.2.0"
+  },
+  "devDependencies": {
+    "nodemon": "1.18.10",
+    "nodemon-webpack-plugin": "^4.3.1",
+    "webpack": "^4.42.0",
+    "webpack-cli": "^3.3.11",
+    "webpack-dev-server": "^3.10.3"
+  }
+}

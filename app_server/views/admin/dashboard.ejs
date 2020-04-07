@@ -1,0 +1,561 @@
+<%- include('header'); -%>
+
+<div class="page-wrapper">
+    <div class="page-content">
+        <div class="d-flex justify-content-between align-items-center flex-wrap grid-margin">
+            <div>
+                <h4 class="mb-3 mb-md-0">Panel de Control</h4>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4 grid-margin stretch-card" style="align-items: start;">
+                <div class="row">
+                    <div class="col-12 col-md-6 grid-margin">
+                        <div class="card text-white bg-primary">
+                            <div class="card-header">GUARDIAS DE SEGURIDAD</div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-10">
+                                        EN PATRULLAJE
+                                    </div>
+                                    <div class="col-2" id="guardsOnPatrol">
+                                        0
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-10">
+                                        EN ESPERA
+                                    </div>
+                                    <div class="col-2" id="guardsOnStandBy">
+                                        0
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-6 grid-margin">
+                        <div class="card text-white bg-primary">
+                            <div class="card-header">PUNTOS DE CONTROL</div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-10">
+                                        PENDIENTES
+                                    </div>
+                                    <div class="col-2" id="activeCheckpoints">
+                                        0
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-10">
+                                        COMPLETADOS
+                                    </div>
+                                    <div class="col-2" id="completedCheckpoints">
+                                        0
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-6 grid-margin">
+                        <div class="card text-white bg-primary">
+                            <div class="card-header">RUTAS (24 HRS)</div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-10">
+                                        ACTIVAS
+                                    </div>
+                                    <div class="col-2" id="activeRoutes">
+                                        0
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-10">
+                                        COMPLETADAS
+                                    </div>
+                                    <div class="col-2" id="completedRoutes">
+                                        0
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-6 grid-margin">
+                        <div class="card text-white bg-primary">
+                            <div class="card-header">ACCESOS (24 HRS)</div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-10">
+                                        ENTRADAS
+                                    </div>
+                                    <div class="col-2" id="entryLogs">
+                                        0
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-10">
+                                        SALIDAS
+                                    </div>
+                                    <div class="col-2" id="exitLogs">
+                                        0
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-6 grid-margin">
+                        <div class="card text-white bg-primary">
+                            <div class="card-header">REPORTES (24 HRS)</div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-10">
+                                        RECIBIDOS
+                                    </div>
+                                    <div class="col-2" id="totalReports">
+                                        0
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-10">
+                                        ALARMAS
+                                    </div>
+                                    <div class="col-2">
+                                        0
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-6 grid-margin">
+                        <div class="card text-white bg-primary">
+                            <div class="card-header">BITÁCORAS (24HRS)</div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-10">
+                                        RECIBIDAS
+                                    </div>
+                                    <div class="col-2" id="totalBitacoras">
+                                        0
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-10">
+                                        &nbsp;
+                                    </div>
+                                    <div class="col-2">
+                                        &nbsp;
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-md-8 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <h6 class="card-title">MAPA GENERAL</h6>
+
+                        <div id="map" style="width: 100%; height: 80%; min-height: 400px;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <h6 class="card-title">ACCESOS</h6>
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>GUARDIA </th>
+                                        <th>MÉTODO</th>
+                                        <th>TIPO</th>
+                                        <th>FECHA</th>
+                                        <th>VER</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="accessLogsContainer">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <h6 class="card-title">REPORTES</h6>
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>GUARDIA</th>
+                                        <th>TÍTULO</th>
+                                        <th>Descripción</th>
+                                        <th>FECHA</th>
+                                        <th>VER</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="reportsContainer">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <h6 class="card-title">BITÁCORAS</h6>
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>GUARDIA</th>
+                                        <th>ACTIVIDADES</th>
+                                        <th>INCIDENCIAS</th>                                        
+                                        <th>FECHA</th>
+                                        <th>VER</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="bitacorasContainer">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+
+</div>
+<script src="<%= host %>assets/bundle.js"></script>
+<script>
+
+    const markersArray = []
+
+
+    const routes = JSON.parse(`<%- JSON.stringify(routes) %>`);
+    // const guards = JSON.parse(`<%- JSON.stringify(guards) %>`)
+    // const reports = JSON.parse(`<%- JSON.stringify(reports) %>`)
+
+    function loadDashboardData() {
+        const host = `<%= host %>`
+        App.token = "<%= token %>";
+        App.getAccessLogsByCompany()
+            .then((res) => {
+                if (res.status == 'OK') {
+                    
+                    const accessLogsContainer = document.getElementById('accessLogsContainer')
+                    accessLogsContainer.innerHTML = ''
+                    let i = 1
+                    
+                    for (let log of res.payload) {
+                        if (i == 10) break
+                        const html = `<tr>
+                                <td>${log.id}</td>
+                                <td>${log.user.username}</td>
+                                <td>${log.accessMethod}</td>
+                                <td>${log.accessType}</td>
+                                <td>${(new Date(log.createdAt)).toLocaleDateString("es-MX")}</td>
+                                <td><a href="${host}admin/accessLog/${log.id}" class="btn btn-primary">Ver</a></td>
+                            </tr>`
+                        accessLogsContainer.insertAdjacentHTML('beforeend', html);
+                        i++                        
+                    }
+                }
+            })
+
+        App.getCompanyReports()
+            .then((res) => {
+                if (res.status == 'OK') {
+                    const reports = res.payload                    
+                    const reportsContainer = document.getElementById('reportsContainer')
+                    reportsContainer.innerHTML = ''
+                    let i = 1
+                    
+                    for (let report of reports) {
+                        if (i == 10) break
+                        const html = `<tr>
+                                <td>${report.id}</td>
+                                <td>${report.user.username}</td>
+                                <td>${report.title.substr(0,10)}...</td>
+                                <td>${report.description.substr(0,10)}...</td>
+                                <td>${(new Date(report.createdAt)).toLocaleDateString("es-MX")}</td>
+                                <td><a href="${host}admin/report/${report.id}" class="btn btn-primary">Ver</a></td>
+                            </tr>`
+                            reportsContainer.insertAdjacentHTML('beforeend', html);
+                        i++
+
+                    }
+                }
+            })
+
+        App.bitacorasByCompany()
+            .then((res) => {
+                if(res.status == 'OK') {
+                    const bitacoras = res.payload
+                    const bitacorasContainer = document.getElementById('bitacorasContainer')
+                    bitacorasContainer.innerHTML = ''
+                    let i = 1
+                    
+                    for (let bitacora of bitacoras) {
+                        if (i == 10) break
+                        const html = `<tr>
+                                <td>${bitacora.id}</td>
+                                <td>${bitacora.user.username}</td>
+                                <td>${bitacora.resumenActividades.substr(0,10)}...</td>
+                                <td>${bitacora.resumenIncidencias.substr(0,10)}...</td>
+                                <td>${(new Date(bitacora.createdAt)).toLocaleDateString("es-MX")}</td>
+                                <td><a href="${host}admin/bitacora/${bitacora.id}" class="btn btn-primary">Ver</a></td>
+                            </tr>`
+                            bitacorasContainer.insertAdjacentHTML('beforeend', html);
+                        i++
+                        
+                    }
+                }
+            })
+
+            App.fetchDashboardData()
+                .then((res) => {
+                    if(res.status == 'OK') {
+                        const data = res.payload
+                        document.getElementById('guardsOnPatrol').innerHTML = data.guardsOnPatrol
+                        document.getElementById('guardsOnStandBy').innerHTML = data.guardsOnStandBy
+                        document.getElementById('activeCheckpoints').innerHTML = data.activeCheckpoints
+                        document.getElementById('completedCheckpoints').innerHTML = data.completedCheckpoints
+                        document.getElementById('activeRoutes').innerHTML = data.activeRoutes
+                        document.getElementById('completedRoutes').innerHTML = data.completedRoutes
+                        document.getElementById('entryLogs').innerHTML = data.entryLogs
+                        document.getElementById('exitLogs').innerHTML = data.exitLogs
+                        document.getElementById('totalReports').innerHTML = data.totalReports
+                        document.getElementById('totalBitacoras').innerHTML = data.totalBitacoras
+                    }
+                })
+        
+        setTimeout(loadDashboardData, 5000)
+    }
+
+    (function () {
+        loadDashboardData()
+    })()
+
+    function loadMapData() {
+        const host = `<%= host %>`
+        App.token = "<%= token %>";
+        clearOverlays()
+        App.fetchCompanyActiveRoutes()
+            .then((res) => {
+                if (res.status == 'OK') {
+                    const routes = res.payload
+                    for (let route of routes) {
+                        if ('checkpoints' in route && route.checkpoints.length > 0) {
+                            for (let checkpoint of route.checkpoints) {
+
+                                let marker = new google.maps.Marker({
+                                    position: { lat: parseFloat(checkpoint.lat), lng: parseFloat(checkpoint.lng) },
+                                    map: App.map,
+                                    label: {
+                                        text: checkpoint.name.toString(),
+                                        color: checkpoint.status == 'ACTIVE' ? '#ff0000' : '#007bff',
+                                        fontWeight: 'bold',
+                                        paddingTop: "20px",
+                                        background: 'black'
+                                    },
+                                    icon: checkpoint.status == 'ACTIVE' ? pinSymbol('#ff0000') : pinSymbol('#007bff')
+                                })
+
+                                markersArray.push(marker)
+
+                                const infowindow = new google.maps.InfoWindow({
+                                    content: `<div>Nombre: <span>${checkpoint.name}</span></div><div>Estado: <span>${checkpoint.status}</span></div>`
+                                });
+
+                                marker.addListener('click', function () {
+                                    infowindow.open(App.map, marker);
+                                })
+                            }
+                        }
+                    }
+                }
+            })
+
+        App.getCompanyGuards()
+            .then((res) => {
+                if (res.status == 'OK') {
+                    const guards = res.payload
+                    for (let guard of guards) {
+
+                        if (!('userLocations' in guard) || guard.userLocations.length == 0) {
+                            continue;
+                        }
+
+                        const image = {
+                            url: `${host}/assets/images/guard_location.png`,
+                            scaledSize: new google.maps.Size(40, 40), // scaled size
+                            origin: new google.maps.Point(0, 0), // origin
+                            anchor: new google.maps.Point(0, 0) // anchor
+                        }
+                        let guardMarker = new google.maps.Marker({
+                            position: { lat: parseFloat(guard.userLocations[0].lat), lng: parseFloat(guard.userLocations[0].lng) },
+                            map: App.map,
+                            icon: image
+                        })
+
+                        markersArray.push(guardMarker)
+
+                        const infowindow = new google.maps.InfoWindow({
+                            content: `<div>Usuario: <span>${guard.username}</span></div><div>Nombre: <span>${guard.name}</span></div><div>Teléfono: <span>${guard.phone}</span></div>`
+                        });
+
+                        guardMarker.addListener('click', function () {
+                            infowindow.open(App.map, guardMarker);
+                        })
+                    }
+                }
+            })
+
+        App.getCompany24hReports()
+            .then((res) => {
+                if (res.status == 'OK') {
+                    const reports = res.payload
+                    for (let report of reports) {
+
+                        const image = {
+                            url: `${host}assets/images/report_icon.svg`,
+                            scaledSize: new google.maps.Size(30, 30), // scaled size
+                            origin: new google.maps.Point(0, 0), // origin
+                            anchor: new google.maps.Point(0, 0) // anchor
+                        }
+                        let reportMarker = new google.maps.Marker({
+                            position: { lat: parseFloat(report.lat), lng: parseFloat(report.lng) },
+                            map: App.map,
+                            icon: image
+                        })
+
+                        markersArray.push(reportMarker)
+                        const infowindow = new google.maps.InfoWindow({
+                            content: `<div>Título: <span>${report.title}</span></div><div>Descripción: <span>${report.description}</span></div>`
+                        });
+
+                        reportMarker.addListener('click', function () {
+                            infowindow.open(App.map, reportMarker);
+                        })
+                    }
+                }
+            })
+
+        setTimeout(loadMapData, 5000)
+    }
+
+    function initMap() {
+
+        
+        App.map = new google.maps.Map(document.getElementById('map'), {
+            center: { lat: parseFloat(routes[0].checkpoints[0].lat), lng: parseFloat(routes[0].checkpoints[0].lng) },
+            zoom: 15,
+            styles: [{
+                featureType: 'poi',
+                elementType: 'labels.icon',
+                stylers: [{ visibility: 'off' }] // hide poi (businesses) icons
+            },
+            {
+                featureType: 'poi',
+                elementType: 'geometry',
+                stylers: [{ color: '#e5e5e5' }] // poi geometry color
+            },
+            {
+                featureType: 'poi.park',
+                elementType: 'labels.text.stroke',
+                stylers: [{ color: '#ffffff' }] // hide local businesses labels
+            },
+            {
+                featureType: 'poi.park',
+                elementType: 'labels.text.fill',
+                stylers: [{ color: '#676767' }] // hide local businesses labels
+            },
+            {
+                featureType: 'landscape',
+                elementType: 'geometry',
+                stylers: [{ color: '#f5f5f5' }] // buildings and so on
+            },
+            {
+                featureType: 'road.arterial',
+                elementType: 'labels',
+                stylers: [{ visibility: 'off' }] // hide arterial roads labels
+            },
+            {
+                featureType: 'road.highway',
+                elementType: 'geometry', // highway color
+                stylers: [{ color: '#dadada' }]
+            },
+            {
+                featureType: 'road.highway',
+                elementType: 'labels.text.stroke', // highway label text stroke (contorno)
+                stylers: [{ color: '#ffffff' }]
+            },
+            {
+                featureType: 'road',
+                elementType: 'labels.text.fill', // rad label text color (fill)
+                stylers: [{ color: '#676767' }]
+            },
+            {
+                featureType: 'road.local',
+                elementType: 'geometry',
+                stylers: [{ color: '#ffffff' }] // park roads color
+
+            },
+            {
+                featureType: 'transit',
+                elementType: 'labels.icon',
+                stylers: [{ visibility: 'off' }]
+            },
+            {
+                featureType: 'transit',
+                elementType: 'labels.text.fill',
+                stylers: [{ color: '#676767' }]
+            },
+            {
+                featureType: 'transit',
+                elementType: 'labels.text.stroke',
+                stylers: [{ color: '#ffffff' }]
+            },
+            {
+                featureType: 'transit.station.bus',
+                elementType: 'labels.icon',
+                stylers: [{ visibility: 'off' }]
+            }]
+        });
+
+
+        loadMapData()
+    }
+    function pinSymbol(color) {
+        return {
+            path: 'M 0,0 C -2,-20 -10,-22 -10,-30 A 10,10 0 1,1 10,-30 C 10,-22 2,-20 0,0 z M -2,-30 a 2,2 0 1,1 4,0 2,2 0 1,1 -4,0',
+            fillColor: color,
+            fillOpacity: 1,
+            strokeColor: '#ffffff',
+            strokeWeight: 1,
+            scale: 1,
+        };
+    }
+    function clearOverlays() {
+        for (var i = 0; i < markersArray.length; i++) {
+            markersArray[i].setMap(null);
+        }
+        markersArray.length = 0;
+    }
+
+</script>
+<script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAY5scI2sYPDGoLn2INfct1gMw5gFLIHjs&callback=initMap"></script>
+<%- include('footer'); -%>

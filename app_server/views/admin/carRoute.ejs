@@ -1,0 +1,229 @@
+<%- include('header'); -%>
+
+<div class="page-wrapper">
+    <div class="page-content">
+        <nav class="page-breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="#">Ruta Vehículo</a></li>
+                <li class="breadcrumb-item active" aria-current="page">ID <%= carRoute.id %></li>
+            </ol>
+        </nav>
+        <div class="row">
+            <div class="col-md-4 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <h6 class="card-title">Datos del Recorrido del Vehículo </h6>
+
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Campo</th>
+                                        <th>Valor</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td style="font-weight: bold;">ID: </td>
+                                        <td><%= carRoute.id %></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight: bold;">Placas Vehículo: </td>
+                                        <td><%= carRoute.vehiclePlates %></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight: bold;">Guardia: </td>
+                                        <td><%= carRoute.user.username %></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight: bold;">Empresa: </td>
+                                        <td><%= carRoute.company.name %></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight: bold;">Fecha de inicio: </td>
+                                        <td><%= carRoute.startTime  %></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight: bold;">Fecha de finalización:</td>
+                                        <td><%= carRoute.endTime  %></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight: bold;">Estado: </td>
+                                        <td><%= carRoute.status  %></td>
+                                    </tr>
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-8 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <h6 class="card-title">Mapa</h6>
+                        <div id="map" style="width: 100%; height: 80%; min-height: 400px;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="<%= host %>assets/bundle.js"></script>
+<script>
+    const markersArray = []
+    function loadData() {
+        const carRoute = JSON.parse(`<%- JSON.stringify(carRoute) %>`);
+        App.token = `<%= token %>`
+        App.fetchCarRouteLocations(carRoute.id)
+            .then((res) => {
+                if (res.status == 'OK') {
+                    clearOverlays()
+                    console.log(res)
+
+                    const carRoute = res.payload
+
+                    let marker = new google.maps.Marker({
+                        position: { lat: parseFloat(carRoute.carLocations[0].lat), lng: parseFloat(carRoute.carLocations[0].lng) },
+                        map: App.map,
+                    })
+
+                    const infowindow = new google.maps.InfoWindow({
+                        content: `<div>Placas: <span>${carRoute.vehiclePlates}</span></div><div>Guardia: <span>${carRoute.user.username}</span></div><div>Empresa: <span>${carRoute.company.name}</span></div>`
+                    });
+
+                    marker.addListener('click', function () {
+                        infowindow.open(App.map, marker);
+                    })
+
+                    markersArray.push(marker)
+                    console.log(carRoute.points)
+                    const path = new google.maps.Polyline({
+                        path: carRoute.points,
+                        geodesic: true,
+                        strokeColor: '#3880ff',
+                        strokeOpacity: 0.8,
+                        strokeWeight: 2
+                    });
+
+                    path.setMap(App.map);
+
+                    markersArray.push(path)
+                }
+            })
+        setTimeout(loadData, 5000)
+    }
+
+    function initMap() {
+        const carRoute = JSON.parse(`<%- JSON.stringify(carRoute) %>`);
+        const location = { lat: parseFloat(carRoute.lastCarLocation.lat), lng: parseFloat(carRoute.lastCarLocation.lng) }
+
+        App.map = new google.maps.Map(document.getElementById('map'), {
+            center: location,
+            zoom: 15,
+            styles: [{
+                featureType: 'poi',
+                elementType: 'labels.icon',
+                stylers: [{ visibility: 'off' }] // hide poi (businesses) icons
+            },
+            {
+                featureType: 'poi',
+                elementType: 'geometry',
+                stylers: [{ color: '#e5e5e5' }] // poi geometry color
+            },
+            {
+                featureType: 'poi.park',
+                elementType: 'labels.text.stroke',
+                stylers: [{ color: '#ffffff' }] // hide local businesses labels
+            },
+            {
+                featureType: 'poi.park',
+                elementType: 'labels.text.fill',
+                stylers: [{ color: '#676767' }] // hide local businesses labels
+            },
+            {
+                featureType: 'landscape',
+                elementType: 'geometry',
+                stylers: [{ color: '#f5f5f5' }] // buildings and so on
+            },
+            {
+                featureType: 'road.arterial',
+                elementType: 'labels',
+                stylers: [{ visibility: 'off' }] // hide arterial roads labels
+            },
+            {
+                featureType: 'road.highway',
+                elementType: 'geometry', // highway color
+                stylers: [{ color: '#dadada' }]
+            },
+            {
+                featureType: 'road.highway',
+                elementType: 'labels.text.stroke', // highway label text stroke (contorno)
+                stylers: [{ color: '#ffffff' }]
+            },
+            {
+                featureType: 'road',
+                elementType: 'labels.text.fill', // rad label text color (fill)
+                stylers: [{ color: '#676767' }]
+            },
+            {
+                featureType: 'road.local',
+                elementType: 'geometry',
+                stylers: [{ color: '#ffffff' }] // park roads color
+
+            },
+            {
+                featureType: 'transit',
+                elementType: 'labels.icon',
+                stylers: [{ visibility: 'off' }]
+            },
+            {
+                featureType: 'transit',
+                elementType: 'labels.text.fill',
+                stylers: [{ color: '#676767' }]
+            },
+            {
+                featureType: 'transit',
+                elementType: 'labels.text.stroke',
+                stylers: [{ color: '#ffffff' }]
+            },
+            {
+                featureType: 'transit.station.bus',
+                elementType: 'labels.icon',
+                stylers: [{ visibility: 'off' }]
+            }]
+
+        });
+
+        let marker = new google.maps.Marker({
+            position: location,
+            map: App.map,
+        })
+
+        const infowindow = new google.maps.InfoWindow({
+            content: `<div>Placas: <span>${carRoute.vehiclePlates}</span></div><div>Guardia: <span>${carRoute.user.username}</span></div><div>Empresa: <span>${carRoute.company.name}</span></div>`
+        });
+
+        marker.addListener('click', function () {
+            infowindow.open(App.map, marker);
+        })
+
+        markersArray.push(marker)
+
+        loadData()
+    }
+
+    function clearOverlays() {
+        for (var i = 0; i < markersArray.length; i++) {
+            markersArray[i].setMap(null);
+        }
+        markersArray.length = 0;
+    }
+</script>
+
+<script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAY5scI2sYPDGoLn2INfct1gMw5gFLIHjs&callback=initMap"></script>
+
+<%- include('footer'); -%>

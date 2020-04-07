@@ -1,0 +1,67 @@
+<%- include('header'); -%>
+
+<div class="page-wrapper">
+    <div class="page-content">
+        <nav class="page-breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="#">Usuario</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Modificar</li>
+            </ol>
+        </nav>
+        <div class="row">
+            <div class="col-md-4 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <h6 class="card-title">Actualizar Datos del Usuario</h6>
+                        <form class="forms-sample" action="" method="post">
+                            <% if(typeof serverMsg != 'undefined') {
+                                 if (typeof serverMsg != 'undefined' && valid == true) { %>
+                            <div class="alert alert-success" role="alert">
+                                <%= serverMsg ? serverMsg : '' %>
+                            </div>
+                            <% } else if (typeof serverMsg != 'undefined' && valid == false) { %>
+                            <div class="alert alert-danger" role="alert">
+                                <%= serverMsg ? serverMsg : '' %>
+                            </div>
+                            <% }} %>
+                            <div class="form-group">
+                                <label>ID del Usuario</label>
+                                <input name="userId" type="text" class="form-control"
+                                    placeholder="Ingresa el ID del usuario a modificar">
+                            </div>
+                            <div class="form-group">
+                                <label for="exampleInputUsername1">Selecciona el campo a cambiar</label>
+                                <select name="fieldToChange" id="" class="form-control">
+                                    <option value="username">Username</option>
+                                    <option value="identification">Identificación</option>
+                                    <option value="name">Nombre</option>
+                                    <option value="phone">Teléfono</option>
+                                    <option value="address">Dirección</option>                                    
+                                    <option value="code">Código</option>
+                                    <option value="active">Activo</option>
+                                    <option value="status">Estado</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Nuevo valor</label>
+                                <input name="newValue" type="text" class="form-control"
+                                    placeholder="Ingresa el nuevo valor del campo seleccionado">
+                            </div>
+                            <input type="hidden" name="_csrf" value="<%= csrf %>">
+
+                            <button type="submit" class="btn btn-primary mr-2">Guardar</button>
+                            <button class="btn btn-light">Cancelar</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<%- include('footer'); -%>

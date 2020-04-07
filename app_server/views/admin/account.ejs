@@ -1,0 +1,88 @@
+<%- include('header'); -%>
+
+<div class="page-wrapper">
+    <div class="page-content">
+        <nav class="page-breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="#">Cuenta</a></li>
+                <li class="breadcrumb-item active" aria-current="page"><%= account.username %></li>
+            </ol>
+        </nav>
+        <div class="row">
+            <div class="col-md-4 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <h6 class="card-title">Datos de la Cuenta </h6>
+
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Campo</th>
+                                        <th>Valor</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td style="font-weight: bold;">ID: </td>
+                                        <td><%= account.id %></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight: bold;">Usuario: </td>
+                                        <td><%=  account.username %></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight: bold;">Nombre: </td>
+                                        <td><%=  account.name %></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight: bold;">Identificación: </td>
+                                        <td><%=  account.identification %></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight: bold;">Teléfono: </td>
+                                        <td><%= account.phone %></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight: bold;">Email: </td>
+                                        <td><%= account.email %></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight: bold;">Dirección: </td>
+                                        <td><%= account.address  %></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight: bold;">Código: </td>
+                                        <td><%= account.code  %></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight: bold;">Tipo de usuario: </td>
+                                        <td><%= account.userType == 'admin' ? 'Administrador' : 'Guardia' %></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight: bold;">Fecha de creación: </td>
+                                        <td><%= account.createdAt  %></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight: bold;">Fecha última modificación: </td>
+                                        <td><%= account.updatedAt  %></td>
+                                    </tr>
+                                    
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<%- include('footer'); -%>
