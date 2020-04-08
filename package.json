@@ -1,7 +1,7 @@
 {
-  "name": "control-guardias-seguridad",
+  "name": "jiwards",
   "version": "1.0.0",
-  "description": "Control de Guardias de Seguridad",
+  "description": "jiwards",
   "main": "app.js",
   "scripts": {
     "test": "nodemon app.js",

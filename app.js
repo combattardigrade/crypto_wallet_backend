@@ -11,7 +11,7 @@ const cookieParser = require('cookie-parser')
 
 
 require('./app_api/config/passport')
-const routesAdmin = require('./app_server/routes/admin')
+//const routesAdmin = require('./app_server/routes/admin')
 const routesApi = require('./app_api/routes/index')
 const app = express()
 
@@ -31,7 +31,7 @@ app.use('/api', routesApi)
 app.use(cookieParser())
 app.use(csurf({ cookie: true }))
 // app.use('/',routes)
-app.use('/admin',routesAdmin) 
+// app.use('/admin',routesAdmin) 
 
 // Cronjob to update deposits
 const CronJob = require('cron').CronJob
