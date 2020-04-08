@@ -6,7 +6,7 @@ module.exports = (sequelize,DataTypes) => {
         },
         toUserId: {
 			type: DataTypes.INTEGER,
-			allowNull: false,
+			allowNull: true,
 		},
 		amount: {
             type: DataTypes.DECIMAL(16,8),

@@ -37,6 +37,7 @@ module.exports.getAllTxs = (req, res) => {
                         toUserId: { $eq: userId }
                     }
                 ],
+                operationType: 'INTERNAL_TRANSFER',
                 status: 'COMPLETED'
             },
             include: [
@@ -45,10 +46,45 @@ module.exports.getAllTxs = (req, res) => {
             order: [
                 ['createdAt', 'DESC']
             ],
+            raw: true,
             transaction: t
         })
 
-        sendJSONresponse(res, 200, { status: 'OK', payload: txs })
+        const usersArray = []
+        for (let tx of txs) {           
+            let user
+            if (tx.userId === userId) { // sent
+                user = User.findOne({ 
+                    where: { id: tx.toUserId }, 
+                    attributes: ['id', 'firstName', 'lastName', 'username', 'email'], 
+                    raw: true, 
+                    transaction: t 
+                })
+            } else if (tx.toUserId === userId) { // received
+                user = User.findOne({ 
+                    where: { id: tx.userId }, 
+                    attributes: ['id', 'firstName', 'lastName', 'username', 'email'], 
+                    raw: true, 
+                    transaction: t 
+                })
+            }
+            usersArray.push(user)
+        }
+
+        const users = await Promise.all(usersArray)
+        let payload = []
+        let i = 0
+        for (let tx of txs) {
+            payload.push({
+                ...tx,
+                user: {
+                    ...users[i]
+                }
+            })
+            i++
+        }
+
+        sendJSONresponse(res, 200, { status: 'OK', payload: payload })
         return
     })
         .catch((err) => {

@@ -1,11 +1,12 @@
 const passport = require('passport')
 const User = require('../models/sequelize').User
 const Balance = require('../models/sequelize').Balance
-
+const UserAddress = require('../models/sequelize').UserAddress
 const sequelize = require('../models/sequelize').sequelize
 const crypto = require('crypto')
 const emailValidator = require('email-validator')
 const sendJSONresponse = require('../utils').sendJSONresponse
+const ethWallet = require('ethereumjs-wallet')
 const passwordValidator = require('password-validator')
 const passwordSchema = new passwordValidator()
 passwordSchema
@@ -69,6 +70,13 @@ module.exports.signup = (req, res) => {
                     currency: 'JWS'
                 }, { transaction: t })
 
+                // Generate Ethereum address
+                const addressData = ethWallet.generate()
+                await UserAddress.create({
+                    userId: user.id,
+                    address: addressData.getAddressString(),
+                    privateKey: addressData.getPrivateKeyString()
+                }, { transaction: t })
 
                 sendJSONresponse(res, 200, { status: 'OK', token: token, message: 'Account created' })
                 return

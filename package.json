@@ -13,11 +13,14 @@
     "body-parser": "1.18.3",
     "cookie-parser": "^1.4.5",
     "cors": "2.8.5",
+    "cron": "^1.8.2",
     "csurf": "1.9.0",
     "debug": "4.1.1",
     "dotenv": "6.2.0",
     "dotenv-webpack": "^1.7.0",
     "email-validator": "2.0.4",
+    "ethereumjs-tx": "^2.1.2",
+    "ethereumjs-wallet": "^0.6.3",
     "express": "4.16.4",
     "express-fileupload": "1.1.1-alpha.3",
     "express-jwt": "5.3.1",
@@ -33,10 +36,11 @@
     "passport-local": "1.0.0",
     "password-validator": "^5.0.3",
     "request": "^2.88.2",
-    "request-promise": "^4.2.4",
+    "request-promise": "^4.2.5",
     "sequelize": "4.42.0",
     "serve-favicon": "2.5.0",
-    "socket.io": "2.2.0"
+    "socket.io": "2.2.0",
+    "web3": "^1.2.6"
   },
   "devDependencies": {
     "nodemon": "1.18.10",

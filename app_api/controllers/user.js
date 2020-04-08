@@ -1,7 +1,6 @@
 const User = require('../models/sequelize').User
 const Balance = require('../models/sequelize').Balance
-const Transaction = require('../models/sequelize').Transaction
-
+const UserAddress = require('../models/sequelize').UserAddress
 const sendJSONresponse = require('../utils/index.js').sendJSONresponse
 const sequelize = require('../models/sequelize').sequelize
 const { Op } = require('sequelize')
@@ -22,7 +21,8 @@ module.exports.getUserData = (req, res) => {
             },
             attributes: ['id', 'email', 'username', 'firstName', 'lastName', 'userType', 'status','createdAt','updatedAt'],
             include: [
-                { model: Balance },                              
+                { model: Balance },   
+                { model: UserAddress, attributes: ['id', 'userId', 'address', 'createdAt', 'updatedAt'] }                           
             ],
             transaction: t
         })

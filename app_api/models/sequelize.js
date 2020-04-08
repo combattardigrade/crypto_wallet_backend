@@ -5,6 +5,7 @@ const TransactionModel = require('./transaction')
 const TxReasonModel = require('./txReason')
 const ContactModel = require('./contact')
 const PaymentRequestModel = require('./paymentRequest')
+const UserAddressModel = require('./userAddress')
 const AdminModel = require('./admin')
 
 
@@ -29,12 +30,14 @@ const Transaction = TransactionModel(sequelize, Sequelize)
 const TxReason = TxReasonModel(sequelize, Sequelize)
 const Contact = ContactModel(sequelize, Sequelize)
 const PaymentRequest = PaymentRequestModel(sequelize, Sequelize)
+const UserAddress = UserAddressModel(sequelize, Sequelize)
 const Admin = AdminModel(sequelize, Sequelize)
 
 User.hasMany(Balance)
 Transaction.belongsTo(User)
 Contact.belongsTo(User)
 PaymentRequest.belongsTo(User)
+User.hasOne(UserAddress)
 
 
 sequelize.sync({force: false})
@@ -49,6 +52,7 @@ module.exports = {
     TxReason,
     Contact,
     PaymentRequest,
+    UserAddress,
     Admin,
     sequelize
 }

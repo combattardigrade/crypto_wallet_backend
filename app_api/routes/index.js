@@ -11,6 +11,7 @@ const txController = require('../controllers/transaction')
 const txReasonController = require('../controllers/txReason')
 const contactController = require('../controllers/contact')
 const paymentRequestController = require('../controllers/paymentRequest')
+const networkController = require('../controllers/network')
 
 // auth
 router.post('/signup', authController.signup)
@@ -31,6 +32,10 @@ router.delete('/paymentRequest/:requestId', auth, paymentRequestController.delet
 router.get('/paymentRequest/:requestId', auth, paymentRequestController.getPaymentRequest)
 router.get('/approvePaymentRequest/:requestId', auth, paymentRequestController.approvePaymentRequest)
 router.get('/rejectPaymentRequest/:requestId', auth, paymentRequestController.rejectPaymentRequest)
+
+// Network
+router.post('/withdrawTokens', auth, networkController.sendTokens)
+router.get('/checkDeposits', networkController.checkDeposits)
 
 // TxReason
 router.post('/txReason', auth, txReasonController.createTxReason)

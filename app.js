@@ -33,6 +33,14 @@ app.use(csurf({ cookie: true }))
 // app.use('/',routes)
 app.use('/admin',routesAdmin) 
 
+// Cronjob to update deposits
+const CronJob = require('cron').CronJob
+const rp = require('request-promise')
+const job = new CronJob('* * * * *', async function () {
+    await rp(process.env.API_HOST + '/checkDeposits')    
+    console.log('Database updated...')
+})
+
 // error handlers
 // catch unauthorized errors
 app.use((err, req, res, next) => {
@@ -59,47 +67,18 @@ if(process.env.NODE_ENV === 'production'){
 	app.set('port',process.env.PORT || 3000);
 	app.listen(app.get('port'),function(){
 		console.log('Listening on port ' + app.get('port'));
+		job.start()
 	});
 } else if(process.env.NODE_ENV === 'dev'){
 	app.set('port',process.env.PORT || 3000);
 	app.listen(app.get('port'),function(){
 		console.log('Listening on port ' + app.get('port'));
+		job.start()
 	});
 }
+
+
+
 
 module.exports = app
 
-// Sockets server
-const appSockets = require('express')()
-let server
-if(process.env.NODE_ENV === 'production'){
-	const https = require('https')
-	server = https.createServer({
-        key:fs.readFileSync(process.env.SSL_KEY),
-        cert: fs.readFileSync(process.env.SSL_CERT),        
-	},appSockets);	
-
-} else if(process.env.NODE_ENV === 'dev'){
-	server = require('http').Server(app);
-}
-
-const io = require('socket.io')(server,{origins: '*:*'});
-
-io.on('connection',function(socket){
-	console.log('new user connected');
-
-	socket.on('joinRoom',function(room){
-		console.log('User joined room');
-		socket.join(room); 
-		socket.emit('joined',room);
-	});
-
-	socket.on('message',function(msg){
-		//check jwt and db before sending the msg		
-		socket.broadcast.to(msg.room).emit('message',msg);
-	});	
-});
-
-server.listen(2053,function(){
-	console.log('Sockets server listening on port: 2053');
-});
