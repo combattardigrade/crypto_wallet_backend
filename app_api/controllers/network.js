@@ -8,7 +8,7 @@ const { Op } = require('sequelize')
 const moment = require('moment')
 const path = require('path')
 const fs = require('fs')
-const Web3 = require('Web3')
+const Web3 = require('web3')
 const Tx = require('ethereumjs-tx').Transaction
 
 module.exports.sendTokens = (req, res) => {
