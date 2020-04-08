@@ -193,7 +193,7 @@ module.exports.sendInternalTx = (req, res) => {
     const operationType = 'INTERNAL_TRANSFER'
     const reason = req.body.reason
     const description = req.body.description
-
+    
 
     if (!userId) {
         sendJSONresponse(res, 404, { status: 'ERROR', message: 'Invalid session token' })
@@ -239,8 +239,13 @@ module.exports.sendInternalTx = (req, res) => {
             transaction: t
         })
 
-        fromBalance.amount = fromBalance.amount - amount
-        toBalance.amount = toBalance.amount + amount
+        if(!fromBalance || !toBalance) {
+            sendJSONresponse(res, 404, { status: 'ERROR', message: 'An error occurred while trying update the balances'})
+            return
+        }
+
+        fromBalance.amount = parseFloat(fromBalance.amount) - parseFloat(amount)
+        toBalance.amount = parseFloat(toBalance.amount) + parseFloat(amount)
 
         await fromBalance.save({ transaction: t })
         await toBalance.save({ transaction: t })
