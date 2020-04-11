@@ -40,9 +40,6 @@ module.exports.getAllTxs = (req, res) => {
                 operationType: 'INTERNAL_TRANSFER',
                 status: 'COMPLETED'
             },
-            include: [
-                { model: User, attributes: ['id', 'firstName', 'lastName', 'username', 'email'] }
-            ],
             order: [
                 ['createdAt', 'DESC']
             ],
@@ -51,24 +48,11 @@ module.exports.getAllTxs = (req, res) => {
         })
 
         const usersArray = []
-        for (let tx of txs) {           
-            let user
-            if (tx.userId === userId) { // sent
-                user = User.findOne({ 
-                    where: { id: tx.toUserId }, 
-                    attributes: ['id', 'firstName', 'lastName', 'username', 'email'], 
-                    raw: true, 
-                    transaction: t 
-                })
-            } else if (tx.toUserId === userId) { // received
-                user = User.findOne({ 
-                    where: { id: tx.userId }, 
-                    attributes: ['id', 'firstName', 'lastName', 'username', 'email'], 
-                    raw: true, 
-                    transaction: t 
-                })
-            }
-            usersArray.push(user)
+        for (let tx of txs) {
+            let from = User.findOne({ where: { id: tx.userId }, transaction: t, raw: true, attributes: ['id', 'firstName', 'lastName', 'username', 'email'] })
+            let to = User.findOne({ where: { id: tx.toUserId }, transaction: t, raw: true, attributes: ['id', 'firstName', 'lastName', 'username', 'email'] })
+            usersArray.push(from)
+            usersArray.push(to)
         }
 
         const users = await Promise.all(usersArray)
@@ -77,10 +61,14 @@ module.exports.getAllTxs = (req, res) => {
         for (let tx of txs) {
             payload.push({
                 ...tx,
-                user: {
+                from: {
                     ...users[i]
+                },
+                to: {
+                    ...users[i+1]
                 }
             })
+            i++
             i++
         }
 
@@ -193,7 +181,7 @@ module.exports.sendInternalTx = (req, res) => {
     const operationType = 'INTERNAL_TRANSFER'
     const reason = req.body.reason
     const description = req.body.description
-    
+
 
     if (!userId) {
         sendJSONresponse(res, 404, { status: 'ERROR', message: 'Invalid session token' })
@@ -239,8 +227,8 @@ module.exports.sendInternalTx = (req, res) => {
             transaction: t
         })
 
-        if(!fromBalance || !toBalance) {
-            sendJSONresponse(res, 404, { status: 'ERROR', message: 'An error occurred while trying update the balances'})
+        if (!fromBalance || !toBalance) {
+            sendJSONresponse(res, 404, { status: 'ERROR', message: 'An error occurred while trying update the balances' })
             return
         }
 
