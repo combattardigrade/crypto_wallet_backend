@@ -140,7 +140,7 @@ module.exports.getRankingsByPeriod = (req, res) => {
                 'id', ['toUserId', 'userId'],
                 [sequelize.fn('sum', sequelize.col('amount')), 'total_amount']
             ],
-            group: ['toUserId'],
+            group: ['userId'],
             limit: 50,
             raw: true,
             transaction: t
