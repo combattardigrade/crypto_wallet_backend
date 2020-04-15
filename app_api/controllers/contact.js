@@ -236,10 +236,33 @@ module.exports.searchContact = (req, res) => {
                         id: userId,
                     }
                 ]
-            }
+            },
+            raw: true,
+            transaction: t
         })
 
-        sendJSONresponse(res, 200, { status: 'OK', payload: results })
+        const contacts = await Contact.findAll({
+            where: {
+                userId
+            },
+            transaction: t
+        })
+
+        const payload = []
+        for(let result of results) {
+            let flag = 0
+            for(let contact of contacts) {
+                if(result.id === contact.contactId) {
+                    flag = 1
+                    break;
+                }
+            }
+            if(flag !== 1) {
+                payload.push(result)
+            }
+        }
+
+        sendJSONresponse(res, 200, { status: 'OK', payload: payload })
         return
     })
         .catch((err) => {

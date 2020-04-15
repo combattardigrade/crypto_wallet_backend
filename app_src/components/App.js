@@ -2,11 +2,20 @@ import React, { Component, Fragment } from 'react'
 import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom'
 import { connect } from 'react-redux'
 
-// components
-import Loading from './Loading'
+// Components
 import Login from './Login'
+import Dashboard from './Dashboard'
+import Contacts from './Contacts'
+import AddContact from './AddContact'
+import ContactDetails from './ContactDetails'
+import Rankings from './Rankings'
+import Transactions from './Transactions'
+import TxDetails from './TxDetails'
+import Send from './Send'
+import Receive from './Receive'
+import Withdraw from './Withdraw'
 
-class App extends Component { 
+class App extends Component {
 
   render() {
     const { match, auth } = this.props
@@ -16,6 +25,21 @@ class App extends Component {
         <Fragment>
           <Route path="/" exact component={Login} />
           <Route path="/login" component={Login} />
+          <PrivateRoute path={`/dashboard`} component={Dashboard} auth={auth} />
+          <PrivateRoute path={`/contacts`} component={Contacts} auth={auth} />
+          <PrivateRoute path={`/contact/:userId`} component={ContactDetails} auth={auth} />
+          <PrivateRoute path={`/add-contact`} component={AddContact} auth={auth} />
+          <PrivateRoute path={`/rankings`} component={Rankings} auth={auth} />
+          <PrivateRoute path={`/txs`} component={Transactions} auth={auth} />
+          <PrivateRoute path={`/tx/:txId`} component={TxDetails} auth={auth} />
+          <PrivateRoute path={`/send`} component={Send} auth={auth} />
+          <PrivateRoute path={`/receive`} component={Receive} auth={auth} />
+          <PrivateRoute path={`/withdraw`} component={Withdraw} auth={auth} />
+
+          <PrivateRoute path={`/inbox`} component={Dashboard} auth={auth} />
+          <PrivateRoute path={`/settings`} component={Dashboard} auth={auth} />
+          <PrivateRoute path={`/io-history`} component={Dashboard} auth={auth} />
+          
         </Fragment>
       </Router>
     )

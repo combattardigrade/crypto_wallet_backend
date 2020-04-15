@@ -19,6 +19,7 @@ router.post('/login', authController.login)
 
 // user
 router.get('/user', auth, userController.getUserData)
+router.get('/user/:userId', auth, userController.getUserDetails)
 
 // transactions
 router.get('/txs', auth, txController.getAllTxs)

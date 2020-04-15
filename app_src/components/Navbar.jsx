@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react'
 import { connect } from 'react-redux'
-
+import { Link } from "react-router-dom";
+import { Send, Download, Inbox, RefreshCw, Upload } from 'react-feather';
 
 
 class Navbar extends Component {
@@ -12,52 +13,39 @@ class Navbar extends Component {
                     <i data-feather="menu" />
                 </a>
                 <div className="navbar-content">
-                    <form className="search-form">
-                        <div className="input-group">
-                            <div className="input-group-prepend">
-                                <div className="input-group-text">
-                                    <i data-feather="search" />
-                                </div>
+                    <div style={{ display: 'flex', }}>
+                        
+                        <Link style={{ display: 'flex', marginLeft: '20px', }} to="/send">
+                            <div style={{ display: 'flex', alignItems: 'center' }}>
+                                <Send size="22" />
+                                <div style={{ padding: '5px', fontSize: '18px', fontWeight: 'bold' }}>Send</div>
                             </div>
-                            <input type="text" className="form-control" id="navbarForm" placeholder="Search here..." />
-                        </div>
-                    </form>
+                        </Link>
+                        <div style={{ display: 'flex', alignItems: 'center', marginLeft: '20px', color: '#d6d6d6' }}>|</div>
+                        <Link style={{ display: 'flex' }} to="/receive">
+                            <div style={{ display: 'flex', alignItems: 'center', marginLeft: '20px' }}>
+                                <Download size="22" />
+                                <div style={{ padding: '5px', fontSize: '18px', fontWeight: 'bold' }}>Receive</div>
+                            </div>
+                        </Link>
+                        <div style={{ display: 'flex', alignItems: 'center', marginLeft: '20px', color: '#d6d6d6' }}>|</div>
+                        <Link style={{ display: 'flex' }} to="/withdraw">
+                            <div style={{ display: 'flex', alignItems: 'center', marginLeft: '20px' }}>
+                                <Upload size="22" />
+                                <div style={{ padding: '5px', fontSize: '18px', fontWeight: 'bold' }}>Widthdraw</div>
+                            </div>
+                        </Link>
+                    </div>
                     <ul className="navbar-nav">
-                        <li className="nav-item dropdown">
-                            
-                            <div className="dropdown-menu" aria-labelledby="languageDropdown">
-                                <a href="#" className="dropdown-item py-2"><i className="flag-icon flag-icon-us" title="us" id="us" /> <span className="ml-1"> English </span></a>
-                                <a href="#" className="dropdown-item py-2"><i className="flag-icon flag-icon-fr" title="fr" id="fr" /> <span className="ml-1"> French </span></a>
-                                <a href="#" className="dropdown-item py-2"><i className="flag-icon flag-icon-de" title="de" id="de" /> <span className="ml-1"> German </span></a>
-                                <a href="#" className="dropdown-item py-2"><i className="flag-icon flag-icon-pt" title="pt" id="pt" /> <span className="ml-1"> Portuguese </span></a>
-                                <a href="#" className="dropdown-item py-2"><i className="flag-icon flag-icon-es" title="es" id="es" /> <span className="ml-1"> Spanish </span></a>
-                            </div>
-                        </li>
-                        <li className="nav-item dropdown nav-apps">
-                            <a className="nav-link dropdown-toggle" href="#" id="appsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i data-feather="grid" />
+                        <li className="nav-item dropdown nav-notifications">
+                            <a className="nav-link dropdown-toggle" href="#" id="notificationDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <RefreshCw />                                
                             </a>
-                            <div className="dropdown-menu" aria-labelledby="appsDropdown">
-                                <div className="dropdown-header d-flex align-items-center justify-content-between">
-                                    <p className="mb-0 font-weight-medium">Web Apps</p>
-                                    <a href="#" className="text-muted">Edit</a>
-                                </div>
-                                <div className="dropdown-body">
-                                    <div className="d-flex align-items-center apps">
-                                        <a href="pages/apps/chat.html"><i data-feather="message-square" className="icon-lg" /><p>Chat</p></a>
-                                        <a href="pages/apps/calendar.html"><i data-feather="calendar" className="icon-lg" /><p>Calendar</p></a>
-                                        <a href="pages/email/inbox.html"><i data-feather="mail" className="icon-lg" /><p>Email</p></a>
-                                        <a href="pages/general/profile.html"><i data-feather="instagram" className="icon-lg" /><p>Profile</p></a>
-                                    </div>
-                                </div>
-                                <div className="dropdown-footer d-flex align-items-center justify-content-center">
-                                    <a href="#">View all</a>
-                                </div>
-                            </div>
                         </li>
+
                         <li className="nav-item dropdown nav-messages">
                             <a className="nav-link dropdown-toggle" href="#" id="messageDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i data-feather="mail" />
+                                <Inbox size="24" />
                             </a>
                             <div className="dropdown-menu" aria-labelledby="messageDropdown">
                                 <div className="dropdown-header d-flex align-items-center justify-content-between">
