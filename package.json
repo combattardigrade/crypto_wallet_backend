@@ -109,7 +109,7 @@
     "redux-thunk": "^2.3.0",
     "request": "^2.88.2",
     "request-promise": "^4.2.5",
-    "sequelize": "4.42.0",
+    "sequelize": "5.15.1",
     "serve-favicon": "2.5.0",
     "socicon": "^3.0.5",
     "socket.io": "2.2.0",
