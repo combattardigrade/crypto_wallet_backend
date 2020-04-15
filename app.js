@@ -11,27 +11,23 @@ const cookieParser = require('cookie-parser')
 
 
 require('./app_api/config/passport')
-//const routesAdmin = require('./app_server/routes/admin')
+const routesWallet = require('./app_server/routes/index')
 const routesApi = require('./app_api/routes/index')
 const app = express()
 
-app.use(cors({ origin: '*' }))
+app.use(cors({origin: '*',credentials: true , origin: 'http://localhost:8080'}))
 app.use(fileUpload({ limits: { fileSize: 10 * 1024 * 1024 } }))
+app.use(bodyParser.json({limit:'50mb'}))
+app.use(bodyParser.urlencoded({limit: '50mb', extended: true}))
+app.use(express.static(path.join(__dirname,'public')))
 
-// view engine setup
-app.set('views', path.join(__dirname, 'app_server', 'views'))
-app.set('view engine', 'ejs')
-
-app.use(bodyParser.json({ limit: '50mb' }))
-app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }))
-app.use(express.static(path.join(__dirname, 'public')))
 app.use(passport.initialize())
 app.use('/api', routesApi)
 // csrf and cookies
 app.use(cookieParser())
-app.use(csurf({ cookie: true }))
-// app.use('/',routes)
-// app.use('/admin',routesAdmin) 
+// app.use(csurf({cookie: {httpOnly: true}}))
+// global variable
+global.APP_ROOT = path.resolve(__dirname)
 
 // Cronjob to update deposits
 const CronJob = require('cron').CronJob
@@ -44,23 +40,17 @@ const job = new CronJob('* * * * *', async function () {
 // error handlers
 // catch unauthorized errors
 app.use((err, req, res, next) => {
-    if (err.name === 'UnauthorizedError') {
+    if(err.name === 'UnauthorizedError') {
         res.status(401)
-        res.json({ message: err.name + ': ' + err.message })
+        res.json({message: 'Unauthorized user' })
     } else if (err.code === 'EBADCSRFTOKEN') {
         res.status(403)
         res.send('CSRF verification failed')
-    } else if (err.message === 'missing_admin_token_cookie') {
-        res.writeHead(302, {
-            Location: process.env.SERVER_HOST + '/admin/login'
-        })
-        res.end()
     } else if (err.message === 'missing_token_cookie') {
-        res.writeHead(302, {
-            'Location': process.env.SERVER_HOST + '/login'
-        });
-        res.end();
-    }    
+        res.status(401)
+        res.json({message: 'User not authenticated' })
+        res.end()
+    }
 })
 
 if(process.env.NODE_ENV === 'production'){
@@ -76,9 +66,6 @@ if(process.env.NODE_ENV === 'production'){
 		job.start()
 	});
 }
-
-
-
 
 module.exports = app
 

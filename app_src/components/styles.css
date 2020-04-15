@@ -1,0 +1,118 @@
+.preloader {
+    display: inline-block;
+}
+
+.btn-icon {
+    font-size: 0.8em !important;
+}
+
+.action-btn {
+    margin-right: 5px;
+}
+
+.dropzone {
+    border-collapse: separate;
+    caption-side: top;
+    caret-color: auto;
+    cursor: auto;
+    empty-cells: show;
+    font-feature-settings: normal;
+    font-kerning: auto;
+    hyphens: none;
+    image-rendering: auto;
+    letter-spacing: normal;
+    list-style-image: none;
+    list-style-position: outside;
+    list-style-type: disc;
+    orphans: 2;
+    pointer-events: auto;
+    quotes: initial;
+    tab-size: 8;
+    text-align: initial;
+    text-align-last: auto;
+    text-combine-upright: none;
+    text-indent: 0px;
+    text-orientation: mixed;
+    text-rendering: auto;
+    text-shadow: none;
+    text-transform: none;
+    text-underline-position: auto;
+    visibility: visible;
+    white-space: normal;
+    widows: 2;
+    word-break: normal;
+    word-spacing: normal;
+    overflow-wrap: normal;
+    writing-mode: horizontal-tb;
+    border-spacing: 0px;
+    font: inherit;
+    font-family: sans-serif;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    border-width: 2px;
+    border-radius: 2px;
+    border-color: #eeeeee;
+    border-style: dashed;
+    background-color: #fafafa;
+    color: #bdbdbd;
+    outline: none;
+    transition: border .24s ease-in-out;
+    border: 2px dashed !important;
+}
+
+.dropzone-container {  
+    
+    border-collapse: separate;
+    caption-side: top;
+    caret-color: auto;
+    color: inherit;
+    cursor: auto;
+    empty-cells: show;
+    font-feature-settings: normal;
+    font-kerning: auto;
+    hyphens: none;
+    image-rendering: auto;
+    letter-spacing: normal;
+    list-style-image: none;
+    list-style-position: outside;
+    list-style-type: disc;
+    orphans: 2;
+    pointer-events: auto;
+    quotes: initial;
+    tab-size: 8;
+    text-align: initial;
+    text-align-last: auto;
+    text-combine-upright: none;
+    text-indent: 0px;
+    text-orientation: mixed;
+    text-rendering: auto;
+    text-shadow: none;
+    text-transform: none;
+    text-underline-position: auto;
+    visibility: visible;
+    white-space: normal;
+    widows: 2;
+    word-break: normal;
+    word-spacing: normal;
+    overflow-wrap: normal;
+    writing-mode: horizontal-tb;
+    border-spacing: 0px;
+    font: inherit;
+    display: flex;
+    flex-direction: column;
+    font-family: sans-serif;
+}
+
+
+
+.dropzone-text {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 200px;
+    width: 100%;
+    
+}
