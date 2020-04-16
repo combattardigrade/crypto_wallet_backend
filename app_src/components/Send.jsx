@@ -68,19 +68,19 @@ class Send extends Component {
 
     handleConfirmTx = (e) => {
         e.preventDefault()
-        
+
         const { token } = this.props
         const { selectedContact, amount, selectedReason, description } = this.state
 
-        if(!selectedContact || !amount || !selectedReason || !description) {
-            this.setState({serverStatus: 'ERROR', serverMsg: 'Enter all the required fields'})
+        if (!selectedContact || !amount || !selectedReason || !description) {
+            this.setState({ serverStatus: 'ERROR', serverMsg: 'Enter all the required fields' })
             return
         }
 
         if (isNaN(amount) || amount < 0) {
             this.setState({ serverStatus: 'ERROR', serverMsg: 'Enter a valid amount' })
             return
-        }   
+        }
 
         const params = {
             toUserId: selectedContact,
@@ -101,17 +101,17 @@ class Send extends Component {
                         sendInternalTx(params)
                             .then(data => data.json())
                             .then((res) => {
-                                if(res.status === 'OK') {
+                                if (res.status === 'OK') {
                                     console.log(res.payload)
-                                    this.setState({serverStatus: 'OK', serverMsg: 'Transaction sent!', amount: '', description: ''})
+                                    this.setState({ serverStatus: 'OK', serverMsg: 'Transaction sent!', amount: '', description: '' })
                                 } else {
-                                    this.setState({serverStatus: 'ERROR', serverMsg: res.message})
+                                    this.setState({ serverStatus: 'ERROR', serverMsg: res.message })
                                 }
                             })
                             .catch((err) => {
                                 console.log(err)
-                                this.setState({serverStatus: 'ERROR', serverMsg: 'An error occurred. Please try again!'})
-                            })                        
+                                this.setState({ serverStatus: 'ERROR', serverMsg: 'An error occurred. Please try again!' })
+                            })
                     }
                 },
                 {
@@ -152,12 +152,12 @@ class Send extends Component {
                                     <div className="card-body">
                                         <h6 className="card-title">Send JWS</h6>
                                         <form className="forms-sample">
-                                        {
+                                            {
                                                 serverMsg
-                                                    &&
-                                                    <div className={serverStatus === 'OK' ? "alert alert-success" : "alert alert-danger"} role="alert">
-                                                        {serverMsg}
-							                        </div>
+                                                &&
+                                                <div className={serverStatus === 'OK' ? "alert alert-success" : "alert alert-danger"} role="alert">
+                                                    {serverMsg}
+                                                </div>
                                             }
                                             <div className="form-group">
                                                 <label htmlFor="exampleInputPassword1">Send To</label>

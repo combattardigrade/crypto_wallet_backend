@@ -4,7 +4,8 @@ import { Box, Inbox, Users, Award, Repeat } from 'react-feather';
 
 class Sidebar extends Component {
     render() {
-       
+        const { user } = this.props
+
         return (
             <Fragment>
                 <nav className="sidebar">
@@ -20,6 +21,13 @@ class Sidebar extends Component {
                     </div>
                     <div className="sidebar-body">
                         <ul className="nav">
+                            <li className="nav-item nav-category">Total Balance</li>
+                            <li className="nav-item">
+                                <a href='#' className="nav-link">
+                                    <span style={{ marginLeft: '2px', fontSize:'1em' }} className="link-title">{parseFloat(user.balances[0].amount)} JWS</span>
+                                </a>
+                            </li>
+
                             <li className="nav-item nav-category">Main</li>
                             <li className="nav-item">
                                 <a href={`${process.env.WEB_HOST}dashboard`} className="nav-link">
@@ -52,7 +60,7 @@ class Sidebar extends Component {
                                     </ul>
                                 </div>
                             </li>
-                            
+
                             <li className="nav-item nav-category">Rankings</li>
                             <li className="nav-item">
                                 <a className="nav-link" data-toggle="collapse" href="#rankings" role="button" aria-expanded="false" aria-controls="rankings">
@@ -64,7 +72,7 @@ class Sidebar extends Component {
                                     <ul className="nav sub-menu">
                                         <li className="nav-item">
                                             <a href={`${process.env.WEB_HOST}rankings`} className="nav-link">Global Rankings</a>
-                                        </li>                                        
+                                        </li>
                                     </ul>
                                 </div>
                             </li>
@@ -87,8 +95,8 @@ class Sidebar extends Component {
                                     </ul>
                                 </div>
                             </li>
-                            
-                            
+
+
                         </ul>
                     </div>
                 </nav>
@@ -98,4 +106,11 @@ class Sidebar extends Component {
     }
 }
 
-export default Sidebar
+function mapStateToProps({ auth, user }) {
+    return {
+        token: auth && auth.token,
+        user,
+    }
+}
+export default connect(mapStateToProps)(Sidebar)
+

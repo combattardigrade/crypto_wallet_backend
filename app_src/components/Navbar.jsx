@@ -39,7 +39,7 @@ class Navbar extends Component {
                     <ul className="navbar-nav">
                         <li className="nav-item dropdown nav-notifications">
                             <a className="nav-link dropdown-toggle" href="#" id="notificationDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <RefreshCw />                                
+                                <RefreshCw />
                             </a>
                         </li>
 

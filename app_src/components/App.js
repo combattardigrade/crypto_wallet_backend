@@ -14,6 +14,8 @@ import TxDetails from './TxDetails'
 import Send from './Send'
 import Receive from './Receive'
 import Withdraw from './Withdraw'
+import Inbox from './Inbox'
+import InboxTxDetails from './InboxTxDetails'
 
 class App extends Component {
 
@@ -35,8 +37,9 @@ class App extends Component {
           <PrivateRoute path={`/send`} component={Send} auth={auth} />
           <PrivateRoute path={`/receive`} component={Receive} auth={auth} />
           <PrivateRoute path={`/withdraw`} component={Withdraw} auth={auth} />
-
-          <PrivateRoute path={`/inbox`} component={Dashboard} auth={auth} />
+          <PrivateRoute path={`/inbox`} component={Inbox} auth={auth} />
+          <PrivateRoute path={`/inboxTx/:txId`} component={InboxTxDetails} auth={auth} />
+          
           <PrivateRoute path={`/settings`} component={Dashboard} auth={auth} />
           <PrivateRoute path={`/io-history`} component={Dashboard} auth={auth} />
           

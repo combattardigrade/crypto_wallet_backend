@@ -85,8 +85,8 @@ class Transactions extends Component {
                                             <ReactHTMLTableToExcel
                                                 className="btn btn-light mb-1 "
                                                 table="txsTable"
-                                                filename="rankings"
-                                                sheet="rankings"
+                                                filename="transactions"
+                                                sheet="transactions"
                                                 buttonText="Excel"
                                             />
                                         </div>
