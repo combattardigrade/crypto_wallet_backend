@@ -118,6 +118,7 @@
     "serve-favicon": "2.5.0",
     "socicon": "^3.0.5",
     "socket.io": "2.2.0",
+    "translate-json-object": "^2.3.6",
     "utf8": "^3.0.0",
     "web3": "^1.2.6"
   },
