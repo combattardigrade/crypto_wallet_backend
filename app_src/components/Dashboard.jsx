@@ -12,6 +12,16 @@ import { getUserData, getInbox, getTxs } from '../utils/api'
 // Actions
 import { saveUserData } from '../actions/user'
 
+// Locales
+import en from '../locales/en'
+import fr from '../locales/fr'
+import nl from '../locales/nl'
+import es from '../locales/es'
+import pt from '../locales/pt'
+import ja from '../locales/ja'
+import zh from '../locales/zh'
+const LOCALES = { en, fr, nl, es, pt, ja, zh }
+
 // Libraries
 const moment = require('moment')
 
@@ -55,7 +65,7 @@ class Dashboard extends Component {
 
     render() {
         const { loading, inbox, txs } = this.state
-        const { user } = this.props
+        const { user, lan } = this.props
 
         if (loading) {
             return <Loading />
@@ -71,7 +81,7 @@ class Dashboard extends Component {
                                 <div className="card-body">
                                     <div className="row">
                                         <div className="col-xs-4 col-sm-4 col-md-6 col-xl-6">
-                                            <h3>Balance</h3>
+                                            <h3>{LOCALES[lan]['web_wallet']['balance']}</h3>
                                             <h5>{parseFloat(user.balances[0].amount)} JWS</h5>
                                         </div>
                                         <div className="col-xs-8 col-sm-8 col-md-6 col-xl-6" style={{ textAlign: 'right' }}>
@@ -86,8 +96,8 @@ class Dashboard extends Component {
                                 <div className="card-body">
                                     <div className="row">
                                         <div className="col-xs-4 col-sm-4 col-md-6 col-xl-6">
-                                            <h3>Inbox</h3>
-                                            <h5>{inbox.length} Pending Approval</h5>
+                                            <h3>{LOCALES[lan]['web_wallet']['inbox']}</h3>
+                                            <h5>{inbox.length} {LOCALES[lan]['web_wallet']['pending_approval']}</h5>
                                         </div>
                                         <div className="col-xs-8 col-sm-8 col-md-6 col-xl-6" style={{ textAlign: 'right', display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
                                             <i style={{ fontSize: '2em', color: '#0033cc' }} className="fa fa-inbox"></i>
@@ -101,7 +111,7 @@ class Dashboard extends Component {
                                 <div className="card-body">
                                     <div className="row">
                                         <div className="col-xs-4 col-sm-4 col-md-6 col-xl-6">
-                                            <h3>Transactions</h3>
+                                            <h3>{LOCALES[lan]['web_wallet']['transactions']}</h3>
                                             <h5>{txs && txs.length} Txs</h5>
                                         </div>
                                         <div className="col-xs-8 col-sm-8 col-md-6 col-xl-6" style={{ textAlign: 'right', display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
@@ -117,18 +127,18 @@ class Dashboard extends Component {
                         <div className="col-xs-12 col-sm-12 col-md-6">
                             <div className="card">
                                 <div className="card-body">
-                                    <h6 className="card-title">Inbox</h6>
+                                    <h6 className="card-title">{LOCALES[lan]['web_wallet']['inbox']}</h6>
                                     <div className="table-responsive">
                                         <table className="table table-hover" id="txsTable">
                                             <thead>
                                                 <tr>
                                                     <td>#</td>
-                                                    <td>Person</td>
-                                                    <td>Operation</td>
-                                                    <td>Amount</td>
-                                                    <td>Reason</td>
-                                                    <td>Date</td>
-                                                    <td>Details</td>
+                                                    <td>{LOCALES[lan]['web_wallet']['person']}</td>
+                                                    <td>{LOCALES[lan]['web_wallet']['operation']}</td>
+                                                    <td>{LOCALES[lan]['web_wallet']['amount']}</td>
+                                                    <td>{LOCALES[lan]['web_wallet']['reason']}</td>
+                                                    <td>{LOCALES[lan]['web_wallet']['date']}</td>
+                                                    <td>{LOCALES[lan]['web_wallet']['details']}</td>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -172,20 +182,20 @@ class Dashboard extends Component {
                         <div className="col-xs-12 col-sm-12 col-md-6">
                             <div className="card">
                                 <div className="card-body">
-                                    <h6 className="card-title">Transactions</h6>
+                                    <h6 className="card-title">{LOCALES[lan]['web_wallet']['transactions']}</h6>
                                     <div className="table-responsive">
                                         <table className="table table-hover" id="txsTable">
                                             <thead>
                                                 <tr>
-                                                <td>ID</td>
-                                                    <td>Person</td>
-                                                    <td>Operation</td>
-                                                    <td>Amount</td>
-                                                    <td>Currency</td>
-                                                    <td>Reason</td>
-                                                    <td>Description</td>
-                                                    <td>Date</td>
-                                                    <td>Details</td>
+                                                    <td>ID</td>
+                                                    <td>{LOCALES[lan]['web_wallet']['person']}</td>
+                                                    <td>{LOCALES[lan]['web_wallet']['operation']}</td>
+                                                    <td>{LOCALES[lan]['web_wallet']['amount']}</td>
+                                                    <td>{LOCALES[lan]['web_wallet']['currency']}</td>
+                                                    <td>{LOCALES[lan]['web_wallet']['reason']}</td>
+                                                    <td>{LOCALES[lan]['web_wallet']['description']}</td>
+                                                    <td>{LOCALES[lan]['web_wallet']['date']}</td>
+                                                    <td>{LOCALES[lan]['web_wallet']['details']}</td>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -213,7 +223,7 @@ class Dashboard extends Component {
                                                         })
                                                         :
                                                         <tr>
-                                                            
+
                                                             <td>-</td>
                                                             <td>-</td>
                                                             <td>-</td>
@@ -238,10 +248,11 @@ class Dashboard extends Component {
     }
 }
 
-function mapStateToProps({ auth, user }) {
+function mapStateToProps({ auth, user, language }) {
     return {
         token: auth && auth.token,
-        user
+        user,
+        lan: language ? language : 'en'
     }
 }
 

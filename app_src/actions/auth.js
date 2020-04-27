@@ -29,3 +29,8 @@ export function saveToken(token) {
     }
 }
 
+export function logout() {
+    return {
+        type: USER_LOGOUT
+    }
+}

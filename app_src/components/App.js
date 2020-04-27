@@ -17,7 +17,29 @@ import Withdraw from './Withdraw'
 import Inbox from './Inbox'
 import InboxTxDetails from './InboxTxDetails'
 
+// Libraries
+import detectBrowserLanguage from 'detect-browser-language'
+
+// Actions
+import { saveLanguage } from '../actions/language'
+
 class App extends Component {
+
+  componentDidMount() {
+    const { dispatch } = this.props
+    const languages = ['en', 'fr', 'nl', 'es', 'pt', 'ja', 'zh']
+    let lan
+    try {
+      lan = detectBrowserLanguage()
+      lan = lan.split('-')[0]
+    } catch (e) {
+      console.log(e)
+      lan = 'en'
+    }
+
+    lan = languages.includes(lan) ? lan : 'en'
+    dispatch(saveLanguage(lan))
+  }
 
   render() {
     const { match, auth } = this.props
@@ -39,10 +61,10 @@ class App extends Component {
           <PrivateRoute path={`/withdraw`} component={Withdraw} auth={auth} />
           <PrivateRoute path={`/inbox`} component={Inbox} auth={auth} />
           <PrivateRoute path={`/inboxTx/:txId`} component={InboxTxDetails} auth={auth} />
-          
+
           <PrivateRoute path={`/settings`} component={Dashboard} auth={auth} />
           <PrivateRoute path={`/io-history`} component={Dashboard} auth={auth} />
-          
+
         </Fragment>
       </Router>
     )

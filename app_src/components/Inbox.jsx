@@ -16,6 +16,17 @@ import ReactHTMLTableToExcel from 'react-html-table-to-excel';
 import { confirmAlert } from 'react-confirm-alert'; // Import
 import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
 import { PlusCircle } from 'react-feather';
+
+// Locales
+import en from '../locales/en'
+import fr from '../locales/fr'
+import nl from '../locales/nl'
+import es from '../locales/es'
+import pt from '../locales/pt'
+import ja from '../locales/ja'
+import zh from '../locales/zh'
+const LOCALES = { en, fr, nl, es, pt, ja, zh }
+
 const moment = require('moment')
 
 
@@ -101,7 +112,7 @@ class Inbox extends Component {
 
     render() {
         const { txs, loading } = this.state
-        const { user } = this.props
+        const { user, lan } = this.props
 
         if (loading) {
             return <Loading />
@@ -112,8 +123,8 @@ class Inbox extends Component {
                 <div className="page-content">
                     <nav className="page-breadcrumb">
                         <ol className="breadcrumb">
-                            <li className="breadcrumb-item"><a href="#">Inbox</a></li>
-                            <li className="breadcrumb-item active" aria-current="page">Pending Approval</li>
+                            <li className="breadcrumb-item"><a href="#">{LOCALES[lan]['web_wallet']['inbox']}</a></li>
+                            <li className="breadcrumb-item active" aria-current="page">{LOCALES[lan]['web_wallet']['pending_approval']}</li>
                         </ol>
                     </nav>
 
@@ -121,7 +132,7 @@ class Inbox extends Component {
                         <div className="col-md-12 grid-margin stretch-card">
                             <div className="card">
                                 <div className="card-body">
-                                    <h6 className="card-title">Transactions Pending Approval</h6>
+                                    <h6 className="card-title">{LOCALES[lan]['web_wallet']['transactions']} {LOCALES[lan]['web_wallet']['pending_approval']}</h6>
                                     <div style={{ marginBottom: '10px' }}>
 
                                         <div style={{ float: 'right' }}>
@@ -140,14 +151,14 @@ class Inbox extends Component {
                                             <thead>
                                                 <tr>
                                                     <td>ID</td>
-                                                    <td>Person</td>
-                                                    <td>Operation</td>
-                                                    <td>Amount</td>
-                                                    <td>Currency</td>
-                                                    <td>Reason</td>
-                                                    <td>Description</td>
-                                                    <td>Date</td>
-                                                    <td>Details</td>
+                                                    <td>{LOCALES[lan]['web_wallet']['person']}</td>
+                                                    <td>{LOCALES[lan]['web_wallet']['operation']}</td>
+                                                    <td>{LOCALES[lan]['web_wallet']['amount']}</td>
+                                                    <td>{LOCALES[lan]['web_wallet']['currency']}</td>
+                                                    <td>{LOCALES[lan]['web_wallet']['reason']}</td>
+                                                    <td>{LOCALES[lan]['web_wallet']['description']}</td>
+                                                    <td>{LOCALES[lan]['web_wallet']['date']}ate</td>
+                                                    <td>{LOCALES[lan]['web_wallet']['details']}</td>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -197,10 +208,11 @@ class Inbox extends Component {
 }
 
 
-function mapStateToProps({ auth, user }) {
+function mapStateToProps({ auth, user, language }) {
     return {
         token: auth && auth.token,
-        user
+        user,
+        lan: language ? language : 'en'
     }
 }
 export default connect(mapStateToProps)(Inbox)

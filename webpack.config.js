@@ -26,18 +26,29 @@ module.exports = {
                     'style-loader',
                     'css-loader'
                 ]
-            }
+            },
+            {
+                test: /\.svg$/,
+                use: [
+                    {
+                        loader: 'svg-url-loader',
+                        options: {
+                            limit: 10000,
+                        },
+                    },
+                ],
+            },
         ]
     },
     resolve: {
-        extensions: ['*','.js','.jsx']
+        extensions: ['*', '.js', '.jsx']
     },
     output: {
-        path: path.join(__dirname, 'public','js'),
+        path: path.join(__dirname, 'public', 'js'),
         publicPath: '/js',
         filename: '[name].js'
     },
-    plugins: [         
+    plugins: [
         new webpack.HotModuleReplacementPlugin(),
         new Dotenv()
     ],
@@ -51,11 +62,11 @@ module.exports = {
         watchContentBase: true,
         proxy: [
             {
-                context: ['^/api/*','^/app/*'],
+                context: ['^/api/*', '^/app/*'],
                 target: 'http://localhost:3000/',
                 secure: false
             }
-        ],        
+        ],
         overlay: {
             warnings: false,
             errors: true

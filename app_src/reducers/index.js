@@ -3,6 +3,7 @@ import loading from './loading'
 import auth from './auth'
 import user from './user'
 import sidebar from './sidebar'
+import language from './language'
 import storage from 'redux-persist/lib/storage'
 
 const appReducer = combineReducers({    
@@ -10,6 +11,7 @@ const appReducer = combineReducers({
     auth,    
     user,
     sidebar,
+    language,
 })
 
 const rootReducer = (state, action) => {    

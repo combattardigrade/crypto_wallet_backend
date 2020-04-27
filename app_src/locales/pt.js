@@ -1,165 +1,75 @@
 const data = {
-    main:
+    web_wallet:
     {
-        tab_wallet_btn: 'Carteira',
-        tab_rankings_btn: 'Rankings',
-        tab_send_btn: 'Enviar',
-        tab_inbox_btn: 'Caixa de entrada'
-    },
-    wallet:
-    {
-        wallet_title: 'Carteira',
-        wallet_send_btn: 'Enviar',
-        wallet_receive_btn: 'Receber',
-        wallet_withdraw_btn: 'Retirar',
-        wallet_txs_all_btn: 'Todos',
-        wallet_txs_received_btn: 'Recebido',
-        wallet_txs_sent_btn: 'Enviei'
-    },
-    rankings:
-    {
-        category: 'Categoria',
-        year: 'Ano',
-        month: 'Mês',
-        week: 'Semana'
-    },
-    send:
-    {
-        send_to: 'Enviar para',
-        amount: 'Montante',
-        reason: 'Razão',
-        description: 'Descrição',
-        verify_transfer: 'Verificar transferência',
-        input_send: 'Selecione um contato',
-        input_amount: 'Digite o valor a transferir',
-        input_reason: 'Selecione um motivo',
-        input_description: 'Digite uma descrição'
-    },
-    inbox:
-    {
-        transactions_pending_approval: 'Transações com aprovação pendente',
-        no_payments: 'Nenhum pedido de pagamento encontrado'
-    },
-    menu:
-    {
-        contacts: 'Contatos',
-        deposit: 'Depósito',
+        inbox: 'Caixa de entrada',
+        send: 'Enviar',
+        receive: 'Receber',
         withdraw: 'Retirar',
-        settings: 'Definições',
-        logout: 'Sair'
-    },
-    contacts:
-    {
-        contacts_title: 'Contatos',
-        all_contacts: 'Todos os contatos',
-        no_contacts: 'Nenhum contato encontrado'
-    },
-    new_contact:
-    {
-        new_contact_title: 'Adicionar novo contato',
-        search: 'Procurar',
-        input_search: 'Pesquisar usuário por nome de usuário ou email',
-        search_results: 'Procurar Resultados',
-        no_results: 'Nenhum resultado de pesquisa encontrado',
-        add_contact_btn: 'Adicionar contato',
-        cancel_btn: 'Cancelar'
-    },
-    contact_details:
-    {
-        contact_details_title: 'Detalhes do contato',
-        user_id: 'ID DO USUÁRIO',
-        username: 'Nome do usuário',
-        full_name: 'Nome completo',
-        email: 'O email',
-        delete_contact_btn: 'Excluir contato',
-        loading: 'Carregando...'
-    },
-    deposit:
-    {
-        deposit_title: 'Depositar JWS',
-        ethereum_address: 'Seu endereço Ethereum'
-    },
-    withdraw:
-    {
-        withdraw_title: 'Retirar',
-        eth_address: 'Endereço ETH',
-        amount: 'Montante',
-        input_address: 'Endereço Ethereum externo',
-        input_amount: 'Digite o valor a transferir',
-        withdraw_btn: 'Retirar',
-        cancel_btn: 'Cancelar'
-    },
-    settings:
-    {
-        settings_title: 'Definições',
-        name: 'Nome',
-        username: 'Nome do usuário',
-        email: 'O email'
-    },
-    tx_details:
-    {
-        tx_details_title: 'Detalhes da transação',
-        tx_id: 'ID da transação',
-        from: 'De',
-        to: 'Para',
-        reason: 'Razão',
-        amount: 'Montante',
-        date: 'Encontro'
-    },
-    payment_request:
-    {
-        payment_request_title: 'Detalhes da solicitação de pagamento',
-        request_id: 'Identificação do Pedido',
-        from: 'De',
+        balance: 'Saldo',
+        pending_approval: 'Aprovação pendente',
+        transactions: 'Transações',
+        person: 'Pessoa',
+        operation: 'Operação',
         amount: 'Montante',
         reason: 'Razão',
-        description: 'Descrição',
         date: 'Encontro',
-        confirm_btn: 'Confirme o pagamento',
-        reject_btn: 'Rejeitar Pagamento'
-    },
-    confirm_tx:
-    {
-        confirm_tx_title: 'Confirme o pagamento',
-        amount_to_transfer: 'Valor a Transferir',
-        transfer_to: 'Transferir para',
-        reason: 'Razão',
+        details: 'Detalhes',
+        currency: 'Moeda',
         description: 'Descrição',
-        send_btn: 'Enviar',
-        cancel_btn: 'Cancelar'
-    },
-    tx_status:
-    {
-        tx_completed: 'Transação concluída',
-        tx: 'Transação',
-        successfully: 'Com sucesso',
-        rejected: 'Rejeitado',
-        your_transfer: 'Sua transferência do JWS',
-        completed_successfully: 'completado com sucesso',
-        has_been_rejected: 'foi rejeitado',
-        return_btn: 'Retorna'
-    },
-    intro: { login_btn: 'Conecte-se', signup_btn: 'Inscrever-se' },
-    login:
-    {
-        login_title: 'CONECTE-SE',
+        pending_tx: 'Transação pendente',
+        field: 'Campo',
+        value: 'Valor',
+        send_to_user: 'Enviar ao usuário',
+        name: 'Nome',
         email: 'O email',
-        password: 'Senha',
-        login_btn: 'Conecte-se',
-        forgot_password: 'Esqueceu sua senha?',
-        create_account: 'Criar uma nova conta'
-    },
-    signup:
-    {
-        signup_title: 'INSCREVER-SE',
+        operation_type: 'Tipo de operação',
+        status: 'Status',
+        approve: 'Aprovar',
+        reject: 'Rejeitar',
+        contacts: 'Contatos',
+        all: 'Todos',
+        add_contact: 'Adicionar contato',
+        username: 'Nome do usuário',
+        action: 'Açao',
+        confirmation: 'Confirmação',
+        contacts_confirmation: 'Tem certeza de que deseja excluir este contato?',
+        yes: 'sim',
+        no: 'Não',
+        add: 'Adicionar',
+        contacts_search_input: 'Buscar contato',
+        user: 'Do utilizador',
+        contact_details: 'Detalhes do contato',
         first_name: 'Primeiro nome',
         last_name: 'Último nome',
-        username: 'Nome do usuário',
-        email: 'O email',
+        delete_contact: 'Excluir contato',
+        delete: 'Excluir',
+        rankings: 'Rankings',
+        week: 'Semana',
+        month: 'Mês',
+        year: 'Ano',
+        rank: 'Classificação',
+        address: 'Endereço',
+        copy_address: 'Copiar endereço',
+        confirm_transfer: 'Confirmar transferência',
+        cancel: 'Cancelar',
+        total_balance: 'Balanço total',
+        main: 'a Principal',
+        dashboard: 'painel de controle',
+        contacts_list: 'Lista de contatos',
+        global_rankings: 'Classificação Global',
+        txs_history: 'História Txs',
+        sent: 'Enviei',
+        received: 'Recebido',
+        tx_details: 'Detalhes da transação',
+        from_user: 'Do usuário',
+        withdraw_confirmation_title: 'Retirar confirmação',
+        withdraw_confirmation_msg: 'Tem certeza de que deseja retirar',
+        tx_sent: 'Transação enviada!',
+        logout: 'Sair',
+        login_welcome_msg: 'Bem-vinda! Digite suas credenciais para entrar',
+        forgot_password: 'Esqueceu sua senha?',
         password: 'Senha',
-        rpassword: 'Repita a senha',
-        signup_btn: 'Say Up',
-        login_btn: 'já tem uma conta? Conecte-se'
+        login: 'Conecte-se'
     },
     error:
     {
@@ -170,7 +80,7 @@ const data = {
         select_contact: 'Selecione um contato para adicionar',
         not_enough_balance: 'Você não tem saldo suficiente',
         enter_valid_amount: 'Digite um valor válido'
-    } 
+    }
 }
 
 export default data

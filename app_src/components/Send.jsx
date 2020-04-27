@@ -13,6 +13,15 @@ import { getTxReasons, getContacts, sendInternalTx } from '../utils/api'
 import { confirmAlert } from 'react-confirm-alert'; // Import
 import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
 
+// Locales
+import en from '../locales/en'
+import fr from '../locales/fr'
+import nl from '../locales/nl'
+import es from '../locales/es'
+import pt from '../locales/pt'
+import ja from '../locales/ja'
+import zh from '../locales/zh'
+const LOCALES = { en, fr, nl, es, pt, ja, zh }
 
 class Send extends Component {
 
@@ -130,6 +139,7 @@ class Send extends Component {
 
     render() {
         const { contacts, txReasons, serverStatus, serverMsg, loading } = this.state
+        const { lan } = this.props
 
         if (loading) {
             return <Loading />
@@ -140,7 +150,7 @@ class Send extends Component {
                 <div className="page-content">
                     <nav className="page-breadcrumb">
                         <ol className="breadcrumb">
-                            <li className="breadcrumb-item"><a href="#">Send</a></li>
+                            <li className="breadcrumb-item"><a href="#">{LOCALES[lan]['web_wallet']['send']}</a></li>
                             <li className="breadcrumb-item active" aria-current="page">Jiwards</li>
                         </ol>
                     </nav>
@@ -150,7 +160,7 @@ class Send extends Component {
                             <div className="card">
                                 <div className="card-body">
                                     <div className="card-body">
-                                        <h6 className="card-title">Send JWS</h6>
+                                        <h6 className="card-title">{LOCALES[lan]['web_wallet']['send']} JWS</h6>
                                         <form className="forms-sample">
                                             {
                                                 serverMsg
@@ -171,11 +181,11 @@ class Send extends Component {
                                                 </select>
                                             </div>
                                             <div className="form-group">
-                                                <label htmlFor="exampleInputUsername1">Amount</label>
+                                                <label htmlFor="exampleInputUsername1">{LOCALES[lan]['web_wallet']['amount']}</label>
                                                 <input onChange={this.handleAmountChange} value={this.state.amount} type="number" className="form-control" autoComplete="off" placeholder="Amount" />
                                             </div>
                                             <div className="form-group">
-                                                <label htmlFor="exampleInputPassword1">Reason</label>
+                                                <label htmlFor="exampleInputPassword1">{LOCALES[lan]['web_wallet']['reason']}</label>
                                                 <select value={this.state.selectedReason} onChange={this.handleReasonChange} className="js-example-basic-single w-100 select2-hidden-accessible" aria-hidden="true">
                                                     {
                                                         txReasons &&
@@ -187,12 +197,12 @@ class Send extends Component {
                                             </div>
 
                                             <div className="form-group">
-                                                <label htmlFor="exampleInputEmail1">Description</label>
+                                                <label htmlFor="exampleInputEmail1">{LOCALES[lan]['web_wallet']['description']}</label>
                                                 <input onChange={this.handleDescription} value={this.state.description} type="text" className="form-control" placeholder="Description" />
                                             </div>
 
-                                            <button onClick={this.handleConfirmTx} className="btn btn-primary mr-2">Confirm Transfer</button>
-                                            <button onClick={this.handleGoBack} className="btn btn-light">Cancel</button>
+                                            <button onClick={this.handleConfirmTx} className="btn btn-primary mr-2">{LOCALES[lan]['web_wallet']['confirm_transfer']}</button>
+                                            <button onClick={this.handleGoBack} className="btn btn-light">{LOCALES[lan]['web_wallet']['cancel']}</button>
                                         </form>
                                     </div>
                                 </div>
@@ -207,9 +217,10 @@ class Send extends Component {
 }
 
 
-function mapStateToProps({ auth }) {
+function mapStateToProps({ auth, language }) {
     return {
         token: auth && auth.token,
+        lan: language ? language : 'en'
     }
 }
 export default connect(mapStateToProps)(Send)

@@ -9,6 +9,17 @@ import Loading from './Loading'
 // Actions
 import { handleLogin } from '../actions/auth'
 
+// Locales
+import en from '../locales/en'
+import fr from '../locales/fr'
+import nl from '../locales/nl'
+import es from '../locales/es'
+import pt from '../locales/pt'
+import ja from '../locales/ja'
+import zh from '../locales/zh'
+const LOCALES = { en, fr, nl, es, pt, ja, zh }
+
+
 class Login extends Component {
     state = {
         loading: true,
@@ -27,10 +38,10 @@ class Login extends Component {
         e.preventDefault()
         
         const { email, password } = this.state
-        const { dispatch, auth } = this.props
+        const { dispatch, lan } = this.props
         
         if (!email || !password) {           
-            this.setState({serverMsg: 'Enter all the required fields'})
+            this.setState({serverMsg: LOCALES[lan]['error']['missing_required']})
             return
         }
 
@@ -63,6 +74,7 @@ class Login extends Component {
 
     render() {
         const { serverMsg, loading } = this.state       
+        const { lan } = this.props
 
         if (loading === true) {
             return <Loading />
@@ -83,7 +95,7 @@ class Login extends Component {
                                     <div className="col-md-8 pl-md-0">
                                         <div className="auth-form-wrapper px-4 py-5">
                                             <a href="#" className="noble-ui-logo d-block mb-2">Jiwards<span> Wallet</span></a>
-                                            <h5 className="text-muted font-weight-normal mb-4">Welcome! Enter your credentials to log in</h5>
+                                            <h5 className="text-muted font-weight-normal mb-4">{LOCALES[lan]['web_wallet']['login_welcome_msg']}</h5>
                                             <form className="forms-sample">
                                                 {
                                                     serverMsg && (
@@ -93,18 +105,18 @@ class Login extends Component {
                                                     )
                                                 }
                                                 <div className="form-group">
-                                                    <label>Email</label>
-                                                    <input onChange={this.handleEmailChange} value={this.state.email} name="email" type="email" className="form-control" placeholder="Email" />
+                                                    <label>{LOCALES[lan]['web_wallet']['email']}</label>
+                                                    <input onChange={this.handleEmailChange} value={this.state.email} name="email" type="email" className="form-control" placeholder={LOCALES[lan]['web_wallet']['email']} />
                                                 </div>
                                                 <div className="form-group">
-                                                    <label>Password</label>
-                                                    <input onChange={this.handlePasswordChange} value={this.state.password} name="password" type="password" className="form-control" placeholder="Contraseña" />
+                                                    <label>{LOCALES[lan]['web_wallet']['password']}</label>
+                                                    <input onChange={this.handlePasswordChange} value={this.state.password} name="password" type="password" className="form-control" placeholder={LOCALES[lan]['web_wallet']['password']} />
                                                 </div>
                                                 
                                                 <div className="mt-3">
-                                                    <button onClick={this.handleSubmit} type="submit" href="#" className="btn btn-primary mr-2 mb-2 mb-md-0 text-white">Login</button>
+                                                    <button onClick={this.handleSubmit} type="submit" href="#" className="btn btn-primary mr-2 mb-2 mb-md-0 text-white">{LOCALES[lan]['web_wallet']['login']}</button>
                                                 </div>
-                                                <a href="#" className="d-block mt-3 text-muted">Forgot your password?</a>
+                                                <a href="#" className="d-block mt-3 text-muted">{LOCALES[lan]['web_wallet']['forgot_password']}</a>
                                             </form>
                                         </div>
                                     </div>
@@ -118,9 +130,10 @@ class Login extends Component {
     }
 }
 
-function mapStateToProps({ auth }) {
+function mapStateToProps({ auth, language }) {
     return {
-        auth
+        auth,
+        lan: language ? language : 'en'
     }
 }
 

@@ -16,8 +16,17 @@ import ReactHTMLTableToExcel from 'react-html-table-to-excel';
 import { confirmAlert } from 'react-confirm-alert'; // Import
 import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
 import { PlusCircle } from 'react-feather';
-const moment = require('moment')
 
+// Locales
+import en from '../locales/en'
+import fr from '../locales/fr'
+import nl from '../locales/nl'
+import es from '../locales/es'
+import pt from '../locales/pt'
+import ja from '../locales/ja'
+import zh from '../locales/zh'
+const LOCALES = { en, fr, nl, es, pt, ja, zh }
+const moment = require('moment')
 
 
 class Transactions extends Component {
@@ -55,7 +64,7 @@ class Transactions extends Component {
 
     render() {
         const { txs, selectedOperation, loading } = this.state
-        const { user } = this.props
+        const { user, lan } = this.props
 
         if (loading) {
             return <Loading />
@@ -66,7 +75,7 @@ class Transactions extends Component {
                 <div className="page-content">
                     <nav className="page-breadcrumb">
                         <ol className="breadcrumb">
-                            <li className="breadcrumb-item"><a href="#">Transactions</a></li>
+                            <li className="breadcrumb-item"><a href="#">{LOCALES[lan]['web_wallet']['transactions']}</a></li>
                             <li className="breadcrumb-item active" aria-current="page">{selectedOperation}</li>
                         </ol>
                     </nav>
@@ -75,11 +84,11 @@ class Transactions extends Component {
                         <div className="col-md-12 grid-margin stretch-card">
                             <div className="card">
                                 <div className="card-body">
-                                    <h6 className="card-title">Transactions</h6>
+                                    <h6 className="card-title">{LOCALES[lan]['web_wallet']['transactions']}</h6>
                                     <div style={{ marginBottom: '10px' }}>
-                                        <button onClick={e => { e.preventDefault(); this.handleOperationSelect('All') }} className={selectedOperation === 'All' ? "btn btn-primary mb-1" : "btn btn-light mb-1"} style={{ marginRight: '5px' }}>All</button>
-                                        <button onClick={e => { e.preventDefault(); this.handleOperationSelect('Sent') }} className={selectedOperation === 'Sent' ? "btn btn-primary mb-1" : "btn btn-light mb-1"} style={{ marginRight: '5px' }}>Sent</button>
-                                        <button onClick={e => { e.preventDefault(); this.handleOperationSelect('Received') }} className={selectedOperation === 'Received' ? "btn btn-primary mb-1" : "btn btn-light mb-1"}>Received</button>
+                                        <button onClick={e => { e.preventDefault(); this.handleOperationSelect('All') }} className={selectedOperation === 'All' ? "btn btn-primary mb-1" : "btn btn-light mb-1"} style={{ marginRight: '5px' }}>{LOCALES[lan]['web_wallet']['all']}</button>
+                                        <button onClick={e => { e.preventDefault(); this.handleOperationSelect('Sent') }} className={selectedOperation === 'Sent' ? "btn btn-primary mb-1" : "btn btn-light mb-1"} style={{ marginRight: '5px' }}>{LOCALES[lan]['web_wallet']['sent']}</button>
+                                        <button onClick={e => { e.preventDefault(); this.handleOperationSelect('Received') }} className={selectedOperation === 'Received' ? "btn btn-primary mb-1" : "btn btn-light mb-1"}>{LOCALES[lan]['web_wallet']['received']}</button>
 
                                         <div style={{ float: 'right' }}>
                                             <ReactHTMLTableToExcel
@@ -97,12 +106,12 @@ class Transactions extends Component {
                                             <thead>
                                                 <tr>
                                                     <td>#</td>
-                                                    <td>Person</td>
-                                                    <td>Operation</td>
-                                                    <td>Amount</td>
-                                                    <td>Reason</td>
-                                                    <td>Date</td>
-                                                    <td>Details</td>
+                                                    <td>{LOCALES[lan]['web_wallet']['person']}</td>
+                                                    <td>{LOCALES[lan]['web_wallet']['operation']}</td>
+                                                    <td>{LOCALES[lan]['web_wallet']['amount']}</td>
+                                                    <td>{LOCALES[lan]['web_wallet']['reason']}</td>
+                                                    <td>{LOCALES[lan]['web_wallet']['date']}</td>
+                                                    <td>{LOCALES[lan]['web_wallet']['details']}</td>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -110,7 +119,7 @@ class Transactions extends Component {
                                                     txs && txs.length > 0
                                                         ?
                                                         txs.filter((tx) => {
-                                                            let operation = tx.userId === user.id ? 'Sent' : 'Received'
+                                                            let operation = tx.userId === user.id ? LOCALES[lan]['web_wallet']['sent'] : LOCALES[lan]['web_wallet']['received']
                                                             if (selectedOperation != operation && selectedOperation != 'All') {
                                                                 return false
                                                             }
@@ -121,12 +130,12 @@ class Transactions extends Component {
                                                                 <tr key={index}>
                                                                     <td>{index + 1}</td>
                                                                     <td>{tx.userId === user.id ? tx.to.firstName + ' ' + tx.to.lastName : tx.from.firstName + ' ' + tx.from.lastName}</td>
-                                                                    <td>{tx.userId === user.id ? 'Sent' : 'Received'}</td>
+                                                                    <td>{tx.userId === user.id ? LOCALES[lan]['web_wallet']['sent'] : LOCALES[lan]['web_wallet']['received']}</td>
                                                                     <td>{parseFloat(tx.amount)}</td>
                                                                     <td>{tx.reason}</td>
                                                                     <td>{moment(tx.createdAt).format('DD/MM/YYY HH:mm')}</td>
                                                                     <td>
-                                                                    <Link to={`/tx/${tx.id}`} className="btn btn-primary mb-1 mb-md-0 action-btn"><i className="fa fa-search btn-icon"></i></Link>
+                                                                        <Link to={`/tx/${tx.id}`} className="btn btn-primary mb-1 mb-md-0 action-btn"><i className="fa fa-search btn-icon"></i></Link>
                                                                     </td>
 
                                                                 </tr>
@@ -157,10 +166,11 @@ class Transactions extends Component {
 }
 
 
-function mapStateToProps({ auth, user }) {
+function mapStateToProps({ auth, user, language }) {
     return {
         token: auth && auth.token,
-        user
+        user,
+        lan: language ? language : 'en'
     }
 }
 export default connect(mapStateToProps)(Transactions)

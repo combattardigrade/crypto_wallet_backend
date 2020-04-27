@@ -1,11 +1,26 @@
 import React, { Component, Fragment } from 'react'
 import { connect } from 'react-redux'
 import { Link } from "react-router-dom";
-import { Send, Download, Inbox, RefreshCw, Upload } from 'react-feather';
+import { Send, Download, Inbox, RefreshCw, Upload, Menu } from 'react-feather';
 
 // Actions
+import { saveLanguage } from '../actions/language'
 import { showSidebar, hideSidebar } from '../actions/shared'
 import { logout } from '../actions/auth'
+
+// Libraries
+import ReactFlagsSelect from 'react-flags-select';
+import 'react-flags-select/css/react-flags-select.css';
+
+// Locales
+import en from '../locales/en'
+import fr from '../locales/fr'
+import nl from '../locales/nl'
+import es from '../locales/es'
+import pt from '../locales/pt'
+import ja from '../locales/ja'
+import zh from '../locales/zh'
+const LOCALES = { en, fr, nl, es, pt, ja, zh }
 
 class Navbar extends Component {
 
@@ -14,11 +29,44 @@ class Navbar extends Component {
         const { sidebar, dispatch } = this.props
         if (sidebar === false) {
             document.body.className += ' ' + 'sidebar-open'
-            dispatch(showSidebar())            
+            dispatch(showSidebar())
         } else {
             document.body.className = document.body.className.replace('sidebar-open', '')
             dispatch(hideSidebar())
         }
+    }
+
+    handleLanSelect = (country) => {
+        const { dispatch } = this.props
+        let lan = 'en'
+        switch (country) {
+            case 'GB':
+                lan = 'en'
+                break
+            case 'FR':
+                lan = 'fr'
+                break
+            case 'NL':
+                lan = 'nl'
+                break
+            case 'ES':
+                lan = 'es'
+                break
+            case 'PT':
+                lan = 'pt'
+                break
+            case 'JP':
+                lan = 'ja'
+                break
+            case 'CN':
+                lan = 'zh'
+                break
+            default:
+                lan = 'en'
+                break
+        }
+
+        dispatch(saveLanguage(lan))
     }
 
     handleLogout = (e) => {
@@ -28,37 +76,70 @@ class Navbar extends Component {
     }
 
     render() {
+
+        const { lan } = this.props
+        let flag = 'GB'
+        switch(lan) {
+            case 'en': 
+                flag = 'GB'; break;
+            case 'fr':
+                flag = 'FR'; break;
+            case 'nl':
+                flag = 'NL'; break;
+            case 'es':
+                flag = 'ES'; break;
+            case 'pt':
+                flag = 'PT'; break;
+            case 'ja':
+                flag = 'JP'; break;
+            case 'zh':
+                flag = 'CH'; break;
+        }
+
         return (
 
             < nav className="navbar" >
                 <a onClick={this.handleNavbarToggleBtn} href="#" className="sidebar-toggler">
-                    <i data-feather="menu" />
+                    <Menu size={16} />
                 </a>
                 <div className="navbar-content">
                     <div style={{ display: 'flex', }}>
-                        
+
                         <Link style={{ display: 'flex', marginLeft: '20px', }} to="/send">
                             <div style={{ display: 'flex', alignItems: 'center' }}>
                                 <Send size="22" />
-                                <div style={{ padding: '5px', fontSize: '18px', fontWeight: 'bold' }}>Send</div>
+                                <div style={{ padding: '5px', fontSize: '18px', fontWeight: 'bold' }}>{LOCALES[lan]['web_wallet']['send']}</div>
                             </div>
                         </Link>
                         <div style={{ display: 'flex', alignItems: 'center', marginLeft: '20px', color: '#d6d6d6' }}>|</div>
                         <Link style={{ display: 'flex' }} to="/receive">
                             <div style={{ display: 'flex', alignItems: 'center', marginLeft: '20px' }}>
                                 <Download size="22" />
-                                <div style={{ padding: '5px', fontSize: '18px', fontWeight: 'bold' }}>Receive</div>
+                                <div style={{ padding: '5px', fontSize: '18px', fontWeight: 'bold' }}>{LOCALES[lan]['web_wallet']['receive']}</div>
                             </div>
                         </Link>
                         <div style={{ display: 'flex', alignItems: 'center', marginLeft: '20px', color: '#d6d6d6' }}>|</div>
                         <Link style={{ display: 'flex' }} to="/withdraw">
                             <div style={{ display: 'flex', alignItems: 'center', marginLeft: '20px' }}>
                                 <Upload size="22" />
-                                <div style={{ padding: '5px', fontSize: '18px', fontWeight: 'bold' }}>Widthdraw</div>
+                                <div style={{ padding: '5px', fontSize: '18px', fontWeight: 'bold' }}>{LOCALES[lan]['web_wallet']['withdraw']}</div>
                             </div>
                         </Link>
                     </div>
                     <ul className="navbar-nav">
+                        <li className="nav-item">
+                            <ReactFlagsSelect
+                                countries={["GB", "FR", "NL", "ES", "PT", "JP", "CN"]}
+                                defaultCountry={flag}
+                                placeholder="Select Language"
+                                showSelectedLabel={false}
+                                showOptionLabel={false}
+                                selectedSize={14}
+                                optionsSize={14}
+                                
+                                onSelect={this.handleLanSelect}
+                            />
+                        </li>
                         <li className="nav-item dropdown nav-notifications">
                             <a className="nav-link dropdown-toggle" href="#" id="notificationDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <RefreshCw />
@@ -257,11 +338,12 @@ class Navbar extends Component {
     }
 }
 
-function mapStateToProps({ auth, user, sidebar }) {
+function mapStateToProps({ auth, user, sidebar, language }) {
     return {
         token: auth && auth.token,
         user,
-        sidebar
+        sidebar,
+        lan: language ? language : 'en'
     }
 }
 export default connect(mapStateToProps)(Navbar)

@@ -15,9 +15,17 @@ import { getRankings } from '../utils/api'
 import ReactHTMLTableToExcel from 'react-html-table-to-excel';
 import { confirmAlert } from 'react-confirm-alert'; // Import
 import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
-
 import { PlusCircle } from 'react-feather';
 
+// Locales
+import en from '../locales/en'
+import fr from '../locales/fr'
+import nl from '../locales/nl'
+import es from '../locales/es'
+import pt from '../locales/pt'
+import ja from '../locales/ja'
+import zh from '../locales/zh'
+const LOCALES = { en, fr, nl, es, pt, ja, zh }
 
 class Rankings extends Component {
 
@@ -54,6 +62,7 @@ class Rankings extends Component {
 
     render() {
         const { rankings, period, loading } = this.state
+        const { lan } = this.props
 
         if (loading) {
             return <Loading />
@@ -64,7 +73,7 @@ class Rankings extends Component {
                 <div className="page-content">
                     <nav className="page-breadcrumb">
                         <ol className="breadcrumb">
-                            <li className="breadcrumb-item"><a href="#">Rankings</a></li>
+                            <li className="breadcrumb-item"><a href="#">{LOCALES[lan]['web_wallet']['rankings']}</a></li>
                             <li className="breadcrumb-item active" aria-current="page">{this.state.period}</li>
                         </ol>
                     </nav>
@@ -73,11 +82,11 @@ class Rankings extends Component {
                         <div className="col-md-12 grid-margin stretch-card">
                             <div className="card">
                                 <div className="card-body">
-                                    <h6 className="card-title">Rankings</h6>
+                                    <h6 className="card-title">{LOCALES[lan]['web_wallet']['rankings']}</h6>
                                     <div style={{ marginBottom: '10px' }}>
-                                        <button onClick={e => { e.preventDefault(); this.handlePeriodSelect('week') }} className={period === 'week' ? "btn btn-primary mb-1" : "btn btn-light mb-1"} style={{ marginRight: '5px' }}>Week</button>
-                                        <button onClick={e => { e.preventDefault(); this.handlePeriodSelect('month') }} className={period === 'month' ? "btn btn-primary mb-1" : "btn btn-light mb-1"} style={{ marginRight: '5px' }}>Month</button>
-                                        <button onClick={e => { e.preventDefault(); this.handlePeriodSelect('year') }} className={period === 'year' ? "btn btn-primary mb-1" : "btn btn-light mb-1"}>Year</button>
+                                        <button onClick={e => { e.preventDefault(); this.handlePeriodSelect('week') }} className={period === 'week' ? "btn btn-primary mb-1" : "btn btn-light mb-1"} style={{ marginRight: '5px' }}>{LOCALES[lan]['web_wallet']['week']}</button>
+                                        <button onClick={e => { e.preventDefault(); this.handlePeriodSelect('month') }} className={period === 'month' ? "btn btn-primary mb-1" : "btn btn-light mb-1"} style={{ marginRight: '5px' }}>{LOCALES[lan]['web_wallet']['month']}</button>
+                                        <button onClick={e => { e.preventDefault(); this.handlePeriodSelect('year') }} className={period === 'year' ? "btn btn-primary mb-1" : "btn btn-light mb-1"}>{LOCALES[lan]['web_wallet']['year']}</button>
 
                                         <div style={{ float: 'right' }}>
                                             <ReactHTMLTableToExcel
@@ -96,10 +105,10 @@ class Rankings extends Component {
                                                 <tr>
                                                     <td>Rank</td>
                                                     <td>ID</td>
-                                                    <td>Name</td>
-                                                    <td>Username</td>
-                                                    <td>Email</td>
-                                                    <td>Amount</td>
+                                                    <td>{LOCALES[lan]['web_wallet']['name']}</td>
+                                                    <td>{LOCALES[lan]['web_wallet']['username']}</td>
+                                                    <td>{LOCALES[lan]['web_wallet']['email']}</td>
+                                                    <td>{LOCALES[lan]['web_wallet']['amount']}</td>
 
                                                 </tr>
                                             </thead>
@@ -142,10 +151,10 @@ class Rankings extends Component {
 }
 
 
-function mapStateToProps({ auth }) {
+function mapStateToProps({ auth, language }) {
     return {
         token: auth && auth.token,
-
+        lan: language ? language : 'en'
     }
 }
 export default connect(mapStateToProps)(Rankings)

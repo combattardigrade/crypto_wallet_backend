@@ -9,6 +9,16 @@ import Loading from './Loading'
 // API
 import { searchContact, addContact } from '../utils/api'
 
+// Locales
+import en from '../locales/en'
+import fr from '../locales/fr'
+import nl from '../locales/nl'
+import es from '../locales/es'
+import pt from '../locales/pt'
+import ja from '../locales/ja'
+import zh from '../locales/zh'
+const LOCALES = { en, fr, nl, es, pt, ja, zh }
+
 class AddContact extends Component {
 
     state = {
@@ -50,6 +60,7 @@ class AddContact extends Component {
 
     render() {
         const { serverMsg, serverStatus, loading, contacts } = this.state
+        const { lan } = this.props
 
         if (loading) {
             return <Loading />
@@ -60,8 +71,8 @@ class AddContact extends Component {
                 <div className="page-content">
                     <nav className="page-breadcrumb">
                         <ol className="breadcrumb">
-                            <li className="breadcrumb-item"><a href="#">Contacts</a></li>
-                            <li className="breadcrumb-item " aria-current="page">Add</li>
+                            <li className="breadcrumb-item"><a href="#">{LOCALES[lan]['web_wallet']['contacts']}</a></li>
+                            <li className="breadcrumb-item " aria-current="page">{LOCALES[lan]['web_wallet']['add']}</li>
                         </ol>
                     </nav>
 
@@ -70,7 +81,7 @@ class AddContact extends Component {
                             <div className="card">
                                 <div className="card-body">
                                     <div className="card-body">
-                                        <h6 className="card-title">Add New Contact</h6>
+                                        <h6 className="card-title">{LOCALES[lan]['web_wallet']['add_contact']}</h6>
                                         <form className="forms-sample">
                                             {
                                                 serverMsg
@@ -81,7 +92,7 @@ class AddContact extends Component {
                                             }
                                             <div className="form-group">
                                                 <label htmlFor="exampleInputUsername1">Search Contact</label>
-                                                <input onChange={this.handleSearchContact} type="text" className="form-control" autoComplete="off" placeholder="Nombre del vehículo" value={this.state.searchValue} />
+                                                <input onChange={this.handleSearchContact} type="text" className="form-control" autoComplete="off" placeholder={LOCALES[lan]['web_wallet']['contacts_search_input']} value={this.state.searchValue} />
                                             </div>
                                         </form>
                                         <div className="table-responsive">
@@ -89,10 +100,10 @@ class AddContact extends Component {
                                                 <thead>
                                                     <tr>
                                                         <td>ID</td>
-                                                        <td>Name</td>
-                                                        <td>Username</td>
-                                                        <td>Email</td>
-                                                        <td>Action</td>
+                                                        <td>{LOCALES[lan]['web_wallet']['name']}</td>
+                                                        <td>{LOCALES[lan]['web_wallet']['username']}</td>
+                                                        <td>{LOCALES[lan]['web_wallet']['email']}</td>
+                                                        <td>{LOCALES[lan]['web_wallet']['action']}</td>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -134,10 +145,10 @@ class AddContact extends Component {
 }
 
 
-function mapStateToProps({ auth }) {
+function mapStateToProps({ auth, language }) {
     return {
         token: auth && auth.token,
-
+        lan: language ? language : 'en'
     }
 }
 export default connect(mapStateToProps)(AddContact)

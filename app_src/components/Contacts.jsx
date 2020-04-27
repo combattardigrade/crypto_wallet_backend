@@ -15,9 +15,17 @@ import { getContacts, deleteContact } from '../utils/api'
 import ReactHTMLTableToExcel from 'react-html-table-to-excel';
 import { confirmAlert } from 'react-confirm-alert'; // Import
 import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
-
 import { PlusCircle } from 'react-feather';
 
+// Locales
+import en from '../locales/en'
+import fr from '../locales/fr'
+import nl from '../locales/nl'
+import es from '../locales/es'
+import pt from '../locales/pt'
+import ja from '../locales/ja'
+import zh from '../locales/zh'
+const LOCALES = { en, fr, nl, es, pt, ja, zh }
 
 class Contacts extends Component {
 
@@ -45,15 +53,15 @@ class Contacts extends Component {
     }
 
     handleDeleteContact = (contactId) => {
-        const { token } = this.props
+        const { token, lan } = this.props
         const { contacts } = this.state
 
         confirmAlert({
-            title: 'Confirmation',
-            message: 'Are you sure you want to delete this contact?',
+            title: LOCALES[lan]['web_wallet']['confirmation'],
+            message: LOCALES[lan]['web_wallet']['contacts_confirmation'],
             buttons: [
                 {
-                    label: 'Yes',
+                    label: LOCALES[lan]['web_wallet']['yes'],
                     onClick: () => {
                         deleteContact({ contactId, token })
                         this.setState({
@@ -62,7 +70,7 @@ class Contacts extends Component {
                     }
                 },
                 {
-                    label: 'No',
+                    label: LOCALES[lan]['web_wallet']['no'],
                     onClick: () => { }
                 }
             ]
@@ -71,6 +79,7 @@ class Contacts extends Component {
 
     render() {
         const { contacts, loading } = this.state
+        const { lan } = this.props
 
         if (loading) {
             return <Loading />
@@ -81,8 +90,8 @@ class Contacts extends Component {
                 <div className="page-content">
                     <nav className="page-breadcrumb">
                         <ol className="breadcrumb">
-                            <li className="breadcrumb-item"><a href="#">Contacts</a></li>
-                            <li className="breadcrumb-item active" aria-current="page">All</li>
+                            <li className="breadcrumb-item"><a href="#">{LOCALES[lan]['web_wallet']['contacts']}</a></li>
+                            <li className="breadcrumb-item active" aria-current="page">{LOCALES[lan]['web_wallet']['all']}</li>
                         </ol>
                     </nav>
 
@@ -90,7 +99,7 @@ class Contacts extends Component {
                         <div className="col-md-12 grid-margin stretch-card">
                             <div className="card">
                                 <div className="card-body">
-                                    <h6 className="card-title">Contacts</h6>
+                                    <h6 className="card-title">{LOCALES[lan]['web_wallet']['contacts']}</h6>
                                     <div style={{ marginBottom: '10px' }}>
                                         <ReactHTMLTableToExcel
                                             className="btn btn-light mb-1 "
@@ -100,7 +109,7 @@ class Contacts extends Component {
                                             buttonText="Excel"
                                         />
                                         <div style={{ float: "right", display: 'flex' }}>                                            
-                                            <button onClick={this.handleAddContact} type="button" className="btn btn-primary btn-icon-text mb-2 mb-md-0"><PlusCircle size="16" />Add Contact</button>
+                                            <button onClick={this.handleAddContact} type="button" className="btn btn-primary btn-icon-text mb-2 mb-md-0"><PlusCircle size="16" />{LOCALES[lan]['web_wallet']['add_contact']}</button>
                                         </div>
                                     </div>
                                     <div className="table-responsive">
@@ -108,10 +117,10 @@ class Contacts extends Component {
                                             <thead>
                                                 <tr>
                                                     <td>ID</td>
-                                                    <td>Name</td>
-                                                    <td>Username</td>
-                                                    <td>Email</td>                                                    
-                                                    <td>Action</td>
+                                                    <td>{LOCALES[lan]['web_wallet']['name']}</td>
+                                                    <td>{LOCALES[lan]['web_wallet']['username']}</td>
+                                                    <td>{LOCALES[lan]['web_wallet']['email']}</td>                                                    
+                                                    <td>{LOCALES[lan]['web_wallet']['action']}</td>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -154,10 +163,10 @@ class Contacts extends Component {
 }
 
 
-function mapStateToProps({ auth }) {
+function mapStateToProps({ auth, language }) {
     return {
         token: auth && auth.token,
-
+        lan: language ? language : 'en'
     }
 }
 export default connect(mapStateToProps)(Contacts)
