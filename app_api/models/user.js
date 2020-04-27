@@ -56,7 +56,8 @@ module.exports = (sequelize, DataTypes) => {
             id: this.id,
             username: this.username,         
             email: this.email, 
-			exp: parseInt(expiry.getTime() + 1000*60*60*24)
+            exp: parseInt(expiry.getTime() + 1000*60*60*24),
+            test:'hello keycloak',
         }, process.env.JWT_SECRET)
     }
 

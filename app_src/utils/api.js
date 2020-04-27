@@ -1,4 +1,4 @@
-const API = 'http://155.138.230.105:5000/api'
+const API = 'http://genesisblock.ddns.net:3000/api'
 
 export function login(params) {
     return fetch(API + '/login', {

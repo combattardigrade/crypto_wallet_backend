@@ -7,6 +7,7 @@ const ContactModel = require('./contact')
 const PaymentRequestModel = require('./paymentRequest')
 const UserAddressModel = require('./userAddress')
 const AdminModel = require('./admin')
+const RegistrationKeyModel = require('./registrationKey')
 
 
 const sequelize = new Sequelize(
@@ -32,12 +33,15 @@ const Contact = ContactModel(sequelize, Sequelize)
 const PaymentRequest = PaymentRequestModel(sequelize, Sequelize)
 const UserAddress = UserAddressModel(sequelize, Sequelize)
 const Admin = AdminModel(sequelize, Sequelize)
+const RegistrationKey = RegistrationKeyModel(sequelize, Sequelize)
 
 User.hasMany(Balance)
 Transaction.belongsTo(User)
 Contact.belongsTo(User)
 PaymentRequest.belongsTo(User)
 User.hasOne(UserAddress)
+RegistrationKey.belongsTo(User)
+User.hasOne(RegistrationKey)
 
 
 sequelize.sync({force: false})
@@ -54,5 +58,6 @@ module.exports = {
     PaymentRequest,
     UserAddress,
     Admin,
+    RegistrationKey,
     sequelize
 }

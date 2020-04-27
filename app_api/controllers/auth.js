@@ -43,7 +43,7 @@ module.exports.signup = (req, res) => {
     sequelize.transaction(async (t) => {
 
         return User.findOrCreate({
-            where: {                
+            where: {
                 email,
             },
             defaults: {
@@ -100,6 +100,21 @@ module.exports.login = (req, res) => {
     }
 
     passport.authenticate('local', function (err, token, info) {
+        if (err) {
+            sendJSONresponse(res, 404, err)
+            return
+        }
+        if (token) {
+            sendJSONresponse(res, 200, { status: 'OK', token: token })
+            return
+        }
+        sendJSONresponse(res, 401, info)
+        return
+    })(req, res)
+}
+
+module.exports.keycloakLogin = (req, res) => {    
+    passport.authenticate('keycloak', function (err, token, info) {        
         if (err) {
             sendJSONresponse(res, 404, err)
             return

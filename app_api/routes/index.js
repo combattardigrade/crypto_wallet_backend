@@ -12,10 +12,12 @@ const txReasonController = require('../controllers/txReason')
 const contactController = require('../controllers/contact')
 const paymentRequestController = require('../controllers/paymentRequest')
 const networkController = require('../controllers/network')
+const pushNotificationController = require('../controllers/pushNotification')
 
 // auth
 router.post('/signup', authController.signup)
 router.post('/login', authController.login)
+router.post('/keycloakLogin', authController.keycloakLogin)
 
 // user
 router.get('/user', auth, userController.getUserData)
@@ -51,5 +53,9 @@ router.post('/searchContact', auth, contactController.searchContact)
 
 // rankings
 router.get('/rankings/:period', auth, txController.getRankingsByPeriod)
+
+// Push Notifications
+router.post('/push/registrationId', auth, pushNotificationController.saveRegistrationId)
+router.post('/push/test', auth, pushNotificationController.testNotification)
 
 module.exports = router
