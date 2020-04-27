@@ -98,6 +98,9 @@ module.exports.approvePaymentRequest = (req, res) => {
         paymentRequest.status = 'COMPLETED'
         paymentRequest.save({ transction: t })
 
+        // Send Push Notification to Receiver
+        sendNotification('New Payment Received', `You received a payment of ${paymentRequest.amount} ${paymentRequest.currency}. Reason: ${paymentRequest.reason}`, paymentRequest.userId)
+
         sendJSONresponse(res, 200, { status: 'OK', payload: tx, message: 'Payment request approved' })
         return
     })
@@ -151,6 +154,9 @@ module.exports.rejectPaymentRequest = (req, res) => {
         // Update Payment Request
         paymentRequest.status = 'REJECTED'
         paymentRequest.save({ transction: t })
+
+        // Send Push Notification to Receiver
+        sendNotification('Payment Request Rejected', `Your payment request of ${paymentRequest.amount} ${paymentRequest.currency} to ${user.firstName}`, paymentRequest.userId)
 
         sendJSONresponse(res, 200, { status: 'OK', payload: paymentRequest, message: 'Payment request has been rejected' })
         return
@@ -854,6 +860,9 @@ module.exports.adminApprovePaymentRequest = (req, res) => {
         paymentRequest.status = 'COMPLETED'
         paymentRequest.save({ transction: t })
 
+        // Send Push Notification to Receiver
+        sendNotification('New Payment Received', `You received a payment of ${paymentRequest.amount} ${paymentRequest.currency}. Reason: ${paymentRequest.reason}`, paymentRequest.userId)
+
         sendJSONresponse(res, 200, { status: 'OK', payload: tx, message: 'Payment request approved' })
         return
     })
@@ -903,6 +912,9 @@ module.exports.adminRejectPaymentRequest = (req, res) => {
         // Update Payment Request
         paymentRequest.status = 'REJECTED'
         paymentRequest.save({ transction: t })
+
+        // Send Push Notification to Receiver
+        sendNotification('Payment Request Rejected', `Your payment request of ${paymentRequest.amount} ${paymentRequest.currency} to ${user.firstName}`, paymentRequest.userId)
 
         sendJSONresponse(res, 200, { status: 'OK', payload: paymentRequest, message: 'Payment request has been rejected' })
         return
