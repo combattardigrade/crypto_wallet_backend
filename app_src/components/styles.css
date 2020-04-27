@@ -116,3 +116,27 @@
     width: 100%;
     
 }
+
+/* width */
+
+.sidebar-body::-webkit-scrollbar {
+    width: 10px;
+}
+
+/* Track */
+
+.sidebar-body::-webkit-scrollbar-track {
+    background: #0c1427;
+}
+
+/* Handle */
+
+.sidebar-body::-webkit-scrollbar-thumb {
+    background: #0c1427;
+}
+
+/* Handle on hover */
+
+.sidebar-body::-webkit-scrollbar-thumb:hover {
+    background: #3b3e47;
+}

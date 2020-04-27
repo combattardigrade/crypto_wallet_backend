@@ -22,8 +22,8 @@ passport.use(new localStrategy({ usernameField: 'email' }, function (email, pass
 }))
 
 passport.use(new KeycloakBearerStrategy({
-    "realm": "demo", // set in env variable
-    "url": "http://localhost:8080/auth" // set in env variable
+    "realm": process.env.KEYCLOAK_REALM, // "demo"
+    "url": process.env.KEYCLOAK_URL // "http://localhost:8080/auth"
 }, (jwtPayload, next) => {   
     User.findOne({ where: { email: jwtPayload.email } })
         .then((user) => {               

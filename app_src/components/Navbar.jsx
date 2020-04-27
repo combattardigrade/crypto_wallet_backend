@@ -3,13 +3,35 @@ import { connect } from 'react-redux'
 import { Link } from "react-router-dom";
 import { Send, Download, Inbox, RefreshCw, Upload } from 'react-feather';
 
+// Actions
+import { showSidebar, hideSidebar } from '../actions/shared'
+import { logout } from '../actions/auth'
 
 class Navbar extends Component {
+
+    handleNavbarToggleBtn = (e) => {
+        e.preventDefault()
+        const { sidebar, dispatch } = this.props
+        if (sidebar === false) {
+            document.body.className += ' ' + 'sidebar-open'
+            dispatch(showSidebar())            
+        } else {
+            document.body.className = document.body.className.replace('sidebar-open', '')
+            dispatch(hideSidebar())
+        }
+    }
+
+    handleLogout = (e) => {
+        e.preventDefault()
+        const { dispatch } = this.props
+        dispatch(logout())
+    }
+
     render() {
         return (
 
             < nav className="navbar" >
-                <a href="#" className="sidebar-toggler">
+                <a onClick={this.handleNavbarToggleBtn} href="#" className="sidebar-toggler">
                     <i data-feather="menu" />
                 </a>
                 <div className="navbar-content">
@@ -235,4 +257,11 @@ class Navbar extends Component {
     }
 }
 
-export default Navbar
+function mapStateToProps({ auth, user, sidebar }) {
+    return {
+        token: auth && auth.token,
+        user,
+        sidebar
+    }
+}
+export default connect(mapStateToProps)(Navbar)

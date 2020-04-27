@@ -2,9 +2,58 @@ import React, { Component, Fragment } from 'react'
 import { connect } from 'react-redux'
 import { Box, Inbox, Users, Award, Repeat } from 'react-feather';
 
+// Libraries
+import { isBrowser, isMobile } from 'react-device-detect';
+import onClickOutside from "react-onclickoutside";
+
+// Actions
+import { showSidebar, hideSidebar, resetSidebar } from '../actions/shared'
+
 class Sidebar extends Component {
+
+    componentDidMount() {
+        const { dispatch } = this.props
+        if (isBrowser) {
+            dispatch(hideSidebar())
+        } else if (isMobile) {
+            dispatch(showSidebar())
+        }
+    }
+
+    handleClickOutside = (e) => {
+        const { sidebar, dispatch } = this.props
+        if (isMobile && sidebar === true || window.innerWidth <= 990 && sidebar === true) {
+            dispatch(hideSidebar())            
+        }
+    }
+
+    handleSidebarToggleBtn = (e) => {
+        e.preventDefault()
+        const { sidebar, dispatch } = this.props
+        if (sidebar === false) {
+            document.body.className += ' ' + 'sidebar-folded'
+            dispatch(showSidebar())
+        } else {
+            document.body.className = document.body.className.replace('sidebar-folded', '')
+            document.body.className = document.body.className.replace('sidebar-open', '')
+            dispatch(hideSidebar())
+        }
+    }
+
+    handleSidebarHover = (e) => {
+        e.preventDefault()
+        const { sidebar } = this.props
+        sidebar ? document.body.className += ' ' + 'open-sidebar-folded' : null
+    }
+
+    handleSidebarBlur = (e) => {
+        e.preventDefault()
+        const { sidebar } = this.props
+        sidebar ? document.body.className = document.body.className.replace('open-sidebar-folded', '') : null
+    }
+
     render() {
-        const { user } = this.props
+        const { user, sidebar } = this.props
 
         return (
             <Fragment>
@@ -13,13 +62,13 @@ class Sidebar extends Component {
                         <a href={`${process.env.WEB_HOST}dashboard`} className="sidebar-brand">
                             Jiwards<span> Wallet</span>
                         </a>
-                        <div className="sidebar-toggler not-active">
+                        <div className={sidebar ? 'sidebar-toggler active' : 'sidebar-toggler not-active'} onClick={this.handleSidebarToggleBtn}>
                             <span />
                             <span />
                             <span />
                         </div>
                     </div>
-                    <div className="sidebar-body">
+                    <div style={{ overflowY: 'scroll', overflowX: 'hidden' }} className="sidebar-body" onMouseEnter={this.handleSidebarHover} onMouseLeave={this.handleSidebarBlur}>
                         <ul className="nav">
                             <li className="nav-item nav-category">Total Balance</li>
                             <li className="nav-item">
@@ -106,10 +155,11 @@ class Sidebar extends Component {
     }
 }
 
-function mapStateToProps({ auth, user }) {
+function mapStateToProps({ auth, user, sidebar }) {
     return {
         token: auth && auth.token,
         user,
+        sidebar,
     }
 }
 export default connect(mapStateToProps)(Sidebar)
