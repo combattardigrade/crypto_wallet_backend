@@ -3,6 +3,7 @@ const Balance = require('../models/sequelize').Balance
 const PaymentRequest = require('../models/sequelize').PaymentRequest
 const Transaction = require('../models/sequelize').Transaction
 const sendJSONresponse = require('../utils/index.js').sendJSONresponse
+const sendNotification = require('./pushNotification').sendNotification
 const sequelize = require('../models/sequelize').sequelize
 const { Op } = require('sequelize')
 const moment = require('moment')
@@ -214,6 +215,9 @@ module.exports.createPaymentRequest = (req, res) => {
             sendJSONresponse(res, 404, { status: 'ERROR', message: 'An error occurred while creating the payment request' })
             return
         }
+
+        // Send Push Notification to Receiver
+        sendNotification('New Payment Request', `You received a new payment request of ${amount} ${currency}. Reason: ${reason}`, requestToUserId, 'PAYMENT_REQUEST')
 
         sendJSONresponse(res, 200, { status: 'OK', payload: tx, message: 'Payment request created' })
         return

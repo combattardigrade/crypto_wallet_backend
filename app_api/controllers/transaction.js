@@ -1,7 +1,8 @@
 const User = require('../models/sequelize').User
 const Balance = require('../models/sequelize').Balance
 const Transaction = require('../models/sequelize').Transaction
-const sendJSONresponse = require('../utils/index.js').sendJSONresponse
+const sendJSONresponse = require('../utils/index').sendJSONresponse
+const sendNotification = require('./pushNotification').sendNotification
 const sequelize = require('../models/sequelize').sequelize
 const { Op } = require('sequelize')
 const moment = require('moment')
@@ -248,6 +249,9 @@ module.exports.sendInternalTx = (req, res) => {
             description,
             status: 'COMPLETED'
         })
+
+        // Send Push Notification to Receiver
+        sendNotification('New Payment Received', `You received a payment of ${amount} ${currency}. Reason: ${reason}`, toUserId)
 
         sendJSONresponse(res, 200, { status: 'OK', payload: tx, message: 'Transaction completed correctly' })
         return

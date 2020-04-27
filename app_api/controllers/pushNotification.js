@@ -15,6 +15,31 @@ firebaseAdmin.initializeApp({
     databaseURL: "https://jiwards.firebaseio.com/"
 })
 
+
+
+module.exports.sendNotification = async (title, message, userId, type = 'PAYMENT_RECEIVED') => {
+
+    const registrationKey = await RegistrationKey.findOne({ where: { userId } })
+
+    const notification = {
+        data: {
+            title,
+            body: message,
+            type,
+        },
+        notification: {
+            title,
+            body: message,
+        },
+        token: registrationKey.registrationId
+    }
+
+    // Send notification to one device
+    const response = await firebaseAdmin.messaging().send(notification)
+
+    return response;
+}
+
 module.exports.testNotification = (req, res) => {
     const userId = req.body.userId
     const title = req.body.title
