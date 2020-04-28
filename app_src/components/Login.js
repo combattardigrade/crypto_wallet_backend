@@ -89,13 +89,13 @@ class Login extends Component {
                             <div className="card">
                                 <div className="row">
                                     <div className="col-md-4 pr-md-0">
-                                        <div className="auth-left-wrapper" style={{ backgroundImage: 'url(' + process.env.SERVER_HOST + 'images/logo.png)' }}>
+                                        <div className="auth-left-wrapper" style={{ backgroundImage: 'url(' + process.env.SERVER_HOST + 'images/logo.png)', backgroundPosition: '50% 50%' }}>
 
                                         </div>
                                     </div>
                                     <div className="col-md-8 pl-md-0">
                                         <div className="auth-form-wrapper px-4 py-5">
-                                            <a href="#" className="noble-ui-logo d-block mb-2">Jiwards<span> Wallet</span></a>
+                                            <a href="#" className="noble-ui-logo d-block mb-2 "><span  style={{fontWeight:900, color: '#031a61'}}>Jiwards</span><span> Wallet</span></a>
                                             <h5 className="text-muted font-weight-normal mb-4">{LOCALES[lan]['web_wallet']['login_welcome_msg']}</h5>
                                             <form className="forms-sample">
                                                 {
