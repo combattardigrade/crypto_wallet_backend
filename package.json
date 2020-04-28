@@ -5,7 +5,8 @@
   "main": "app.js",
   "scripts": {
     "test": "nodemon app.js",
-    "test2": "npm test && webpack"
+    "dev-client": "webpack-dev-server",
+    "build": "webpack --config webpack.config.js"
   },
   "author": "SoftBot",
   "license": "ISC",
