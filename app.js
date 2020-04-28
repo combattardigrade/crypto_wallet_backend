@@ -25,6 +25,7 @@ app.use(passport.initialize())
 app.use('/api', routesApi)
 // csrf and cookies
 app.use(cookieParser())
+app.use('/',routesWallet)
 // app.use(csurf({cookie: {httpOnly: true}}))
 // global variable
 global.APP_ROOT = path.resolve(__dirname)

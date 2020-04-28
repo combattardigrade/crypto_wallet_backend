@@ -4,10 +4,10 @@ const sendJSONresponse = require('../../utils/index').sendJSONresponse
 const API_HOST = process.env.API_HOST
 const rp = require('request-promise')
 
-module.exports.renderAdminApp = function (req, res) {
+module.exports.renderApp = function (req, res) {
 
     try {
-        res.sendFile(APP_ROOT + '/public/admin.html')
+        res.sendFile(APP_ROOT + '/public/index.html')
     }
     catch (e) {
         console.log(e)
