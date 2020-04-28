@@ -69,7 +69,8 @@ const data = {
         login_welcome_msg: '欢迎！输入您的凭据登录',
         forgot_password: '忘记密码了吗？',
         password: '密码',
-        login: '登录'
+        login: '登录',
+        profile: '轮廓'
     },
     error:
     {

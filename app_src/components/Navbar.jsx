@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react'
 import { connect } from 'react-redux'
 import { Link } from "react-router-dom";
-import { Send, Download, Inbox, RefreshCw, Upload, Menu } from 'react-feather';
+import { Send, Download, Inbox, RefreshCw, Upload, Menu, User, LogOut } from 'react-feather';
 
 // Actions
 import { saveLanguage } from '../actions/language'
@@ -21,6 +21,8 @@ import pt from '../locales/pt'
 import ja from '../locales/ja'
 import zh from '../locales/zh'
 const LOCALES = { en, fr, nl, es, pt, ja, zh }
+import moment from 'moment';
+
 
 class Navbar extends Component {
 
@@ -77,10 +79,11 @@ class Navbar extends Component {
 
     render() {
 
-        const { lan } = this.props
+        const { user, inbox, lan } = this.props
+
         let flag = 'GB'
-        switch(lan) {
-            case 'en': 
+        switch (lan) {
+            case 'en':
                 flag = 'GB'; break;
             case 'fr':
                 flag = 'FR'; break;
@@ -98,7 +101,7 @@ class Navbar extends Component {
 
         return (
 
-            < nav className="navbar" >
+            < nav className="navbar" style={{backgroundColor:'#0033cc'}}>
                 <a onClick={this.handleNavbarToggleBtn} href="#" className="sidebar-toggler">
                     <Menu size={16} />
                 </a>
@@ -108,21 +111,21 @@ class Navbar extends Component {
                         <Link style={{ display: 'flex', marginLeft: '20px', }} to="/send">
                             <div style={{ display: 'flex', alignItems: 'center' }}>
                                 <Send size="22" />
-                                <div style={{ padding: '5px', fontSize: '18px', fontWeight: 'bold' }}>{LOCALES[lan]['web_wallet']['send']}</div>
+                                <div style={{ padding: '5px', fontSize: '18px', fontWeight: 'normal' }}>{LOCALES[lan]['web_wallet']['send']}</div>
                             </div>
                         </Link>
                         <div style={{ display: 'flex', alignItems: 'center', marginLeft: '20px', color: '#d6d6d6' }}>|</div>
                         <Link style={{ display: 'flex' }} to="/receive">
                             <div style={{ display: 'flex', alignItems: 'center', marginLeft: '20px' }}>
                                 <Download size="22" />
-                                <div style={{ padding: '5px', fontSize: '18px', fontWeight: 'bold' }}>{LOCALES[lan]['web_wallet']['receive']}</div>
+                                <div style={{ padding: '5px', fontSize: '18px', fontWeight: 'normal' }}>{LOCALES[lan]['web_wallet']['receive']}</div>
                             </div>
                         </Link>
                         <div style={{ display: 'flex', alignItems: 'center', marginLeft: '20px', color: '#d6d6d6' }}>|</div>
                         <Link style={{ display: 'flex' }} to="/withdraw">
                             <div style={{ display: 'flex', alignItems: 'center', marginLeft: '20px' }}>
                                 <Upload size="22" />
-                                <div style={{ padding: '5px', fontSize: '18px', fontWeight: 'bold' }}>{LOCALES[lan]['web_wallet']['withdraw']}</div>
+                                <div style={{ padding: '5px', fontSize: '18px', fontWeight: 'normal' }}>{LOCALES[lan]['web_wallet']['withdraw']}</div>
                             </div>
                         </Link>
                     </div>
@@ -136,15 +139,15 @@ class Navbar extends Component {
                                 showOptionLabel={false}
                                 selectedSize={14}
                                 optionsSize={14}
-                                
+                                className="languageSelector"
                                 onSelect={this.handleLanSelect}
                             />
                         </li>
-                        <li className="nav-item dropdown nav-notifications">
+                        {/* <li className="nav-item dropdown nav-notifications">
                             <a className="nav-link dropdown-toggle" href="#" id="notificationDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <RefreshCw />
                             </a>
-                        </li>
+                        </li> */}
 
                         <li className="nav-item dropdown nav-messages">
                             <a className="nav-link dropdown-toggle" href="#" id="messageDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -152,178 +155,67 @@ class Navbar extends Component {
                             </a>
                             <div className="dropdown-menu" aria-labelledby="messageDropdown">
                                 <div className="dropdown-header d-flex align-items-center justify-content-between">
-                                    <p className="mb-0 font-weight-medium">9 New Messages</p>
-                                    <a href="#" className="text-muted">Clear all</a>
+                                    <p className="mb-0 font-weight-medium">{Object.values(inbox).length} Pending Txs</p>
+
                                 </div>
                                 <div className="dropdown-body">
-                                    <a href="#" className="dropdown-item">
-                                        <div className="figure">
-                                            <img src="https://via.placeholder.com/30x30" alt="userr" />
-                                        </div>
-                                        <div className="content">
-                                            <div className="d-flex justify-content-between align-items-center">
-                                                <p>Leonardo Payne</p>
-                                                <p className="sub-text text-muted">2 min ago</p>
-                                            </div>
-                                            <p className="sub-text text-muted">Project status</p>
-                                        </div>
-                                    </a>
-                                    <a href="#" className="dropdown-item">
-                                        <div className="figure">
-                                            <img src="https://via.placeholder.com/30x30" alt="userr" />
-                                        </div>
-                                        <div className="content">
-                                            <div className="d-flex justify-content-between align-items-center">
-                                                <p>Carl Henson</p>
-                                                <p className="sub-text text-muted">30 min ago</p>
-                                            </div>
-                                            <p className="sub-text text-muted">Client meeting</p>
-                                        </div>
-                                    </a>
-                                    <a href="#" className="dropdown-item">
-                                        <div className="figure">
-                                            <img src="https://via.placeholder.com/30x30" alt="userr" />
-                                        </div>
-                                        <div className="content">
-                                            <div className="d-flex justify-content-between align-items-center">
-                                                <p>Jensen Combs</p>
-                                                <p className="sub-text text-muted">1 hrs ago</p>
-                                            </div>
-                                            <p className="sub-text text-muted">Project updates</p>
-                                        </div>
-                                    </a>
-                                    <a href="#" className="dropdown-item">
-                                        <div className="figure">
-                                            <img src="https://via.placeholder.com/30x30" alt="userr" />
-                                        </div>
-                                        <div className="content">
-                                            <div className="d-flex justify-content-between align-items-center">
-                                                <p>Amiah Burton</p>
-                                                <p className="sub-text text-muted">2 hrs ago</p>
-                                            </div>
-                                            <p className="sub-text text-muted">Project deadline</p>
-                                        </div>
-                                    </a>
-                                    <a href="#" className="dropdown-item">
-                                        <div className="figure">
-                                            <img src="https://via.placeholder.com/30x30" alt="userr" />
-                                        </div>
-                                        <div className="content">
-                                            <div className="d-flex justify-content-between align-items-center">
-                                                <p>Yaretzi Mayo</p>
-                                                <p className="sub-text text-muted">5 hr ago</p>
-                                            </div>
-                                            <p className="sub-text text-muted">New record</p>
-                                        </div>
-                                    </a>
+                                    {
+                                        inbox && Object.values(inbox).length > 0
+                                            ?
+                                            Object.values(inbox).map((tx) => (
+                                                <Link to={'/inboxTx/' + tx.id} key={tx.id} href="#" className="dropdown-item">
+                                                    <div className="content">
+                                                        <div className="d-flex justify-content-between align-items-center">
+                                                            <p style={{color: 'black'}}>{tx.user.firstName + ' ' + tx.user.lastName}</p>
+                                                            <p className="sub-text text-muted">{moment(tx.createdAt).fromNow()}</p>
+                                                        </div>
+                                                        <p className="sub-text text-muted">{tx.reason}</p>
+                                                    </div>
+                                                </Link>
+                                            ))
+                                            :
+                                            <a href="#" className="dropdown-item">
+                                                <div style={{ marginLeft: '0px' }} className="content">
+                                                    <div className="d-flex justify-content-between align-items-center">
+                                                        <p style={{color: 'black'}}>No pending transactions</p>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                    }
+
                                 </div>
                                 <div className="dropdown-footer d-flex align-items-center justify-content-center">
-                                    <a href="#">View all</a>
+                                    <Link className="a-whitebg" to="/inbox">View all</Link>
                                 </div>
                             </div>
                         </li>
-                        <li className="nav-item dropdown nav-notifications">
-                            <a className="nav-link dropdown-toggle" href="#" id="notificationDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i data-feather="bell" />
-                                <div className="indicator">
-                                    <div className="circle" />
-                                </div>
-                            </a>
-                            <div className="dropdown-menu" aria-labelledby="notificationDropdown">
-                                <div className="dropdown-header d-flex align-items-center justify-content-between">
-                                    <p className="mb-0 font-weight-medium">6 New Notifications</p>
-                                    <a href="#" className="text-muted">Clear all</a>
-                                </div>
-                                <div className="dropdown-body">
-                                    <a href="#" className="dropdown-item">
-                                        <div className="icon">
-                                            <i data-feather="user-plus" />
-                                        </div>
-                                        <div className="content">
-                                            <p>New customer registered</p>
-                                            <p className="sub-text text-muted">2 sec ago</p>
-                                        </div>
-                                    </a>
-                                    <a href="#" className="dropdown-item">
-                                        <div className="icon">
-                                            <i data-feather="gift" />
-                                        </div>
-                                        <div className="content">
-                                            <p>New Order Recieved</p>
-                                            <p className="sub-text text-muted">30 min ago</p>
-                                        </div>
-                                    </a>
-                                    <a href="#" className="dropdown-item">
-                                        <div className="icon">
-                                            <i data-feather="alert-circle" />
-                                        </div>
-                                        <div className="content">
-                                            <p>Server Limit Reached!</p>
-                                            <p className="sub-text text-muted">1 hrs ago</p>
-                                        </div>
-                                    </a>
-                                    <a href="#" className="dropdown-item">
-                                        <div className="icon">
-                                            <i data-feather="layers" />
-                                        </div>
-                                        <div className="content">
-                                            <p>Apps are ready for update</p>
-                                            <p className="sub-text text-muted">5 hrs ago</p>
-                                        </div>
-                                    </a>
-                                    <a href="#" className="dropdown-item">
-                                        <div className="icon">
-                                            <i data-feather="download" />
-                                        </div>
-                                        <div className="content">
-                                            <p>Download completed</p>
-                                            <p className="sub-text text-muted">6 hrs ago</p>
-                                        </div>
-                                    </a>
-                                </div>
-                                <div className="dropdown-footer d-flex align-items-center justify-content-center">
-                                    <a href="#">View all</a>
-                                </div>
-                            </div>
-                        </li>
+
                         <li className="nav-item dropdown nav-profile">
                             <a className="nav-link dropdown-toggle" href="#" id="profileDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <img src="https://via.placeholder.com/30x30" alt="userr" />
+                                <img src={process.env.SERVER_HOST + 'images/defaultUser.png'} />
                             </a>
                             <div className="dropdown-menu" aria-labelledby="profileDropdown">
                                 <div className="dropdown-header d-flex flex-column align-items-center">
                                     <div className="figure mb-3">
-                                        <img src="https://via.placeholder.com/80x80" alt="" />
+                                        <img src={process.env.SERVER_HOST + 'images/defaultUserBlack.png'} />
                                     </div>
                                     <div className="info text-center">
-                                        <p className="name font-weight-bold mb-0">Amiah Burton</p>
-                                        <p className="email text-muted mb-3">amiahburton@gmail.com</p>
+                                        <p className="name font-weight-bold mb-0">{user.firstName + ' ' + user.lastName}</p>
+                                        <p className="email text-muted mb-3">{user.email}</p>
                                     </div>
                                 </div>
                                 <div className="dropdown-body">
                                     <ul className="profile-nav p-0 pt-3">
                                         <li className="nav-item">
-                                            <a href="pages/general/profile.html" className="nav-link">
-                                                <i data-feather="user" />
-                                                <span>Profile</span>
-                                            </a>
+                                            <Link to="/profile" className="nav-link" className="a-whitebg">
+                                                <User />
+                                                <span style={{marginLeft: '10px'}}>{LOCALES[lan]['web_wallet']['profile']}</span>
+                                            </Link>
                                         </li>
                                         <li className="nav-item">
-                                            <a href="#" className="nav-link">
-                                                <i data-feather="edit" />
-                                                <span>Edit Profile</span>
-                                            </a>
-                                        </li>
-                                        <li className="nav-item">
-                                            <a href="#" className="nav-link">
-                                                <i data-feather="repeat" />
-                                                <span>Switch User</span>
-                                            </a>
-                                        </li>
-                                        <li className="nav-item">
-                                            <a href="#" className="nav-link">
-                                                <i data-feather="log-out" />
-                                                <span>Log Out</span>
+                                            <a onClick={this.handleLogout} href="#" className="nav-link" className="a-whitebg">
+                                                <LogOut />
+                                                <span style={{marginLeft: '10px'}}>{LOCALES[lan]['web_wallet']['logout']}</span>
                                             </a>
                                         </li>
                                     </ul>
@@ -338,10 +230,11 @@ class Navbar extends Component {
     }
 }
 
-function mapStateToProps({ auth, user, sidebar, language }) {
+function mapStateToProps({ auth, user, inbox, sidebar, language }) {
     return {
         token: auth && auth.token,
         user,
+        inbox,
         sidebar,
         lan: language ? language : 'en'
     }

@@ -38,7 +38,8 @@ class Transactions extends Component {
     }
 
     componentDidMount() {
-        const { token } = this.props
+        const { token, lan } = this.props
+        document.title = `${LOCALES[lan]['web_wallet']['transactions']} | Jiwards`
 
         getTxs({ token })
             .then(data => data.json())
@@ -75,7 +76,7 @@ class Transactions extends Component {
                 <div className="page-content">
                     <nav className="page-breadcrumb">
                         <ol className="breadcrumb">
-                            <li className="breadcrumb-item"><a href="#">{LOCALES[lan]['web_wallet']['transactions']}</a></li>
+                            <li className="breadcrumb-item"><a className="a-whitebg" href="#">{LOCALES[lan]['web_wallet']['transactions']}</a></li>
                             <li className="breadcrumb-item active" aria-current="page">{selectedOperation}</li>
                         </ol>
                     </nav>

@@ -57,8 +57,8 @@ const data = {
     dashboard: 'Tablero',
     contacts_list: 'Lista de contactos',
     global_rankings: 'Rankings mundiales',
-    txs_history: 'Historia de Txs',
-    sent: 'Expedido',
+    txs_history: 'Historial de Txs',
+    sent: 'Enviado',
     received: 'Recibido',
     tx_details: 'Detalles de la transacción',
     from_user: 'Del usuario',
@@ -69,7 +69,8 @@ const data = {
     login_welcome_msg: '¡Bienvenidos! Ingrese sus credenciales para iniciar sesión',
     forgot_password: '¿Olvidaste tu contraseña?',
     password: 'Contraseña',
-    login: 'Iniciar sesión'
+    login: 'Iniciar sesión',
+    profile: 'Perfil'
   },
   error:
   {

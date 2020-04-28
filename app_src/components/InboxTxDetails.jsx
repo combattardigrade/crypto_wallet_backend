@@ -34,8 +34,9 @@ class InboxTxDetails extends Component {
     }
 
     componentDidMount() {
-        const { token } = this.props
+        const { token, lan } = this.props
         const { txId } = this.props.match.params
+        document.title = `${LOCALES[lan]['web_wallet']['pending_tx']} | Jiwards`
 
         getInbox({ token })
             .then(data => data.json())
@@ -158,7 +159,7 @@ class InboxTxDetails extends Component {
                 <div className="page-content">
                     <nav className="page-breadcrumb">
                         <ol className="breadcrumb">
-                            <li className="breadcrumb-item"><Link to={'/inbox'}>{LOCALES[lan]['web_wallet']['inbox']}</Link></li>
+                            <li className="breadcrumb-item"><Link className="a-whitebg" to={'/inbox'}>{LOCALES[lan]['web_wallet']['inbox']}</Link></li>
                             <li className="breadcrumb-item active" aria-current="page">{tx.id}</li>
                         </ol>
                     </nav>

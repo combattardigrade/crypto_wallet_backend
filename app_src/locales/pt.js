@@ -69,7 +69,8 @@ const data = {
         login_welcome_msg: 'Bem-vinda! Digite suas credenciais para entrar',
         forgot_password: 'Esqueceu sua senha?',
         password: 'Senha',
-        login: 'Conecte-se'
+        login: 'Conecte-se',
+        profile: 'Perfil'
     },
     error:
     {

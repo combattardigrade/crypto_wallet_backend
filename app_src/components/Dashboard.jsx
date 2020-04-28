@@ -11,6 +11,7 @@ import { getUserData, getInbox, getTxs } from '../utils/api'
 
 // Actions
 import { saveUserData } from '../actions/user'
+import { saveInbox } from '../actions/inbox'
 
 // Locales
 import en from '../locales/en'
@@ -49,6 +50,7 @@ class Dashboard extends Component {
             .then((res) => {
                 if (res.status === 'OK') {
                     console.log(res.payload)
+                    dispatch(saveInbox(res.payload))
                     this.setState({ loading: false, inbox: res.payload })
                 }
             })

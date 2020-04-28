@@ -140,3 +140,19 @@
 .sidebar-body::-webkit-scrollbar-thumb:hover {
     background: #3b3e47;
 }
+a {
+    color: white !important;
+}
+.a-whitebg {
+    color: black !important;
+}
+.languageSelector {
+    color: white !important;
+}
+.flag-select__btn:after {
+    border-top: 5px solid white !important;
+}
+.btn-primary:hover, .swal2-modal .swal2-actions button.swal2-confirm:hover, .wizard > .actions a:hover {
+    background-color: #023ef3 !important;
+    border-color: #023ef3 !important;
+}

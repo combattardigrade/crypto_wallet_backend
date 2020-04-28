@@ -35,7 +35,8 @@ class Contacts extends Component {
     }
 
     componentDidMount() {
-        const { token } = this.props
+        const { token, lan } = this.props
+        document.title = `${LOCALES[lan]['web_wallet']['contacts']} | Jiwards`
 
         getContacts({ token })
             .then(data => data.json())
@@ -90,7 +91,7 @@ class Contacts extends Component {
                 <div className="page-content">
                     <nav className="page-breadcrumb">
                         <ol className="breadcrumb">
-                            <li className="breadcrumb-item"><a href="#">{LOCALES[lan]['web_wallet']['contacts']}</a></li>
+                            <li className="breadcrumb-item"><a className="a-whitebg" href="#">{LOCALES[lan]['web_wallet']['contacts']}</a></li>
                             <li className="breadcrumb-item active" aria-current="page">{LOCALES[lan]['web_wallet']['all']}</li>
                         </ol>
                     </nav>

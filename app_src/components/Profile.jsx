@@ -24,57 +24,21 @@ import ja from '../locales/ja'
 import zh from '../locales/zh'
 const LOCALES = { en, fr, nl, es, pt, ja, zh }
 
-class ContactDetails extends Component {
+class Profile extends Component {
 
     state = {
         user: '',
-        loading: true
-    }
-
+        loading: false
+    }    
+    
     componentDidMount() {
-        const { token, lan } = this.props
-        let { userId } = this.props.match.params
-        
-        document.title = `${LOCALES[lan]['web_wallet']['contact_details']} | Jiwards`
-
-        getUserDetails({ userId, token })
-            .then(data => data.json())
-            .then((res) => {
-                if (res.status === 'OK') {
-                    console.log(res.payload)
-                    this.setState({ loading: false, user: res.payload })
-                }
-            })
-    }
-
-    handleDeleteContact = (contactId) => {
-        const { token, lan } = this.props
-        const { contacts } = this.state
-
-        confirmAlert({
-            title: LOCALES[lan]['web_wallet']['confirmation'],
-            message: 'Are you sure you want to delete this contact?',
-            buttons: [
-                {
-                    label: LOCALES[lan]['web_wallet']['yes'],
-                    onClick: () => {
-                        deleteContact({ contactId, token })
-                        this.setState({
-                            contacts: contacts.filter(c => c.id !== contactId)
-                        })
-                    }
-                },
-                {
-                    label: LOCALES[lan]['web_wallet']['no'],
-                    onClick: () => { }
-                }
-            ]
-        });
+        const { lan } = this.props
+        document.title = `${LOCALES[lan]['web_wallet']['profile']} | Jiwards`
     }
 
     render() {
-        const { user, loading } = this.state
-        const { lan } = this.props
+        const { loading } = this.state
+        const { user, lan } = this.props
 
         if (loading) {
             return <Loading />
@@ -85,7 +49,7 @@ class ContactDetails extends Component {
                 <div className="page-content">
                     <nav className="page-breadcrumb">
                         <ol className="breadcrumb">
-                            <li className="breadcrumb-item"><Link to="/contacts">{LOCALES[lan]['web_wallet']['user']}</Link></li>
+                            <li className="breadcrumb-item"><a className="a-whitebg" href="#">{LOCALES[lan]['web_wallet']['profile']}</a></li>
                             <li className="breadcrumb-item active" aria-current="page">{user.id}</li>
                         </ol>
                     </nav>
@@ -97,7 +61,7 @@ class ContactDetails extends Component {
                                     <div className="card-body">
                                         <h6 className="card-title">{LOCALES[lan]['web_wallet']['contact_details']}</h6>
                                         <div className="table-responsive">
-                                            <table className="table table-hover" id="contactsTable">
+                                            <table className="table table-hover">
                                                 <thead>
                                                     <tr>
                                                         <td>{LOCALES[lan]['web_wallet']['field']}</td>
@@ -121,10 +85,7 @@ class ContactDetails extends Component {
                                                         <td>{LOCALES[lan]['web_wallet']['username']}</td>
                                                         <td>{user.username}</td>
                                                     </tr>                                                    
-                                                    <tr>
-                                                        <td>{LOCALES[lan]['web_wallet']['delete_contact']}</td>
-                                                        <td><button onClick={e => { e.preventDefault(); this.handleDeleteContact(user.id)}} className="btn btn-danger mr-2">{LOCALES[lan]['web_wallet']['delete']}</button></td>
-                                                    </tr>
+                                                    
                                                 </tbody>
                                             </table>
                                         </div>                                        
@@ -141,10 +102,11 @@ class ContactDetails extends Component {
 }
 
 
-function mapStateToProps({ auth, language }) {
+function mapStateToProps({ auth, user, language }) {
     return {
         token: auth && auth.token,
+        user,
         lan: language ? language : 'en'
     }   
 }
-export default connect(mapStateToProps)(ContactDetails)
+export default connect(mapStateToProps)(Profile)

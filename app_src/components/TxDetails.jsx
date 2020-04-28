@@ -33,8 +33,11 @@ class TxDetails extends Component {
     }
 
     componentDidMount() {
-        const { token } = this.props
+        const { token, lan } = this.props
         const { txId } = this.props.match.params
+
+        document.title = `${LOCALES[lan]['web_wallet']['tx_details']} | Jiwards`
+
         getTxs({ token })
             .then(data => data.json())
             .then((res) => {
@@ -60,7 +63,7 @@ class TxDetails extends Component {
                 <div className="page-content">
                     <nav className="page-breadcrumb">
                         <ol className="breadcrumb">
-                            <li className="breadcrumb-item"><Link to="/txs">{LOCALES[lan]['web_wallet']['transactions']}</Link></li>
+                            <li className="breadcrumb-item"><Link className="a-whitebg" to="/txs">{LOCALES[lan]['web_wallet']['transactions']}</Link></li>
                             <li className="breadcrumb-item active" aria-current="page">{tx.id}</li>
                         </ol>
                     </nav>

@@ -29,6 +29,11 @@ class AddContact extends Component {
         loading: false
     }
 
+    componentDidMount() {
+        const { lan } = this.props
+        document.title = `${LOCALES[lan]['web_wallet']['add_contact']} | Jiwards`
+    }
+
     handleSearchContact = (e) => {
         e.preventDefault()
         const { token } = this.props
@@ -71,7 +76,7 @@ class AddContact extends Component {
                 <div className="page-content">
                     <nav className="page-breadcrumb">
                         <ol className="breadcrumb">
-                            <li className="breadcrumb-item"><a href="#">{LOCALES[lan]['web_wallet']['contacts']}</a></li>
+                            <li className="breadcrumb-item"><Link to="/contacts" className="a-whitebg" href="#">{LOCALES[lan]['web_wallet']['contacts']}</Link></li>
                             <li className="breadcrumb-item " aria-current="page">{LOCALES[lan]['web_wallet']['add']}</li>
                         </ol>
                     </nav>

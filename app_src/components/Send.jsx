@@ -40,7 +40,8 @@ class Send extends Component {
     }
 
     componentDidMount() {
-        const { token } = this.props
+        const { token, lan } = this.props
+        document.title = `${LOCALES[lan]['web_wallet']['send']} | Jiwards`
 
         getTxReasons({ token })
             .then(data => data.json())
@@ -150,7 +151,7 @@ class Send extends Component {
                 <div className="page-content">
                     <nav className="page-breadcrumb">
                         <ol className="breadcrumb">
-                            <li className="breadcrumb-item"><a href="#">{LOCALES[lan]['web_wallet']['send']}</a></li>
+                            <li className="breadcrumb-item"><a className="a-whitebg" href="#">{LOCALES[lan]['web_wallet']['send']}</a></li>
                             <li className="breadcrumb-item active" aria-current="page">Jiwards</li>
                         </ol>
                     </nav>

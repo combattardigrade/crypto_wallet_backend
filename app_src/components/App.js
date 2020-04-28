@@ -16,6 +16,7 @@ import Receive from './Receive'
 import Withdraw from './Withdraw'
 import Inbox from './Inbox'
 import InboxTxDetails from './InboxTxDetails'
+import Profile from './Profile'
 
 // Libraries
 import detectBrowserLanguage from 'detect-browser-language'
@@ -61,7 +62,7 @@ class App extends Component {
           <PrivateRoute path={`/withdraw`} component={Withdraw} auth={auth} />
           <PrivateRoute path={`/inbox`} component={Inbox} auth={auth} />
           <PrivateRoute path={`/inboxTx/:txId`} component={InboxTxDetails} auth={auth} />
-
+          <PrivateRoute path={`/profile`} component={Profile} auth={auth} />
           <PrivateRoute path={`/settings`} component={Dashboard} auth={auth} />
           <PrivateRoute path={`/io-history`} component={Dashboard} auth={auth} />
 

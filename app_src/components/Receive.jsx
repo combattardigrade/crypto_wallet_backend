@@ -28,6 +28,10 @@ const QRCode = require('qrcode.react');
 
 class Receive extends Component {
 
+    componentDidMount() {
+        const { lan } = this.props
+        document.title = `${LOCALES[lan]['web_wallet']['receive']} | Jiwards`
+    }
 
     handleGoBack = (e) => {
         e.preventDefault()
@@ -47,7 +51,7 @@ class Receive extends Component {
                 <div className="page-content">
                     <nav className="page-breadcrumb">
                         <ol className="breadcrumb">
-                            <li className="breadcrumb-item"><a href="#">{LOCALES[lan]['web_wallet']['receive']}</a></li>
+                            <li className="breadcrumb-item"><a className="a-whitebg" href="#">{LOCALES[lan]['web_wallet']['receive']}</a></li>
                             <li className="breadcrumb-item active" aria-current="page">Jiwards</li>
                         </ol>
                     </nav>

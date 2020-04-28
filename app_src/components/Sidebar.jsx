@@ -71,7 +71,7 @@ class Sidebar extends Component {
                 <nav className="sidebar">
                     <div className="sidebar-header">
                         <a href={`${process.env.WEB_HOST}dashboard`} className="sidebar-brand">
-                            Jiwards<span> Wallet</span>
+                            Jiwards<span style={{color: '#144fff'}}> Wallet</span>
                         </a>
                         <div className={sidebar ? 'sidebar-toggler active' : 'sidebar-toggler not-active'} onClick={this.handleSidebarToggleBtn}>
                             <span />
@@ -83,9 +83,9 @@ class Sidebar extends Component {
                         <ul className="nav">
                             <li className="nav-item nav-category">{LOCALES[lan]['web_wallet']['total_balance']}</li>
                             <li className="nav-item">
-                                <a href='#' className="nav-link">
+                                <Link to={`/dashboard`} className="nav-link">
                                     <span style={{ marginLeft: '2px', fontSize:'1em' }} className="link-title">{parseFloat(user.balances[0].amount)} JWS</span>
-                                </a>
+                                </Link>
                             </li>
 
                             <li className="nav-item nav-category">Main</li>

@@ -69,7 +69,8 @@ const data = {
         login_welcome_msg: 'Welkom! Voer uw gegevens in om in te loggen',
         forgot_password: 'Je wachtwoord vergeten?',
         password: 'Wachtwoord',
-        login: 'Log in'
+        login: 'Log in',
+        profile: 'Profiel'
     },
     error:
     {

@@ -41,7 +41,8 @@ class Inbox extends Component {
     }
 
     componentDidMount() {
-        const { token } = this.props
+        const { token, lan } = this.props
+        document.title = `${LOCALES[lan]['web_wallet']['inbox']} | Jiwards`
 
         getInbox({ token })
             .then(data => data.json())
@@ -123,7 +124,7 @@ class Inbox extends Component {
                 <div className="page-content">
                     <nav className="page-breadcrumb">
                         <ol className="breadcrumb">
-                            <li className="breadcrumb-item"><a href="#">{LOCALES[lan]['web_wallet']['inbox']}</a></li>
+                            <li className="breadcrumb-item"><a className="a-whitebg" href="#">{LOCALES[lan]['web_wallet']['inbox']}</a></li>
                             <li className="breadcrumb-item active" aria-current="page">{LOCALES[lan]['web_wallet']['pending_approval']}</li>
                         </ol>
                     </nav>

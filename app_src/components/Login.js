@@ -29,7 +29,8 @@ class Login extends Component {
     }
 
     componentDidMount() {
-        document.title = "Login | Jiwards Wallet"
+        const { lan } = this.props
+        document.title = `${LOCALES[lan]['web_wallet']['login']} | Jiwards`
         const { dispatch } = this.props
         this.setState({ loading: false })
     }

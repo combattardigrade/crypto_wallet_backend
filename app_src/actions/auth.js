@@ -1,7 +1,6 @@
-import { login, getLoginCSRFToken } from '../utils/api'
-import { showLoading, hideLoading } from './shared'
+import { login } from '../utils/api'
 export const SAVE_TOKEN = 'SAVE_TOKEN'
-
+export const USER_LOGOUT = 'USER_LOGOUT'
 
 export function handleLogin(params, cb) {
     

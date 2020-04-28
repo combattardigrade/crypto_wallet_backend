@@ -1,7 +1,7 @@
-const API = 'http://localhost:3000/api'
+const API = process.env.API_HOST
 
 export function login(params) {
-    return fetch(API + '/login', {
+    return fetch(API + 'login', {
         method: 'POST',
         body: JSON.stringify(params),
         headers: {
@@ -12,7 +12,7 @@ export function login(params) {
 }
 
 export function signup(params) {
-    return fetch(API + '/signup', {
+    return fetch(API + 'signup', {
         method: 'POST',
         body: JSON.stringify(params),
         headers: {
@@ -22,7 +22,7 @@ export function signup(params) {
 }
 
 export function getUserData(params) {
-    return fetch(API + '/user', {
+    return fetch(API + 'user', {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -32,7 +32,7 @@ export function getUserData(params) {
 }
 
 export function getUserDetails(params) {
-    return fetch(API + '/user/' + params.userId, {
+    return fetch(API + 'user/' + params.userId, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -42,7 +42,7 @@ export function getUserDetails(params) {
 }
 
 export function getTxs(params) {
-    return fetch(API + '/txs', {
+    return fetch(API + 'txs', {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -52,7 +52,7 @@ export function getTxs(params) {
 }
 
 export function getRankings(params) {
-    return fetch(API + '/rankings/' + params.period, {
+    return fetch(API + 'rankings/' + params.period, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -62,7 +62,7 @@ export function getRankings(params) {
 }
 
 export function getTxReasons(params) {
-    return fetch(API + '/txReasons', {
+    return fetch(API + 'txReasons', {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -72,7 +72,7 @@ export function getTxReasons(params) {
 }
 
 export function getContacts(params) {
-    return fetch(API + '/contacts', {
+    return fetch(API + 'contacts', {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -82,7 +82,7 @@ export function getContacts(params) {
 }
 
 export function searchContact(params) {
-    return fetch(API + '/searchContact', {
+    return fetch(API + 'searchContact', {
         method: 'POST',
         body: JSON.stringify(params),
         headers: {
@@ -93,7 +93,7 @@ export function searchContact(params) {
 }
 
 export function addContact(params) {
-    return fetch(API + '/contact', {
+    return fetch(API + 'contact', {
         method: 'POST',
         body: JSON.stringify(params),
         headers: {
@@ -104,7 +104,7 @@ export function addContact(params) {
 }
 
 export function deleteContact(params) {
-    return fetch(API + '/contact/' + params.contactId, {
+    return fetch(API + 'contact/' + params.contactId, {
         method: 'DELETE',
         body: JSON.stringify(params),
         headers: {
@@ -115,7 +115,7 @@ export function deleteContact(params) {
 }
 
 export function sendInternalTx(params) {
-    return fetch(API + '/sendInternalTx', {
+    return fetch(API + 'sendInternalTx', {
         method: 'POST',
         body: JSON.stringify(params),
         headers: {
@@ -126,7 +126,7 @@ export function sendInternalTx(params) {
 }
 
 export function getInbox(params) {
-    return fetch(API + '/paymentRequests/PENDING_APPROVAL', {
+    return fetch(API + 'paymentRequests/PENDING_APPROVAL', {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -136,7 +136,7 @@ export function getInbox(params) {
 }
 
 export function approvePaymentRequest(params) {
-    return fetch(API + '/approvePaymentRequest/' + params.requestId, {
+    return fetch(API + 'approvePaymentRequest/' + params.requestId, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -145,7 +145,7 @@ export function approvePaymentRequest(params) {
     })
 }
 export function rejectPaymentRequest(params) {
-    return fetch(API + '/rejectPaymentRequest/' + params.requestId, {
+    return fetch(API + 'rejectPaymentRequest/' + params.requestId, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -155,7 +155,7 @@ export function rejectPaymentRequest(params) {
 }
 
 export function withdrawTokens(params) {
-    return fetch(API + '/withdrawTokens', {
+    return fetch(API + 'withdrawTokens', {
         method: 'POST',
         body: JSON.stringify(params),
         headers: {

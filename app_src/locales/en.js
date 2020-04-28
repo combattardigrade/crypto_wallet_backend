@@ -70,7 +70,8 @@ const data = {
         'login_welcome_msg': 'Welcome! Enter your credentials to Log In',
         'forgot_password': 'Forgot your password?',
         'password': 'Password',
-        'login': 'Login'
+        'login': 'Login',
+        'profile': 'Profile'
     },
     error: {
         'missing_required': 'Enter all the required fields',

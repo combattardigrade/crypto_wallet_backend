@@ -33,6 +33,11 @@ class Withdraw extends Component {
         loading: true
     }
 
+    componentDidMount() {
+        const { lan } = this.props
+        document.title = `${LOCALES[lan]['web_wallet']['withdraw']} | Jiwards`
+    }
+
     handleAddressChange = (e) => {
         this.setState({ address: e.target.value })
     }
@@ -105,7 +110,7 @@ class Withdraw extends Component {
                 <div className="page-content">
                     <nav className="page-breadcrumb">
                         <ol className="breadcrumb">
-                            <li className="breadcrumb-item"><a href="#">{LOCALES[lan]['web_wallet']['withdraw']}</a></li>
+                            <li className="breadcrumb-item"><a className="a-whitebg" href="#">{LOCALES[lan]['web_wallet']['withdraw']}</a></li>
                             <li className="breadcrumb-item active" aria-current="page">Jiwards</li>
                         </ol>
                     </nav>
