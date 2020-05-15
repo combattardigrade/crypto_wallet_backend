@@ -8,7 +8,7 @@ export function login(params) {
             'Content-Type': 'application/json'
         },
         credentials: 'include'
-    })        
+    })
 }
 
 export function signup(params) {
@@ -165,3 +165,23 @@ export function withdrawTokens(params) {
     })
 }
 
+export function getKeycloakToken(params) {
+    return fetch(API + 'getKeycloakToken', {
+        method: 'POST',
+        body: JSON.stringify(params),
+        headers: {
+            'Content-Type': 'application/json',            
+        }
+    })
+}
+
+export function keycloakLogin(params) {
+    return fetch(API + 'keycloakLogin', {
+        method: 'POST',
+        body: JSON.stringify(params),
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + params.token
+        }
+    })
+}

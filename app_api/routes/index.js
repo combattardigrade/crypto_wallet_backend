@@ -21,6 +21,7 @@ const pushNotificationController = require('../controllers/pushNotification')
 router.post('/signup', authController.signup)
 router.post('/login', authController.login)
 router.post('/keycloakLogin', authController.keycloakLogin)
+router.post('/getKeycloakToken', authController.getKeycloakToken)
 
 // User
 router.get('/user', auth, userController.getUserData)

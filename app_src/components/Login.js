@@ -1,13 +1,15 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { Redirect } from 'react-router-dom'
-
+import axios from 'axios-jsonp-pro'
 
 // components
 import Loading from './Loading'
 
 // Actions
-import { handleLogin } from '../actions/auth'
+import { saveToken } from '../actions/auth'
+
+// API
+import { getKeycloakToken, keycloakLogin } from '../utils/api'
 
 // Locales
 import en from '../locales/en'
@@ -37,36 +39,47 @@ class Login extends Component {
 
     handleSubmit = (e) => {
         e.preventDefault()
-        
+
         const { email, password } = this.state
-        const { dispatch, lan } = this.props
-        
-        if (!email || !password) {           
-            this.setState({serverMsg: LOCALES[lan]['error']['missing_required']})
+        const { dispatch, lan, history } = this.props
+
+        if (!email || !password) {
+            this.setState({ serverMsg: LOCALES[lan]['error']['missing_required'] })
             return
         }
 
-        const params = {
-            email,
-            password,
-        }
-
-        dispatch(handleLogin(params, (res) => {
-            if(res.status === 'OK') {
-                this.props.history.replace('/dashboard')
-            } else {
-                this.setState({serverMsg: res.message})
-            }
-        }))
-        
+        getKeycloakToken({ email, password })
+            .then(data => data.json())
+            .then((res) => {
+                if (res.status === 'OK') {
+                    keycloakLogin({ token: res.token })
+                        .then(data => data.json())
+                        .then((res2) => {
+                            if (res2.status === 'OK') {
+                                dispatch(saveToken(res2.token))
+                                history.replace('/dashboard')
+                            } else {
+                                this.setState({ serverMsg: res.message })
+                            }
+                        })
+                } else {
+                    this.setState({ serverMsg: res.message })
+                    return
+                }
+            })
+            .catch((err) => {
+                console.log(err)
+                this.setState({ serverMsg: LOCALES[lan]['error']['general'] })
+                return
+            })
     }
 
     handleEmailChange = (e) => {
-        this.setState({email: e.target.value})
+        this.setState({ email: e.target.value })
     }
 
     handlePasswordChange = (e) => {
-        this.setState({password: e.target.value})
+        this.setState({ password: e.target.value })
     }
 
     closeAlert = () => {
@@ -74,7 +87,7 @@ class Login extends Component {
     }
 
     render() {
-        const { serverMsg, loading } = this.state       
+        const { serverMsg, loading } = this.state
         const { lan } = this.props
 
         if (loading === true) {
@@ -95,7 +108,7 @@ class Login extends Component {
                                     </div>
                                     <div className="col-md-8 pl-md-0">
                                         <div className="auth-form-wrapper px-4 py-5">
-                                            <a href="#" className="noble-ui-logo d-block mb-2 "><span  style={{fontWeight:900, color: '#031a61'}}>Jiwards</span><span> Wallet</span></a>
+                                            <a href="#" className="noble-ui-logo d-block mb-2 "><span style={{ fontWeight: 900, color: '#031a61' }}>Jiwards</span><span> Wallet</span></a>
                                             <h5 className="text-muted font-weight-normal mb-4">{LOCALES[lan]['web_wallet']['login_welcome_msg']}</h5>
                                             <form className="forms-sample">
                                                 {
@@ -113,7 +126,7 @@ class Login extends Component {
                                                     <label>{LOCALES[lan]['web_wallet']['password']}</label>
                                                     <input onChange={this.handlePasswordChange} value={this.state.password} name="password" type="password" className="form-control" placeholder={LOCALES[lan]['web_wallet']['password']} />
                                                 </div>
-                                                
+
                                                 <div className="mt-3">
                                                     <button onClick={this.handleSubmit} type="submit" href="#" className="btn btn-primary mr-2 mb-2 mb-md-0 text-white">{LOCALES[lan]['web_wallet']['login']}</button>
                                                 </div>
