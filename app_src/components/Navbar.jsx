@@ -81,6 +81,10 @@ class Navbar extends Component {
 
         const { user, inbox, lan } = this.props
 
+        if(!inbox) {
+            return
+        }
+
         let flag = 'GB'
         switch (lan) {
             case 'en':
