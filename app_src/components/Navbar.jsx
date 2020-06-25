@@ -75,6 +75,7 @@ class Navbar extends Component {
         e.preventDefault()
         const { dispatch } = this.props
         dispatch(logout())
+        // window.location.href = `${process.env.KEYCLOAK_URL}/realms/${process.env.KEYCLOAK_REALM}/protocol/openid-connect/logout?redirect_uri=${process.env.SERVER_HOST}login`
     }
 
     render() {

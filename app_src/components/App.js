@@ -81,14 +81,17 @@ function PrivateRoute({ component: Component, ...rest }) {
         auth !== null ? (
           <Component {...props} />
         )
-          : (
-            <Redirect
-              to={{
-                pathname: '/login',
-                state: { from: props.location.pathname }
-              }}
-            />
-          )
+          :
+          window.location.href = `${process.env.KEYCLOAK_URL}/realms/${process.env.KEYCLOAK_REALM}/protocol/openid-connect/logout?redirect_uri=${process.env.SERVER_HOST}login`
+        // : (
+
+        //   <Redirect
+        //     to={{
+        //       pathname: '/login',
+        //       state: { from: props.location.pathname }
+        //     }}
+        //   />
+        // )
       }
     />
   )

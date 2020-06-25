@@ -48,7 +48,7 @@ class Send extends Component {
             .then((res) => {
                 if (res.status === 'OK') {
                     console.log(res.payload)
-                    this.setState({ loading: false, txReasons: res.payload })
+                    this.setState({ loading: false, txReasons: res.payload, selectedReason: res.payload[0] ? res.payload[0].id : '' })
                 }
             })
         getContacts({ token })
@@ -56,7 +56,7 @@ class Send extends Component {
             .then((res) => {
                 if (res.status === 'OK')
                     console.log(res.payload)
-                this.setState({ loading: false, contacts: res.payload })
+                this.setState({ loading: false, contacts: res.payload, selectedContact: res.payload[0] ? res.payload[0].userId : '' })
             })
     }
 

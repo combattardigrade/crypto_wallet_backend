@@ -172,7 +172,7 @@ module.exports.getKeycloakTokenWithAuthCode = (req, res) => {
     }
 
     const URL = `${process.env.KEYCLOAK_URL}/realms/${process.env.KEYCLOAK_REALM}/protocol/openid-connect/token`
-    
+
     rp(URL, {
         method: 'POST',
         form: {

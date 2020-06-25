@@ -50,7 +50,6 @@ class Login extends Component {
         }
 
         if ('code' in query) {
-
             getKeycloakTokenWithAuthCode({ auth_code: query.code, redirect_uri: `${process.env.SERVER_HOST}login` })
                 .then(data => data.json())
                 .then((res) => {
