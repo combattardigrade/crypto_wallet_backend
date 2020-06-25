@@ -96,7 +96,7 @@ module.exports.approvePaymentRequest = (req, res) => {
 
         // Update Payment Request
         paymentRequest.status = 'COMPLETED'
-        paymentRequest.save({ transction: t })
+        paymentRequest.save({ transaction: t })
 
         // Send Push Notification to Receiver
         sendNotification('New Payment Received', `You received a payment of ${paymentRequest.amount} ${paymentRequest.currency}. Reason: ${paymentRequest.reason}`, paymentRequest.userId)
@@ -153,12 +153,69 @@ module.exports.rejectPaymentRequest = (req, res) => {
 
         // Update Payment Request
         paymentRequest.status = 'REJECTED'
-        paymentRequest.save({ transction: t })
+        await paymentRequest.save({ transaction: t })
 
         // Send Push Notification to Receiver
         sendNotification('Payment Request Rejected', `Your payment request of ${paymentRequest.amount} ${paymentRequest.currency} to ${user.firstName}`, paymentRequest.userId)
 
         sendJSONresponse(res, 200, { status: 'OK', payload: paymentRequest, message: 'Payment request has been rejected' })
+        return
+    })
+        .catch((err) => {
+            console.log(err)
+            sendJSONresponse(res, 404, { status: 'ERROR', message: 'An error occurred, please try again' })
+            return
+        })
+}
+
+module.exports.cancelPaymentRequest = (req, res) => {
+    const userId = req.user.id
+    const requestId = req.params.requestId
+
+    if (!userId) {
+        sendJSONresponse(res, 422, { status: 'ERROR', message: 'Invalid session token' })
+        return
+    }
+
+    if (!requestId) {
+        sendJSONresponse(res, 422, { status: 'ERROR', message: 'Enter all the required fields' })
+        return
+    }
+
+    sequelize.transaction(async (t) => {
+        const user = await User.findOne({
+            where: {
+                id: userId,
+            },
+            transaction: t
+        })
+
+        if (!user) {
+            sendJSONresponse(res, 404, { status: 'ERROR', message: 'User not found' })
+            return
+        }
+
+        const paymentRequest = await PaymentRequest.findOne({
+            where: {
+                id: requestId,
+                userId: userId,
+                status: 'PENDING_APPROVAL',
+            }
+        })
+
+        if (!paymentRequest) {
+            sendJSONresponse(res, 404, { status: 'ERROR', message: 'The payment request was not found or has already been approved' })
+            return
+        }
+
+        // Update Payment Request
+        paymentRequest.status = 'CANCELED'
+        await paymentRequest.save({ transaction: t })
+
+        // Send Push Notification to Receiver
+        sendNotification('Payment Request Canceled', `The payment request of ${paymentRequest.amount} ${paymentRequest.currency} from ${user.firstName} was canceled.`, paymentRequest.requestToUserId)
+
+        sendJSONresponse(res, 200, { status: 'OK', payload: paymentRequest, message: 'Payment request has been canceled' })
         return
     })
         .catch((err) => {
@@ -235,6 +292,68 @@ module.exports.createPaymentRequest = (req, res) => {
         })
 }
 
+module.exports.getRequestsSent = (req, res) => {
+    const userId = req.user.id
+    const status = req.params.status ? req.params.status : 'ALL'
+
+    if (!userId) {
+        sendJSONresponse(res, 422, { status: 'ERROR', message: 'Invalid session token' })
+        return
+    }
+    
+    sequelize.transaction(async (t) => {
+        const user = await User.findOne({
+            where: {
+                id: userId,
+            },
+            transaction: t
+        })
+
+        if (!user) {
+            sendJSONresponse(res, 404, { status: 'ERROR', message: 'User not found' })
+            return
+        }
+
+        let results
+        if (status == 'ALL') {
+            results = await PaymentRequest.findAll({
+                where: {
+                    userId: userId,
+                },
+                include: [
+                    { model: User, as: 'receiver', attributes: ['id', 'username', 'firstName', 'lastName', 'email'] }
+                ],
+                transaction: t
+            })
+        } else {
+            results = await PaymentRequest.findAll({
+                where: {
+                    userId: userId,
+                    status
+                },
+                include: [
+                    { model: User, as: 'receiver', attributes: ['id', 'username', 'firstName', 'lastName', 'email'] }
+                ],
+                transaction: t
+            })
+        }
+
+        if (!results) {
+            sendJSONresponse(res, 404, { status: 'ERROR', message: 'No payment requests found' })
+            return
+        }
+
+        sendJSONresponse(res, 200, { status: 'OK', payload: results })
+        return
+
+    })
+        .catch((err) => {
+            console.log(err)
+            sendJSONresponse(res, 404, { status: 'ERROR', message: 'An error occurred, please try again' })
+            return
+        })
+}
+
 module.exports.getPaymentRequests = (req, res) => {
     const userId = req.user.id
     const status = req.params.status ? req.params.status : 'ALL'
@@ -275,7 +394,7 @@ module.exports.getPaymentRequests = (req, res) => {
                     status
                 },
                 include: [
-                    { model: User, attributes: ['id','username','firstName','lastName','email'] }
+                    { model: User, attributes: ['id', 'username', 'firstName', 'lastName', 'email'] }
                 ],
                 transaction: t
             })
@@ -490,7 +609,7 @@ module.exports.adminCreatePaymentRequest = (req, res) => {
     const reason = req.body.reason
     const description = req.body.description
     const status = 'PENDING_APPROVAL'
-  
+
 
     if (!userId || !requestToUserId || !amount || !currency || !operationType || !reason || !description) {
         sendJSONresponse(res, 422, { status: 'ERROR', message: 'Enter all the required fields' })
@@ -544,6 +663,67 @@ module.exports.adminCreatePaymentRequest = (req, res) => {
         })
 }
 
+module.exports.adminGetRequestsSent = (req, res) => {
+    const userId = req.params.userId
+    const status = req.params.status ? req.params.status : 'ALL'
+
+    if (!userId) {
+        sendJSONresponse(res, 422, { status: 'ERROR', message: 'Invalid session token' })
+        return
+    }
+    
+    sequelize.transaction(async (t) => {
+        const user = await User.findOne({
+            where: {
+                id: userId,
+            },
+            transaction: t
+        })
+
+        if (!user) {
+            sendJSONresponse(res, 404, { status: 'ERROR', message: 'User not found' })
+            return
+        }
+
+        let results
+        if (status == 'ALL') {
+            results = await PaymentRequest.findAll({
+                where: {
+                    userId: userId,
+                },
+                include: [
+                    { model: User, as: 'receiver', attributes: ['id', 'username', 'firstName', 'lastName', 'email'] }
+                ],
+                transaction: t
+            })
+        } else {
+            results = await PaymentRequest.findAll({
+                where: {
+                    userId: userId,
+                    status
+                },
+                include: [
+                    { model: User, as: 'receiver', attributes: ['id', 'username', 'firstName', 'lastName', 'email'] }
+                ],
+                transaction: t
+            })
+        }
+
+        if (!results) {
+            sendJSONresponse(res, 404, { status: 'ERROR', message: 'No payment requests found' })
+            return
+        }
+
+        sendJSONresponse(res, 200, { status: 'OK', payload: results })
+        return
+
+    })
+        .catch((err) => {
+            console.log(err)
+            sendJSONresponse(res, 404, { status: 'ERROR', message: 'An error occurred, please try again' })
+            return
+        })
+}
 
 module.exports.adminGetPaymentRequests = (req, res) => {
     const userId = req.params.userId
@@ -585,7 +765,7 @@ module.exports.adminGetPaymentRequests = (req, res) => {
                     status
                 },
                 include: [
-                    { model: User, attributes: ['id','username','firstName','lastName','email'] }
+                    { model: User, attributes: ['id', 'username', 'firstName', 'lastName', 'email'] }
                 ],
                 transaction: t
             })
@@ -616,7 +796,7 @@ module.exports.adminUpdatePaymentRequest = (req, res) => {
     const operationType = req.body.operationType
     const reason = req.body.reason
     const description = req.body.description
-    const status = req.body.status    
+    const status = req.body.status
 
     if (!userId || !requestId || !amount || !currency || !operationType || !reason || !description || !status) {
         sendJSONresponse(res, 404, { status: 'ERROR', message: 'Enter all the required fields' })
@@ -676,7 +856,7 @@ module.exports.adminUpdatePaymentRequest = (req, res) => {
 
 module.exports.adminDeletePaymentRequest = (req, res) => {
     const userId = req.params.userId
-    const requestId = req.params.requestId    
+    const requestId = req.params.requestId
 
     if (!userId || !requestId) {
         sendJSONresponse(res, 422, { status: 'ERROR', message: 'Enter all the required fields' })
@@ -730,7 +910,7 @@ module.exports.adminDeletePaymentRequest = (req, res) => {
 
 module.exports.adminGetPaymentRequest = (req, res) => {
     const userId = req.params.userId
-    const requestId = req.params.requestId    
+    const requestId = req.params.requestId
 
     if (!userId || !requestId) {
         sendJSONresponse(res, 404, { status: 'ERROR', message: 'Enter all the required fields' })
@@ -777,7 +957,7 @@ module.exports.adminGetPaymentRequest = (req, res) => {
 
 module.exports.adminApprovePaymentRequest = (req, res) => {
     const userId = req.params.userId
-    const requestId = req.params.requestId   
+    const requestId = req.params.requestId
 
     if (!userId || !requestId) {
         sendJSONresponse(res, 422, { status: 'ERROR', message: 'Enter all the required fields' })
@@ -858,7 +1038,7 @@ module.exports.adminApprovePaymentRequest = (req, res) => {
 
         // Update Payment Request
         paymentRequest.status = 'COMPLETED'
-        paymentRequest.save({ transction: t })
+        await paymentRequest.save({ transaction: t })
 
         // Send Push Notification to Receiver
         sendNotification('New Payment Received', `You received a payment of ${paymentRequest.amount} ${paymentRequest.currency}. Reason: ${paymentRequest.reason}`, paymentRequest.userId)
@@ -876,7 +1056,7 @@ module.exports.adminApprovePaymentRequest = (req, res) => {
 
 module.exports.adminRejectPaymentRequest = (req, res) => {
     const userId = req.params.userId
-    const requestId = req.params.requestId    
+    const requestId = req.params.requestId
 
     if (!userId || !requestId) {
         sendJSONresponse(res, 422, { status: 'ERROR', message: 'Enter all the required fields' })
@@ -911,12 +1091,69 @@ module.exports.adminRejectPaymentRequest = (req, res) => {
 
         // Update Payment Request
         paymentRequest.status = 'REJECTED'
-        paymentRequest.save({ transction: t })
+        await paymentRequest.save({ transaction: t })
 
         // Send Push Notification to Receiver
         sendNotification('Payment Request Rejected', `Your payment request of ${paymentRequest.amount} ${paymentRequest.currency} to ${user.firstName}`, paymentRequest.userId)
 
         sendJSONresponse(res, 200, { status: 'OK', payload: paymentRequest, message: 'Payment request has been rejected' })
+        return
+    })
+        .catch((err) => {
+            console.log(err)
+            sendJSONresponse(res, 404, { status: 'ERROR', message: 'An error occurred, please try again' })
+            return
+        })
+}
+
+module.exports.adminCancelPaymentRequest = (req, res) => {
+    const userId = req.params.id
+    const requestId = req.params.requestId
+
+    if (!userId) {
+        sendJSONresponse(res, 422, { status: 'ERROR', message: 'Invalid session token' })
+        return
+    }
+
+    if (!requestId) {
+        sendJSONresponse(res, 422, { status: 'ERROR', message: 'Enter all the required fields' })
+        return
+    }
+
+    sequelize.transaction(async (t) => {
+        const user = await User.findOne({
+            where: {
+                id: userId,
+            },
+            transaction: t
+        })
+
+        if (!user) {
+            sendJSONresponse(res, 404, { status: 'ERROR', message: 'User not found' })
+            return
+        }
+
+        const paymentRequest = await PaymentRequest.findOne({
+            where: {
+                id: requestId,
+                userId: userId,
+                status: 'PENDING_APPROVAL',
+            }
+        })
+
+        if (!paymentRequest) {
+            sendJSONresponse(res, 404, { status: 'ERROR', message: 'The payment request was not found or has already been approved' })
+            return
+        }
+
+        // Update Payment Request
+        paymentRequest.status = 'CANCELED'
+        await paymentRequest.save({ transaction: t })
+
+        // Send Push Notification to Receiver
+        sendNotification('Payment Request Canceled', `The payment request of ${paymentRequest.amount} ${paymentRequest.currency} from ${user.firstName} was canceled.`, paymentRequest.requestToUserId)
+
+        sendJSONresponse(res, 200, { status: 'OK', payload: paymentRequest, message: 'Payment request has been canceled' })
         return
     })
         .catch((err) => {

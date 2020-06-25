@@ -43,20 +43,24 @@ router.post('/admin/sendInternalTx', [auth, adminAuth], txController.adminSendIn
 // Payment Request
 router.post('/paymentRequest', auth, paymentRequestController.createPaymentRequest)
 router.get('/paymentRequests/:status', auth, paymentRequestController.getPaymentRequests)
+router.get('/paymentRequestsSent/:status?', auth, paymentRequestController.getRequestsSent)
 router.put('/paymentRequest', auth, paymentRequestController.updatePaymentRequest)
 router.delete('/paymentRequest/:requestId', auth, paymentRequestController.deletePaymentRequest)
 router.get('/paymentRequest/:requestId', auth, paymentRequestController.getPaymentRequest)
 router.get('/approvePaymentRequest/:requestId', auth, paymentRequestController.approvePaymentRequest)
 router.get('/rejectPaymentRequest/:requestId', auth, paymentRequestController.rejectPaymentRequest)
+router.get('/cancelPaymentRequest/:requestId', auth, paymentRequestController.cancelPaymentRequest)
 
 // Admin => Payment Request
 router.post('/admin/paymentRequest', [auth, adminAuth], paymentRequestController.adminCreatePaymentRequest)
 router.get('/admin/paymentRequests/:userId/:status', [auth, adminAuth], paymentRequestController.adminGetPaymentRequests)
+router.get('/admin/paymentRequestsSent/:userId/:status?', [auth, adminAuth], paymentRequestController.adminGetRequestsSent)
 router.put('/admin/paymentRequest', [auth, adminAuth], paymentRequestController.adminUpdatePaymentRequest)
 router.delete('/admin/paymentRequest/:userId/:requestId', [auth, adminAuth], paymentRequestController.adminDeletePaymentRequest)
 router.get('/admin/paymentRequest/:userId/:requestId', [auth, adminAuth], paymentRequestController.adminGetPaymentRequest)
 router.get('/admin/approvePaymentRequest/:userId/:requestId', [auth, adminAuth], paymentRequestController.adminApprovePaymentRequest)
 router.get('/admin/rejectPaymentRequest/:userId/:requestId', [auth, adminAuth], paymentRequestController.adminRejectPaymentRequest)
+router.get('/admin/cancelPaymentRequest/:requestId', [auth, adminAuth], paymentRequestController.adminCancelPaymentRequest)
 
 // Network
 router.post('/withdrawTokens', auth, networkController.sendTokens)

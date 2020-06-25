@@ -17,12 +17,14 @@ import Withdraw from './Withdraw'
 import Inbox from './Inbox'
 import InboxTxDetails from './InboxTxDetails'
 import Profile from './Profile'
+import PaymentRequestDetails from './PaymentRequestDetails'
 
 // Libraries
 import detectBrowserLanguage from 'detect-browser-language'
 
 // Actions
 import { saveLanguage } from '../actions/language'
+
 
 class App extends Component {
 
@@ -57,6 +59,7 @@ class App extends Component {
           <PrivateRoute path={`/rankings`} component={Rankings} auth={auth} />
           <PrivateRoute path={`/txs`} component={Transactions} auth={auth} />
           <PrivateRoute path={`/tx/:txId`} component={TxDetails} auth={auth} />
+          <PrivateRoute path={`/paymentRequest/:txId`} component={PaymentRequestDetails} auth={auth} />
           <PrivateRoute path={`/send`} component={Send} auth={auth} />
           <PrivateRoute path={`/receive`} component={Receive} auth={auth} />
           <PrivateRoute path={`/withdraw`} component={Withdraw} auth={auth} />

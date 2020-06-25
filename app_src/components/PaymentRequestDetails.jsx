@@ -8,7 +8,7 @@ import DashboardTemplate from './DashboardTemplate'
 import Loading from './Loading'
 
 // API
-import { getInbox, approvePaymentRequest, rejectPaymentRequest } from '../utils/api'
+import { getRequestsSent, cancelPaymentRequest } from '../utils/api'
 
 // Libraries
 import { confirmAlert } from 'react-confirm-alert'; // Import
@@ -25,76 +25,28 @@ import zh from '../locales/zh'
 const LOCALES = { en, fr, nl, es, pt, ja, zh }
 const moment = require('moment')
 
-class InboxTxDetails extends Component {
+class PaymentRequestDetails extends Component {
 
     state = {
         tx: '',
-        serverStatus: '',
-        serverMsg: '',
         loading: true
     }
 
     componentDidMount() {
         const { token, lan } = this.props
         const { txId } = this.props.match.params
-        document.title = `${LOCALES[lan]['web_wallet']['pending_tx']} | Jiwards`
 
-        getInbox({ token })
+        document.title = `${LOCALES[lan]['web_wallet']['payment_requests_send']} | Jiwards`
+
+        getRequestsSent({ token })
             .then(data => data.json())
             .then((res) => {
                 if (res.status === 'OK') {
                     console.log(res.payload)
-                    this.setState({ loading: false, tx: (res.payload.filter(tx => tx.id !== txId))[0] })
+                    this.setState({ loading: false, tx: (res.payload.filter(tx => tx.id == txId))[0] })
+
                 }
             })
-    }
-
-    handleApprove = (e) => {
-        e.preventDefault()
-        const { tx } = this.state
-        const { token, history } = this.props
-        confirmAlert({
-            title: 'Confirmation',
-            message: 'Are you sure you want to approve this transaction?',
-            buttons: [
-                {
-                    label: 'Yes',
-                    onClick: () => {
-                        approvePaymentRequest({ requestId: tx.id, token })
-                            .then(data => data.json())
-                            .then((res) => {
-                                if (res.status === 'OK') {
-                                    this.setState({
-                                        tx: {
-                                            ...this.state.tx,
-                                            status: 'APPROVED'
-                                        },
-                                        serverMsg: 'Transaction approved!',
-                                        serverStatus: 'OK'
-                                    })
-                                    history.goBack()
-                                } else {
-                                    this.setState({
-                                        serverMsg: res.message,
-                                        serverStatus: 'ERROR'
-                                    })
-                                }
-                            })
-                            .catch((err) => {
-                                console.log(err)
-                                this.setState({
-                                    serverMsg: 'An error occurred. Please try again!',
-                                    serverStatus: 'ERROR'
-                                })
-                            })
-                    }
-                },
-                {
-                    label: 'No',
-                    onClick: () => { }
-                }
-            ]
-        });
     }
 
     handleReject = (e) => {
@@ -103,12 +55,12 @@ class InboxTxDetails extends Component {
         const { token, history } = this.props
         confirmAlert({
             title: 'Confirmation',
-            message: 'Are you sure you want to reject this transaction?',
+            message: 'Are you sure you want to cancel this payment request?',
             buttons: [
                 {
                     label: 'Yes',
                     onClick: () => {
-                        rejectPaymentRequest({ requestId: tx.id, token })
+                        cancelPaymentRequest({ requestId: tx.id, token })
                             .then(data => data.json())
                             .then((res) => {
                                 console.log(res)
@@ -116,9 +68,9 @@ class InboxTxDetails extends Component {
                                     this.setState({
                                         tx: {
                                             ...this.state.tx,
-                                            status: 'REJECTED'
+                                            status: 'CANCELED'
                                         },
-                                        serverMsg: 'Transaction rejected!',
+                                        serverMsg: 'Payment request canceled!',
                                         serverStatus: 'OK'
                                     })
                                     history.goBack()
@@ -146,9 +98,8 @@ class InboxTxDetails extends Component {
         });
     }
 
-
     render() {
-        const { tx, serverMsg, serverStatus, loading } = this.state
+        const { tx, loading } = this.state
         const { lan } = this.props
 
         if (loading) {
@@ -160,7 +111,7 @@ class InboxTxDetails extends Component {
                 <div className="page-content">
                     <nav className="page-breadcrumb">
                         <ol className="breadcrumb">
-                            <li className="breadcrumb-item"><Link className="a-whitebg" to={'/inbox'}>{LOCALES[lan]['web_wallet']['inbox']}</Link></li>
+                            <li className="breadcrumb-item"><Link className="a-whitebg" to="/txs">{LOCALES[lan]['web_wallet']['payment_request']}</Link></li>
                             <li className="breadcrumb-item active" aria-current="page">{tx.id}</li>
                         </ol>
                     </nav>
@@ -170,14 +121,7 @@ class InboxTxDetails extends Component {
                             <div className="card">
                                 <div className="card-body">
                                     <div className="card-body">
-                                        <h6 className="card-title">{LOCALES[lan]['web_wallet']['pending_tx']} {LOCALES[lan]['web_wallet']['details']}</h6>
-                                        {
-                                            serverMsg
-                                            &&
-                                            <div className={serverStatus === 'OK' ? "alert alert-success" : "alert alert-danger"} role="alert">
-                                                {serverMsg}
-                                            </div>
-                                        }
+                                        <h6 className="card-title">{LOCALES[lan]['web_wallet']['tx_details']}</h6>
                                         <div className="table-responsive">
                                             <table className="table table-hover" id="contactsTable">
                                                 <thead>
@@ -192,16 +136,12 @@ class InboxTxDetails extends Component {
                                                         <td>{tx.id}</td>
                                                     </tr>
                                                     <tr>
-                                                        <td>{LOCALES[lan]['web_wallet']['send_to_user']} (ID)</td>
-                                                        <td>{tx.user.id}</td>
+                                                        <td>{LOCALES[lan]['web_wallet']['contact']} (ID)</td>
+                                                        <td>{tx.receiver.id}</td>
                                                     </tr>
                                                     <tr>
-                                                        <td>{LOCALES[lan]['web_wallet']['send_to_user']} ({LOCALES[lan]['web_wallet']['name']})</td>
-                                                        <td>{tx.user.firstName + ' ' + tx.user.lastName}</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>{LOCALES[lan]['web_wallet']['send_to_user']} ({LOCALES[lan]['web_wallet']['email']})</td>
-                                                        <td>{tx.user.email}</td>
+                                                        <td>{LOCALES[lan]['web_wallet']['contact']} ({LOCALES[lan]['web_wallet']['name']})</td>
+                                                        <td>{tx.receiver.firstName + ' ' + tx.receiver.lastName}</td>
                                                     </tr>
                                                     <tr>
                                                         <td>{LOCALES[lan]['web_wallet']['amount']}</td>
@@ -231,15 +171,13 @@ class InboxTxDetails extends Component {
                                                         <td>{LOCALES[lan]['web_wallet']['date']}</td>
                                                         <td>{moment().format('DD/MM/YY HH:mm')}</td>
                                                     </tr>
-
                                                 </tbody>
                                             </table>
                                             {
                                                 tx.status === 'PENDING_APPROVAL'
                                                 &&
                                                 <div style={{ marginTop: '20px' }}>
-                                                    <button onClick={this.handleApprove} className="btn btn-primary mb-1 mb-md-0 action-btn"><i className="fa fa-check btn-icon"></i> {LOCALES[lan]['web_wallet']['approve']}</button>
-                                                    <button onClick={this.handleReject} className="btn btn-danger mb-1 mb-md-0 action-btn"><i className="fa fa-close btn-icon"></i> {LOCALES[lan]['web_wallet']['reject']}</button>
+                                                    <button onClick={this.handleReject} className="btn btn-danger mb-1 mb-md-0 action-btn"><i className="fa fa-close btn-icon"></i> {LOCALES[lan]['web_wallet']['cancel']}</button>
                                                 </div>
                                             }
                                         </div>
@@ -262,4 +200,4 @@ function mapStateToProps({ auth, language }) {
         lan: language ? language : 'en'
     }
 }
-export default connect(mapStateToProps)(InboxTxDetails)
+export default connect(mapStateToProps)(PaymentRequestDetails)

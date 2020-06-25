@@ -1,5 +1,8 @@
 const data = {
     web_wallet: {
+        'payment_requests_send': 'Payment Requests Sent',
+        'payment_request': 'Payment Request',
+        'contact': 'Contact',
         'inbox': 'Inbox',
         'send': 'Send',
         'receive': 'Receive',

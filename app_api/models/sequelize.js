@@ -39,6 +39,10 @@ User.hasMany(Balance)
 Transaction.belongsTo(User)
 Contact.belongsTo(User)
 PaymentRequest.belongsTo(User)
+PaymentRequest.belongsTo(User, {
+    as: 'receiver',
+    foreignKey: 'requestToUserId'
+})
 User.hasOne(UserAddress)
 RegistrationKey.belongsTo(User)
 User.hasOne(RegistrationKey)

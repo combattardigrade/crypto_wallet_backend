@@ -9,7 +9,7 @@ import ReactLoading from 'react-loading';
 import Loading from './Loading'
 
 // API
-import { getInbox, approvePaymentRequest } from '../utils/api'
+import { getInbox, approvePaymentRequest, getRequestsSent } from '../utils/api'
 
 // Libraries
 import ReactHTMLTableToExcel from 'react-html-table-to-excel';
@@ -35,6 +35,7 @@ class Inbox extends Component {
 
     state = {
         txs: '',
+        requestsSent: '',
         serverStatus: '',
         serverMsg: '',
         loading: true
@@ -52,12 +53,21 @@ class Inbox extends Component {
                     this.setState({ loading: false, txs: res.payload })
                 }
             })
+
+        getRequestsSent({ token })
+            .then(data => data.json())
+            .then((res) => {
+                if (res.status === 'OK') {
+                    console.log(res.payload)
+                    this.setState({ loading: false, requestsSent: res.payload })
+                }
+            })
     }
 
     handleApproveTx = (txId) => {
         const { token } = this.props
-        
-        
+
+
         confirmAlert({
             title: 'Confirmation',
             message: 'Are you sure you want to approve this transaction?',
@@ -68,14 +78,14 @@ class Inbox extends Component {
                         approvePaymentRequest({ requestId: txId, token })
                             .then(data => data.json())
                             .then((res) => {
-                                if(res.status === 'OK') {
+                                if (res.status === 'OK') {
                                     this.setState({
                                         contacts: contacts.filter(c => c.id !== contactId)
                                     })
                                 } else {
 
                                 }
-                            })                        
+                            })
                     }
                 },
                 {
@@ -112,7 +122,7 @@ class Inbox extends Component {
     }
 
     render() {
-        const { txs, loading } = this.state
+        const { requestsSent, txs, loading } = this.state
         const { user, lan } = this.props
 
         if (loading) {
@@ -158,7 +168,8 @@ class Inbox extends Component {
                                                     <td>{LOCALES[lan]['web_wallet']['currency']}</td>
                                                     <td>{LOCALES[lan]['web_wallet']['reason']}</td>
                                                     <td>{LOCALES[lan]['web_wallet']['description']}</td>
-                                                    <td>{LOCALES[lan]['web_wallet']['date']}ate</td>
+                                                    <td>{LOCALES[lan]['web_wallet']['status']}</td>
+                                                    <td>{LOCALES[lan]['web_wallet']['date']}</td>
                                                     <td>{LOCALES[lan]['web_wallet']['details']}</td>
                                                 </tr>
                                             </thead>
@@ -174,7 +185,8 @@ class Inbox extends Component {
                                                                 <td>{parseFloat(tx.amount)}</td>
                                                                 <td>{tx.currency}</td>
                                                                 <td>{tx.reason}</td>
-                                                                <td>{tx.description}</td>                                                                
+                                                                <td>{tx.description}</td>
+                                                                <td>{tx.status}</td>
                                                                 <td>{moment(tx.createdAt).format('DD/MM/YYY HH:mm')}</td>
                                                                 <td>
                                                                     <Link to={'/inboxTx/' + tx.id} className="btn btn-primary mb-1 mb-md-0 action-btn"><i className="fa fa-search btn-icon"></i></Link>
@@ -183,6 +195,84 @@ class Inbox extends Component {
                                                         ))
                                                         :
                                                         <tr>
+                                                            <td>-</td>
+                                                            <td>-</td>
+                                                            <td>-</td>
+                                                            <td>-</td>
+                                                            <td>-</td>
+                                                            <td>-</td>
+                                                            <td>-</td>
+                                                            <td>-</td>
+                                                            <td>-</td>
+                                                            <td>-</td>
+                                                            <td>-</td>
+                                                        </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="row mt-4">
+                        <div className="col-md-12 grid-margin stretch-card">
+                            <div className="card">
+                                <div className="card-body">
+                                    <h6 className="card-title">{LOCALES[lan]['web_wallet']['payment_requests_send']}</h6>
+                                    <div style={{ marginBottom: '10px' }}>
+
+                                        <div style={{ float: 'right' }}>
+                                            <ReactHTMLTableToExcel
+                                                className="btn btn-light mb-1 "
+                                                table="requestsTable"
+                                                filename="payment_requests_sent"
+                                                sheet="inbox"
+                                                buttonText="Excel"
+                                            />
+                                        </div>
+
+                                    </div>
+                                    <div className="table-responsive">
+                                        <table className="table table-hover" id="requestsTable">
+                                            <thead>
+                                                <tr>
+                                                    <td>ID</td>
+                                                    <td>{LOCALES[lan]['web_wallet']['person']}</td>
+                                                    <td>{LOCALES[lan]['web_wallet']['operation']}</td>
+                                                    <td>{LOCALES[lan]['web_wallet']['amount']}</td>
+                                                    <td>{LOCALES[lan]['web_wallet']['currency']}</td>
+                                                    <td>{LOCALES[lan]['web_wallet']['reason']}</td>
+                                                    <td>{LOCALES[lan]['web_wallet']['description']}</td>
+                                                    <td>{LOCALES[lan]['web_wallet']['status']}</td>
+                                                    <td>{LOCALES[lan]['web_wallet']['date']}</td>
+                                                    <td>{LOCALES[lan]['web_wallet']['details']}</td>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {
+                                                    requestsSent && requestsSent.length > 0
+                                                        ?
+                                                        requestsSent.map((tx, index) => (
+                                                            <tr key={index}>
+                                                                <td>{tx.id}</td>
+                                                                <td>{tx.receiver.firstName + ' ' + tx.receiver.lastName}</td>
+                                                                <td>{LOCALES[lan]['web_wallet']['payment_request']}</td>
+                                                                <td>{parseFloat(tx.amount)}</td>
+                                                                <td>{tx.currency}</td>
+                                                                <td>{tx.reason}</td>
+                                                                <td>{tx.description}</td>
+                                                                <td>{tx.status}</td>
+                                                                <td>{moment(tx.createdAt).format('DD/MM/YYY HH:mm')}</td>
+                                                                <td>
+                                                                    <Link to={'/paymentRequest/' + tx.id} className="btn btn-primary mb-1 mb-md-0 action-btn"><i className="fa fa-search btn-icon"></i></Link>
+                                                                </td>
+                                                            </tr>
+                                                        ))
+                                                        :
+                                                        <tr>
+                                                            <td>-</td>
                                                             <td>-</td>
                                                             <td>-</td>
                                                             <td>-</td>

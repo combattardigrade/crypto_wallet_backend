@@ -135,6 +135,16 @@ export function getInbox(params) {
     })
 }
 
+export function getRequestsSent(params) {
+    return fetch(API + 'paymentRequestsSent', {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + params.token
+        }
+    })
+}
+
 export function approvePaymentRequest(params) {
     return fetch(API + 'approvePaymentRequest/' + params.requestId, {
         method: 'GET',
@@ -146,6 +156,16 @@ export function approvePaymentRequest(params) {
 }
 export function rejectPaymentRequest(params) {
     return fetch(API + 'rejectPaymentRequest/' + params.requestId, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + params.token
+        }
+    })
+}
+
+export function cancelPaymentRequest(params) {
+    return fetch(API + 'cancelPaymentRequest/' + params.requestId, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -170,7 +190,7 @@ export function getKeycloakToken(params) {
         method: 'POST',
         body: JSON.stringify(params),
         headers: {
-            'Content-Type': 'application/json',            
+            'Content-Type': 'application/json',
         }
     })
 }

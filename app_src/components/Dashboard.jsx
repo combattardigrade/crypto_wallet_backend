@@ -129,7 +129,7 @@ class Dashboard extends Component {
                         <div className="col-xs-12 col-sm-12 col-md-6">
                             <div className="card">
                                 <div className="card-body">
-                                    <h6 className="card-title">{LOCALES[lan]['web_wallet']['inbox']}</h6>
+                                    <h6 className="card-title">{LOCALES[lan]['web_wallet']['transactions']}</h6>
                                     <div className="table-responsive">
                                         <table className="table table-hover" id="txsTable">
                                             <thead>
@@ -184,7 +184,7 @@ class Dashboard extends Component {
                         <div className="col-xs-12 col-sm-12 col-md-6">
                             <div className="card">
                                 <div className="card-body">
-                                    <h6 className="card-title">{LOCALES[lan]['web_wallet']['transactions']}</h6>
+                                    <h6 className="card-title">{LOCALES[lan]['web_wallet']['inbox']}</h6>
                                     <div className="table-responsive">
                                         <table className="table table-hover" id="txsTable">
                                             <thead>

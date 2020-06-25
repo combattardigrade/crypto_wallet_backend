@@ -1,6 +1,9 @@
 const data = {
   web_wallet:
   {
+    payment_requests_send: '送信された支払い要求',
+    payment_request: '支払い請求',
+    contact: '連絡先',
     inbox: '受信トレイ',
     send: '送る',
     receive: '受け取る',
