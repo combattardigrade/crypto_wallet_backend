@@ -78,6 +78,7 @@
     "prop-types": "^15.7.2",
     "pug": "^2.0.3",
     "qrcode.react": "^1.0.0",
+    "qs": "^6.9.4",
     "query-string": "^6.8.3",
     "react": "^16.9.0",
     "react-alert": "^5.5.0",

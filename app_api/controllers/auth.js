@@ -161,3 +161,36 @@ module.exports.getKeycloakToken = (req, res) => {
             return
         })
 }
+
+module.exports.getKeycloakTokenWithAuthCode = (req, res) => {
+    const auth_code = req.body.auth_code
+    const redirect_uri = req.body.redirect_uri
+
+    if(!auth_code || !redirect_uri) {
+        sendJSONresponse(res, 422, { status: 'ERROR', message: 'Missing required arguments'})
+        return
+    }
+
+    const URL = `${process.env.KEYCLOAK_URL}/realms/${process.env.KEYCLOAK_REALM}/protocol/openid-connect/token`
+    
+    rp(URL, {
+        method: 'POST',
+        form: {
+            'grant_type': 'authorization_code',
+            'code': auth_code,
+            'client_id': process.env.KEYCLOAK_CLIENT_ID,
+            'client_secret': process.env.KEYCLOAK_CLIENT_SECRET,
+            'redirect_uri': redirect_uri,
+            'scope': 'openid profile User'
+        },
+        json: true
+    })
+        .then((response) => {
+            sendJSONresponse(res, 200, { status: 'OK', token: response.access_token })
+            return
+        })
+        .catch((err) => {
+            sendJSONresponse(res, 422, { status: 'ERROR', message: err.error.error_description})
+            return
+        })
+}

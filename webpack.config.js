@@ -62,7 +62,7 @@ module.exports = {
         watchContentBase: true,
         proxy: [
             {
-                context: ['^/api/*', '^/app/*'],
+                context: ['^/api/*', '^/*'],
                 target: 'http://localhost:3000/',
                 secure: false
             }

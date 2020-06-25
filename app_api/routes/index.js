@@ -22,6 +22,7 @@ router.post('/signup', authController.signup)
 router.post('/login', authController.login)
 router.post('/keycloakLogin', authController.keycloakLogin)
 router.post('/getKeycloakToken', authController.getKeycloakToken)
+router.post('/getKeycloakTokenWithAuthCode', authController.getKeycloakTokenWithAuthCode)
 
 // User
 router.get('/user', auth, userController.getUserData)

@@ -175,6 +175,16 @@ export function getKeycloakToken(params) {
     })
 }
 
+export function getKeycloakTokenWithAuthCode(params) {
+    return fetch(API + 'getKeycloakTokenWithAuthCode', {
+        method: 'POST',
+        body: JSON.stringify(params),
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    })
+}
+
 export function keycloakLogin(params) {
     return fetch(API + 'keycloakLogin', {
         method: 'POST',

@@ -9,7 +9,10 @@ import Loading from './Loading'
 import { saveToken } from '../actions/auth'
 
 // API
-import { getKeycloakToken, keycloakLogin } from '../utils/api'
+import { getKeycloakToken, keycloakLogin, getKeycloakTokenWithAuthCode } from '../utils/api'
+
+// libraries
+import qs from 'qs'
 
 // Locales
 import en from '../locales/en'
@@ -31,10 +34,48 @@ class Login extends Component {
     }
 
     componentDidMount() {
-        const { lan } = this.props
+        const { token, lan, location, history, dispatch } = this.props
         document.title = `${LOCALES[lan]['web_wallet']['login']} | Jiwards`
-        const { dispatch } = this.props
-        this.setState({ loading: false })
+        const query = qs.parse(location.search, { ignoreQueryPrefix: true })
+
+        if (token) {
+            history.replace('/dashboard')
+            return
+        }
+
+        if (!token && !('code' in query)) {
+            const URL = `${process.env.KEYCLOAK_URL}/realms/${process.env.KEYCLOAK_REALM}/protocol/openid-connect/auth?client_id=${process.env.KEYCLOAK_CLIENT_ID}&response_type=code&redirect_uri=${process.env.SERVER_HOST}login`
+            window.location.href = URL
+            return
+        }
+
+        if ('code' in query) {
+
+            getKeycloakTokenWithAuthCode({ auth_code: query.code, redirect_uri: `${process.env.SERVER_HOST}login` })
+                .then(data => data.json())
+                .then((res) => {
+                    if (res.status === 'OK') {
+                        keycloakLogin({ token: res.token })
+                            .then(data => data.json())
+                            .then((res2) => {
+                                if (res2.status === 'OK') {
+                                    dispatch(saveToken(res2.token))
+                                    history.replace('/dashboard')
+                                } else {
+                                    this.setState({ serverMsg: res.message })
+                                }
+                            })
+                    } else {
+                        this.setState({ serverMsg: res.message })
+                        return
+                    }
+                })
+                .catch((err) => {
+                    console.log(err)
+                    this.setState({ serverMsg: LOCALES[lan]['error']['general'] })
+                    return
+                })
+        }
     }
 
     handleSubmit = (e) => {
@@ -146,7 +187,7 @@ class Login extends Component {
 
 function mapStateToProps({ auth, language }) {
     return {
-        auth,
+        token: auth && auth,
         lan: language ? language : 'en'
     }
 }
