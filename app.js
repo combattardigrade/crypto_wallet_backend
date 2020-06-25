@@ -11,12 +11,15 @@ const cookieParser = require('cookie-parser')
 
 
 require('./app_api/config/passport')
-const routesWallet = require('./app_server/routes/index')
+const routesServer = require('./app_server/routes/index')
 const routesApi = require('./app_api/routes/index')
 const app = express()
 
 app.use(cors({ origin: '*', credentials: true/*, origin: 'http://localhost:8080'*/ }))
 app.use(fileUpload({ limits: { fileSize: 10 * 1024 * 1024 } }))
+// view engine setup
+app.set('views', path.join(__dirname, 'app_server', 'views'))
+app.set('view engine', 'ejs')
 app.use(bodyParser.json({ limit: '50mb' }))
 app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }))
 app.use(express.static(path.join(__dirname, 'public')))
@@ -25,7 +28,7 @@ app.use(passport.initialize())
 app.use('/api', routesApi)
 // csrf and cookies
 app.use(cookieParser())
-app.use('/',routesWallet)
+app.use('/', routesServer)
 // app.use(csurf({cookie: {httpOnly: true}}))
 // global variable
 global.APP_ROOT = path.resolve(__dirname)

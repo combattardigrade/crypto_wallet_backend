@@ -57,7 +57,7 @@ module.exports = {
         hot: true,
         inline: true,
         host: 'localhost',
-        port: 8080,
+        port: 8000,
         contentBase: path.join(__dirname, '/public'),
         watchContentBase: true,
         proxy: [
