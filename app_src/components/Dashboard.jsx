@@ -7,11 +7,12 @@ import DashboardTemplate from './DashboardTemplate'
 import Loading from './Loading'
 
 // API
-import { getUserData, getInbox, getTxs } from '../utils/api'
+import { getUserData, getInbox, getTxs, getRequestsSent } from '../utils/api'
 
 // Actions
 import { saveUserData } from '../actions/user'
 import { saveInbox } from '../actions/inbox'
+
 
 // Locales
 import en from '../locales/en'
@@ -25,6 +26,7 @@ const LOCALES = { en, fr, nl, es, pt, ja, zh }
 
 // Libraries
 const moment = require('moment')
+import ReactHTMLTableToExcel from 'react-html-table-to-excel';
 
 class Dashboard extends Component {
 
@@ -32,6 +34,7 @@ class Dashboard extends Component {
         loading: true,
         inbox: '',
         txs: '',
+        requestsSent: '',
     }
 
     componentDidMount() {
@@ -63,10 +66,19 @@ class Dashboard extends Component {
                     this.setState({ loading: false, txs: res.payload })
                 }
             })
+
+        getRequestsSent({ token })
+            .then(data => data.json())
+            .then((res) => {
+                if (res.status === 'OK') {
+                    console.log(res.payload)
+                    this.setState({ loading: false, requestsSent: res.payload })
+                }
+            })
     }
 
     render() {
-        const { loading, inbox, txs } = this.state
+        const { loading, inbox, txs, requestsSent  } = this.state
         const { user, lan } = this.props
 
         if (loading) {
@@ -226,6 +238,66 @@ class Dashboard extends Component {
                                                         :
                                                         <tr>
 
+                                                            <td>-</td>
+                                                            <td>-</td>
+                                                            <td>-</td>
+                                                            <td>-</td>
+                                                            <td>-</td>
+                                                            <td>-</td>
+                                                            <td>-</td>
+                                                            <td>-</td>
+                                                            <td>-</td>
+                                                        </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="card mt-4">
+                                <div className="card-body">
+                                    <h6 className="card-title">{LOCALES[lan]['web_wallet']['payment_requests_send']}</h6>
+                                    <div className="table-responsive">
+                                        <table className="table table-hover" id="requestsTable">
+                                            <thead>
+                                                <tr>
+                                                    <td>ID</td>
+                                                    <td>{LOCALES[lan]['web_wallet']['person']}</td>
+                                                    <td>{LOCALES[lan]['web_wallet']['operation']}</td>
+                                                    <td>{LOCALES[lan]['web_wallet']['amount']}</td>
+                                                    <td>{LOCALES[lan]['web_wallet']['currency']}</td>
+                                                    <td>{LOCALES[lan]['web_wallet']['reason']}</td>
+                                                    <td>{LOCALES[lan]['web_wallet']['description']}</td>
+                                                    <td>{LOCALES[lan]['web_wallet']['status']}</td>
+                                                    <td>{LOCALES[lan]['web_wallet']['date']}</td>
+                                                    <td>{LOCALES[lan]['web_wallet']['details']}</td>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {
+                                                    requestsSent && requestsSent.length > 0
+                                                        ?
+                                                        requestsSent.map((tx, index) => (
+                                                            <tr key={index}>
+                                                                <td>{tx.id}</td>
+                                                                <td>{tx.receiver.firstName + ' ' + tx.receiver.lastName}</td>
+                                                                <td>{LOCALES[lan]['web_wallet']['payment_request']}</td>
+                                                                <td>{parseFloat(tx.amount)}</td>
+                                                                <td>{tx.currency}</td>
+                                                                <td>{tx.reason}</td>
+                                                                <td>{tx.description}</td>
+                                                                <td>{tx.status}</td>
+                                                                <td>{moment(tx.createdAt).format('DD/MM/YYY HH:mm')}</td>
+                                                                <td>
+                                                                    <Link to={'/paymentRequest/' + tx.id} className="btn btn-primary mb-1 mb-md-0 action-btn"><i className="fa fa-search btn-icon"></i></Link>
+                                                                </td>
+                                                            </tr>
+                                                        ))
+                                                        :
+                                                        <tr>
+                                                            <td>-</td>
+                                                            <td>-</td>
                                                             <td>-</td>
                                                             <td>-</td>
                                                             <td>-</td>
