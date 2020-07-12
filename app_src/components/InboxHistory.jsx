@@ -178,6 +178,7 @@ class InboxHistory extends Component {
                                                     requestsSent && requestsSent.length > 0
                                                         ?
                                                         requestsSent.map((tx, index) => (
+                                                            tx.status === 'PENDING_APPROVAL' &&
                                                             <tr key={index}>
                                                                 <td>{tx.id}</td>
                                                                 <td>{tx.receiver.firstName + ' ' + tx.receiver.lastName}</td>
