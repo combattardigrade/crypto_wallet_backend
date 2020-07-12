@@ -39,15 +39,6 @@ class InboxTxDetails extends Component {
         const { txId } = this.props.match.params
         document.title = `${LOCALES[lan]['web_wallet']['pending_tx']} | Jiwards`
 
-        // getInbox({ token })
-        //     .then(data => data.json())
-        //     .then((res) => {
-        //         if (res.status === 'OK') {
-        //             console.log(res.payload)
-        //             this.setState({ loading: false, tx: (res.payload.filter(tx => tx.id !== txId))[0] })
-        //         }
-        //     })
-
         getPaymentRequest({ paymentRequestId: txId, token })
             .then(data => data.json())
             .then((res) => {

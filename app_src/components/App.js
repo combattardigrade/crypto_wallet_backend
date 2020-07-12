@@ -15,6 +15,7 @@ import Send from './Send'
 import Receive from './Receive'
 import Withdraw from './Withdraw'
 import Inbox from './Inbox'
+import InboxHistory from './InboxHistory'
 import InboxTxDetails from './InboxTxDetails'
 import Profile from './Profile'
 import PaymentRequestDetails from './PaymentRequestDetails'
@@ -64,6 +65,7 @@ class App extends Component {
           <PrivateRoute path={`/receive`} component={Receive} auth={auth} />
           <PrivateRoute path={`/withdraw`} component={Withdraw} auth={auth} />
           <PrivateRoute path={`/inbox`} component={Inbox} auth={auth} />
+          <PrivateRoute path={`/inbox-history`} component={InboxHistory} auth={auth} />
           <PrivateRoute path={`/inboxTx/:txId`} component={InboxTxDetails} auth={auth} />
           <PrivateRoute path={`/profile`} component={Profile} auth={auth} />
           <PrivateRoute path={`/settings`} component={Dashboard} auth={auth} />

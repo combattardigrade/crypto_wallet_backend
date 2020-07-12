@@ -31,7 +31,7 @@ const moment = require('moment')
 
 
 
-class Inbox extends Component {
+class InboxHistory extends Component {
 
     state = {
         txs: '',
@@ -143,14 +143,14 @@ class Inbox extends Component {
                         <div className="col-md-12 grid-margin stretch-card">
                             <div className="card">
                                 <div className="card-body">
-                                    <h6 className="card-title">{LOCALES[lan]['web_wallet']['transactions']} {LOCALES[lan]['web_wallet']['pending_approval']}</h6>
+                                    <h6 className="card-title">{LOCALES[lan]['web_wallet']['payment_requests_send']}</h6>
                                     <div style={{ marginBottom: '10px' }}>
 
                                         <div style={{ float: 'right' }}>
                                             <ReactHTMLTableToExcel
                                                 className="btn btn-light mb-1 "
-                                                table="inboxTable"
-                                                filename="inbox"
+                                                table="requestsTable"
+                                                filename="payment_requests_sent"
                                                 sheet="inbox"
                                                 buttonText="Excel"
                                             />
@@ -158,7 +158,7 @@ class Inbox extends Component {
 
                                     </div>
                                     <div className="table-responsive">
-                                        <table className="table table-hover" id="inboxTable">
+                                        <table className="table table-hover" id="requestsTable">
                                             <thead>
                                                 <tr>
                                                     <td>ID</td>
@@ -175,13 +175,13 @@ class Inbox extends Component {
                                             </thead>
                                             <tbody>
                                                 {
-                                                    txs && txs.length > 0
+                                                    requestsSent && requestsSent.length > 0
                                                         ?
-                                                        txs.map((tx, index) => (
+                                                        requestsSent.map((tx, index) => (
                                                             <tr key={index}>
                                                                 <td>{tx.id}</td>
-                                                                <td>{tx.user.firstName + ' ' + tx.user.lastName}</td>
-                                                                <td>Transfer</td>
+                                                                <td>{tx.receiver.firstName + ' ' + tx.receiver.lastName}</td>
+                                                                <td>{LOCALES[lan]['web_wallet']['payment_request']}</td>
                                                                 <td>{parseFloat(tx.amount)}</td>
                                                                 <td>{tx.currency}</td>
                                                                 <td>{tx.reason}</td>
@@ -189,7 +189,7 @@ class Inbox extends Component {
                                                                 <td>{tx.status}</td>
                                                                 <td>{moment(tx.createdAt).format('DD/MM/YYY HH:mm')}</td>
                                                                 <td>
-                                                                    <Link to={'/inboxTx/' + tx.id} className="btn btn-primary mb-1 mb-md-0 action-btn"><i className="fa fa-search btn-icon"></i></Link>
+                                                                    <Link to={'/paymentRequest/' + tx.id} className="btn btn-primary mb-1 mb-md-0 action-btn"><i className="fa fa-search btn-icon"></i></Link>
                                                                 </td>
                                                             </tr>
                                                         ))
@@ -215,7 +215,6 @@ class Inbox extends Component {
                             </div>
                         </div>
                     </div>
-
                 </div>
             </DashboardTemplate>
         )
@@ -230,4 +229,4 @@ function mapStateToProps({ auth, user, language }) {
         lan: language ? language : 'en'
     }
 }
-export default connect(mapStateToProps)(Inbox)
+export default connect(mapStateToProps)(InboxHistory)

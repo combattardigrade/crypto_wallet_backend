@@ -34,7 +34,7 @@ class Sidebar extends Component {
     handleClickOutside = (e) => {
         const { sidebar, dispatch } = this.props
         if (isMobile && sidebar === true || window.innerWidth <= 990 && sidebar === true) {
-            dispatch(hideSidebar())            
+            dispatch(hideSidebar())
         }
     }
 
@@ -71,7 +71,7 @@ class Sidebar extends Component {
                 <nav className="sidebar">
                     <div className="sidebar-header">
                         <a href={`${process.env.WEB_HOST}dashboard`} className="sidebar-brand">
-                            Jiwards<span style={{color: '#144fff'}}> Wallet</span>
+                            Jiwards<span style={{ color: '#144fff' }}> Wallet</span>
                         </a>
                         <div className={sidebar ? 'sidebar-toggler active' : 'sidebar-toggler not-active'} onClick={this.handleSidebarToggleBtn}>
                             <span />
@@ -84,7 +84,7 @@ class Sidebar extends Component {
                             <li className="nav-item nav-category">{LOCALES[lan]['web_wallet']['total_balance']}</li>
                             <li className="nav-item">
                                 <Link to={`/dashboard`} className="nav-link">
-                                    <span style={{ marginLeft: '2px', fontSize:'1em' }} className="link-title">{parseFloat(user.balances[0].amount)} JWS</span>
+                                    <span style={{ marginLeft: '2px', fontSize: '1em' }} className="link-title">{parseFloat(user.balances[0].amount)} JWS</span>
                                 </Link>
                             </li>
 
@@ -95,11 +95,23 @@ class Sidebar extends Component {
                                     <span style={{ marginLeft: '15px' }} className="link-title">{LOCALES[lan]['web_wallet']['dashboard']}</span>
                                 </Link>
                             </li>
+                           
                             <li className="nav-item">
-                                <Link to="/inbox" className="nav-link">
+                                <a className="nav-link" data-toggle="collapse" href="#rankings" role="button" aria-expanded="false" aria-controls="rankings">
                                     <Inbox size="16" />
                                     <span style={{ marginLeft: '15px' }} className="link-title">{LOCALES[lan]['web_wallet']['inbox']}</span>
-                                </Link>
+                                    <i className="link-arrow" data-feather="chevron-down" />
+                                </a>
+                                <div className="collapse" id="rankings">
+                                    <ul className="nav sub-menu">
+                                        <li className="nav-item">
+                                            <Link to="/inbox" className="nav-link">{LOCALES[lan]['web_wallet']['pending_approval']}</Link>
+                                        </li>
+                                        <li className="nav-item">
+                                            <Link to="/inbox-history" className="nav-link">{LOCALES[lan]['web_wallet']['payment_requests_send']}</Link>
+                                        </li>
+                                    </ul>
+                                </div>
                             </li>
 
                             <li className="nav-item nav-category">{LOCALES[lan]['web_wallet']['contacts']}</li>
