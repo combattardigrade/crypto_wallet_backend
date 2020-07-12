@@ -1,6 +1,7 @@
 const data = {
     web_wallet:
     {
+        rejected: 'afgekeurd',
         payment_requests_send: 'Betalingsverzoeken verzonden',
         payment_request: 'Betaal verzoek',
         contact: 'Contact',

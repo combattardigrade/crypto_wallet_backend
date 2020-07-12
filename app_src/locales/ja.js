@@ -1,6 +1,7 @@
 const data = {
   web_wallet:
   {
+    rejected: '拒否されました',
     payment_requests_send: '送信された支払い要求',
     payment_request: '支払い請求',
     contact: '連絡先',

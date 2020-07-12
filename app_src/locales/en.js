@@ -1,5 +1,6 @@
 const data = {
     web_wallet: {
+        'rejected': 'Rejected',
         'payment_requests_send': 'Payment Requests Sent',
         'payment_request': 'Payment Request',
         'contact': 'Contact',

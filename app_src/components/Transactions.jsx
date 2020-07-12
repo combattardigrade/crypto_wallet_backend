@@ -9,7 +9,7 @@ import ReactLoading from 'react-loading';
 import Loading from './Loading'
 
 // API
-import { getTxs } from '../utils/api'
+import { getTxs, getRequestsSent } from '../utils/api'
 
 // Libraries
 import ReactHTMLTableToExcel from 'react-html-table-to-excel';
@@ -33,6 +33,7 @@ class Transactions extends Component {
 
     state = {
         txs: '',
+        requestsSent: '',
         selectedOperation: 'All',
         loading: true
     }
@@ -49,22 +50,33 @@ class Transactions extends Component {
                     this.setState({ loading: false, txs: res.payload })
                 }
             })
+
+        getRequestsSent({ token })
+            .then(data => data.json())
+            .then((res) => {
+                if (res.status === 'OK') {
+                    console.log(res.payload)
+                    this.setState({ loading: false, requestsSent: res.payload })
+                }
+            })
     }
 
     handleOperationSelect = (selectedOperation) => {
         const { token } = this.props
+        this.setState({ selectedOperation })
         getTxs({ token })
             .then(data => data.json())
             .then((res) => {
                 if (res.status === 'OK') {
                     console.log(res.payload)
-                    this.setState({ loading: false, txs: res.payload, selectedOperation })
+                    this.setState({ loading: false, txs: res.payload })
                 }
             })
     }
 
     render() {
-        const { txs, selectedOperation, loading } = this.state
+        const { txs, requestsSent, selectedOperation, loading } = this.state
+
         const { user, lan } = this.props
 
         if (loading) {
@@ -89,8 +101,8 @@ class Transactions extends Component {
                                     <div style={{ marginBottom: '10px' }}>
                                         <button onClick={e => { e.preventDefault(); this.handleOperationSelect('All') }} className={selectedOperation === 'All' ? "btn btn-primary mb-1" : "btn btn-light mb-1"} style={{ marginRight: '5px' }}>{LOCALES[lan]['web_wallet']['all']}</button>
                                         <button onClick={e => { e.preventDefault(); this.handleOperationSelect('Sent') }} className={selectedOperation === 'Sent' ? "btn btn-primary mb-1" : "btn btn-light mb-1"} style={{ marginRight: '5px' }}>{LOCALES[lan]['web_wallet']['sent']}</button>
-                                        <button onClick={e => { e.preventDefault(); this.handleOperationSelect('Received') }} className={selectedOperation === 'Received' ? "btn btn-primary mb-1" : "btn btn-light mb-1"}>{LOCALES[lan]['web_wallet']['received']}</button>
-
+                                        <button onClick={e => { e.preventDefault(); this.handleOperationSelect('Received') }} className={selectedOperation === 'Received' ? "btn btn-primary mb-1" : "btn btn-light mb-1"} style={{ marginRight: '5px' }}>{LOCALES[lan]['web_wallet']['received']}</button>
+                                        <button onClick={e => { e.preventDefault(); this.handleOperationSelect('Rejected') }} className={selectedOperation === 'Rejected' ? "btn btn-primary mb-1" : "btn btn-light mb-1"} style={{ marginRight: '5px' }}>{LOCALES[lan]['web_wallet']['rejected']}</button>
                                         <div style={{ float: 'right' }}>
                                             <ReactHTMLTableToExcel
                                                 className="btn btn-light mb-1 "
@@ -111,6 +123,7 @@ class Transactions extends Component {
                                                     <td>{LOCALES[lan]['web_wallet']['operation']}</td>
                                                     <td>{LOCALES[lan]['web_wallet']['amount']}</td>
                                                     <td>{LOCALES[lan]['web_wallet']['reason']}</td>
+                                                    <td>{LOCALES[lan]['web_wallet']['status']}</td>
                                                     <td>{LOCALES[lan]['web_wallet']['date']}</td>
                                                     <td>{LOCALES[lan]['web_wallet']['details']}</td>
                                                 </tr>
@@ -120,7 +133,7 @@ class Transactions extends Component {
                                                     txs && txs.length > 0
                                                         ?
                                                         txs.filter((tx) => {
-                                                            let operation = tx.userId === user.id ? LOCALES[lan]['web_wallet']['sent'] : LOCALES[lan]['web_wallet']['received']
+                                                            let operation = tx.userId === user.id ? 'Sent' : 'Received'
                                                             if (selectedOperation != operation && selectedOperation != 'All') {
                                                                 return false
                                                             }
@@ -134,6 +147,7 @@ class Transactions extends Component {
                                                                     <td>{tx.userId === user.id ? LOCALES[lan]['web_wallet']['sent'] : LOCALES[lan]['web_wallet']['received']}</td>
                                                                     <td>{parseFloat(tx.amount)}</td>
                                                                     <td>{tx.reason}</td>
+                                                                    <td>COMPLETED</td>
                                                                     <td>{moment(tx.createdAt).format('DD/MM/YYY HH:mm')}</td>
                                                                     <td>
                                                                         <Link to={`/tx/${tx.id}`} className="btn btn-primary mb-1 mb-md-0 action-btn"><i className="fa fa-search btn-icon"></i></Link>
@@ -141,8 +155,6 @@ class Transactions extends Component {
 
                                                                 </tr>
                                                             ))
-
-
                                                         :
                                                         <tr>
                                                             <td>-</td>
@@ -151,7 +163,33 @@ class Transactions extends Component {
                                                             <td>-</td>
                                                             <td>-</td>
                                                             <td>-</td>
+                                                            <td>-</td>
+                                                            <td>-</td>
                                                         </tr>
+                                                }
+                                                {
+                                                    selectedOperation === 'All' || selectedOperation === 'Rejected' &&
+                                                        requestsSent && requestsSent.length > 0
+                                                        ?
+                                                        requestsSent
+                                                            .filter((tx) => tx.status === 'REJECTED')
+                                                            .map((tx, index) => (
+                                                                tx.status === 'REJECTED' &&
+                                                                <tr key={index}>
+                                                                    <td>{selectedOperation === 'All' ? txs.length + 1 + index : index + 1}</td>
+                                                                    <td>{tx.receiver.firstName + ' ' + tx.receiver.lastName}</td>
+                                                                    <td>{LOCALES[lan]['web_wallet']['payment_request']}</td>
+                                                                    <td>{parseFloat(tx.amount)}</td>
+                                                                    <td>{tx.reason}</td>
+                                                                    <td>{tx.status}</td>
+                                                                    <td>{moment(tx.createdAt).format('DD/MM/YYY HH:mm')}</td>
+                                                                    <td>
+                                                                        <Link to={'/paymentRequest/' + tx.id} className="btn btn-primary mb-1 mb-md-0 action-btn"><i className="fa fa-search btn-icon"></i></Link>
+                                                                    </td>
+                                                                </tr>
+                                                            ))
+                                                        :
+                                                        <Fragment></Fragment>
                                                 }
                                             </tbody>
                                         </table>
