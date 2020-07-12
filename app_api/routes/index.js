@@ -16,6 +16,7 @@ const contactController = require('../controllers/contact')
 const paymentRequestController = require('../controllers/paymentRequest')
 const networkController = require('../controllers/network')
 const pushNotificationController = require('../controllers/pushNotification')
+const adminController = require('../controllers/admin')
 
 // Auth
 router.post('/signup', authController.signup)
@@ -95,5 +96,10 @@ router.get('/admin/rankings/:period', [auth, adminAuth], txController.adminGetRa
 // Push Notifications
 router.post('/push/registrationId', auth, pushNotificationController.saveRegistrationId)
 router.post('/push/test', auth, pushNotificationController.testNotification)
+
+// Update User's balance
+router.put('/admin/balances/addFundsToUser', [auth, adminAuth], adminController.addFundsToUser)
+router.put('/admin/balances/deductFundsFromUser', [auth, adminAuth], adminController.deductFundsFromUser)
+router.put('/admin/balances/overrideUserBalance', [auth, adminAuth], adminController.overrideUserBalance)
 
 module.exports = router

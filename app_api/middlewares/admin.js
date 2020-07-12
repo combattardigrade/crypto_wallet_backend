@@ -17,6 +17,7 @@ module.exports.adminAuth = function(req, res, next) {
         }
     })
         .then((admin) => {
+            console.log(admin)
             if(!admin) {
                 sendJSONresponse(res, 422, {status: 'ERROR', message: 'Your account does not exist or you do not have enough privileges'})
                 return
