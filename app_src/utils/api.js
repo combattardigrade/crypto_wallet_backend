@@ -135,6 +135,16 @@ export function getInbox(params) {
     })
 }
 
+export function getPaymentRequest(params) {
+    return fetch(API + 'paymentRequest/' + params.paymentRequestId, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + params.token
+        }
+    })
+}
+
 export function getRequestsSent(params) {
     return fetch(API + 'paymentRequestsSent', {
         method: 'GET',

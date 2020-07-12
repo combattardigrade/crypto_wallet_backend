@@ -574,10 +574,12 @@ module.exports.getPaymentRequest = (req, res) => {
         }
 
         const paymentRequest = await PaymentRequest.findOne({
-            where: {
-                userId,
+            where: {                
                 id: requestId
             },
+            include: [
+                { model: User, }
+            ],
             transaction: t
         })
 
