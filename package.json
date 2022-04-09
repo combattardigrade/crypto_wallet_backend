@@ -63,7 +63,7 @@
     "lodash": "^4.17.15",
     "material-ui-popup-state": "^1.4.1",
     "memorystore": "^1.6.2",
-    "moment": "2.24.0",
+    "moment": "2.29.2",
     "mysql2": "1.6.5",
     "node-fetch": "^2.6.0",
     "nodemailer": "^5.1.1",
