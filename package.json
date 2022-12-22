@@ -57,7 +57,7 @@
     "http": "0.0.0",
     "https": "1.0.0",
     "jade": "1.11.0",
-    "jsonwebtoken": "8.4.0",
+    "jsonwebtoken": "9.0.0",
     "jss-rtl": "^0.3.0",
     "keycloak-connect": "^9.0.3",
     "lodash": "^4.17.15",
